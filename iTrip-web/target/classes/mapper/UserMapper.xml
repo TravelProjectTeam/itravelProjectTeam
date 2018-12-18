@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.itrip.mapper.UserMapper">
+
+	<resultMap id="BaseResultMap" type="org.itrip.pojo.User">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="username" property="username"
+			jdbcType="VARCHAR" />
+		<result column="password" property="password"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap type="org.itrip.pojo.Hotel" id="DaseResultMap2">
+		<id property="id" column="id" jdbcType="INTEGER" />
+		<result property="countryid" column="countryid"
+			jdbcType="INTEGER" />
+		<result property="hotelName" column="hotelName"
+			jdbcType="VARCHAR" />
+		<result property="address" column="address" jdbcType="VARCHAR" />
+		<result property="roomAlias" column="alias" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<!-- 数据库字段 -->
+	<sql id="Base_Column_List">
+		id,name,phone, username, pwd,sex,birthday,email,address,status,joinDate
+	</sql>
+	<!-- ====================邹航开始======================== -->
+	<select id="queryPhone" resultType="Integer">
+		select COUNT(phone) from user where phone=#{phone}
+	</select>
+	<insert id="add" parameterType="User">
+		insert into user(id,phone,pwd) value(null,#{phone},#{pwd});
+	</insert>
+	<select id="query" resultMap="DaseResultMap2"
+		parameterType="Integer">
+		select countryid,hotelName,(select valueName from dictionaries t where
+		s.hotelType=t.valueId and t.typeName="酒店类型") alias,address
+		from hotel s where countryid=#{countryid}
+	</select>
+	
+	<insert id="addBackendUser" parameterType="User" >
+    insert into user(id,username,sex,phone,email,address,status) values(null,#{userName},#{sex},#{phone},#{email},#{address},#{status})
+  </insert>
+	
+	<!-- ====================邹航结束======================== -->
+
+	<!-- 前台登录 -->
+	<select id="login" resultType="User">
+		select <include refid="Base_Column_List" /> from user where phone=#{phone} and pwd=#{pwd}
+	</select>
+	<!-- 查询所有的管理员 -->
+	<select id="getAllAdmin" resultType="User">
+		select
+		<include refid="Base_Column_List" />
+		from user where status=0
+	</select>
+	<!-- 查询管理员的数量 -->
+	<select id="getAdminCount" resultType="int">
+		select count(1) from user where status=0
+	</select>
+	<!-- 后台登录，并验证登录用户是否为管理员 -->
+	<select id="getIsAdmin" resultType="User">
+		select <include refid="Base_Column_List" /> from user where phone=#{phone} and pwd=#{pwd}
+	</select>
+	<!-- 查询后台非管理员的用户 -->
+	<select id="getAllUser" resultType="User">
+		select <include refid="Base_Column_List"/> from user where status &lt;&gt; 0
+	</select>
+	
+	<!-- 根据id查询用户 -->
+	<select id="getById" resultType="User">
+		select <include refid="Base_Column_List"/> from user where id = #{id}
+	</select>
+	<!-- 修改用户 -->
+	<update id="updateUser" parameterType="User">
+		update user set username=#{userName},sex=#{sex},phone=#{phone},email=#{email},address=#{address},status=#{status} where id = #{id}
+	</update>
+	<!-- 批量删除用户 -->
+	<delete id="deleteManyUser">
+		delete from user where id in
+ 		<foreach collection="ids" item="ids" open="(" separator="," close=")">
+ 		#{ids}
+ 	</foreach>
+
+	</delete>
+</mapper>
