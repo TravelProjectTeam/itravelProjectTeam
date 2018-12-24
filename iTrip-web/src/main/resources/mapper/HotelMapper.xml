@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.itrip.mapper.HotelMapper">
+	<!-- hotel 表 -->
+	<resultMap type="org.itrip.pojo.Hotel" id="DaseResultMap2">
+		<id property="id" column="id" jdbcType="INTEGER" />
+		<result property="hotelName" column="hotelName"
+			jdbcType="INTEGER" />
+		<result property="phone" column="phone" jdbcType="VARCHAR" />
+		<result property="address" column="address" jdbcType="VARCHAR" />
+		<result property="roomAlias" column="alias" jdbcType="VARCHAR" />
+		<result property="details" column="details" jdbcType="VARCHAR" />
+		<result property="score" column="score" jdbcType="DOUBLE" />
+	</resultMap>
+	<!-- Houses 表 -->
+	<resultMap type="org.itrip.pojo.Houses" id="HousesResultMap">
+		<result property="valueName" column="valueName"
+			jdbcType="VARCHAR" />
+		<result property="roomTitle" column="roomTitle"
+			jdbcType="VARCHAR" />
+		<result property="price" column="price" jdbcType="VARCHAR" />
+		<result property="isbreakfast" column="isbreakfast"
+			jdbcType="INTEGER" />
+		<result property="cancellationPolicy"
+			column="cancellationPolicy" jdbcType="INTEGER" />
+		<result property="number" column="number" jdbcType="INTEGER" />
+	</resultMap>
+
+<!-- =======================邹航开始=========================== -->
+	<!-- 根据首页值查询酒店信息 -->
+	<select id="query" resultType="Hotel" parameterType="Integer">
+		select
+		DISTINCT(hotelName),countryid,t.valueName
+		alias,address,photograph,hotelType,score,MIN(roomPrice) minimum,s.id
+		from
+		hotel s,hotelbrand h,dictionaries t,citys c,houses ho where
+		s.hotelType=t.valueId and
+		c.id=h.citysid and s.countryid=c.id and t.typeName="酒店类型" and ho.hotelId=s.id and
+		countryid=#{countryid}
+		GROUP BY hotelName
+	</select>
+
+	<!-- 根据城市名称查询城市id -->
+	<select id="queryName" resultType="Integer">
+		select id from citys where
+		name=#{names}
+	</select>
+	<!-- 二级页面上版根据条件查询酒店信息 -->
+	<!-- price1:价格下限;price2价格上限;brand品牌Id;rating星级id;cid目的地id;keyword关键字 -->
+	<select id="queryMap" parameterType="Map" resultType="Hotel">
+		select DISTINCT(hotelName),countryid,t.valueName
+		alias,address,photograph,hotelType,score,MIN(roomPrice) minimum,s.id,s.brandId
+		from
+		hotel s,hotelbrand h,dictionaries t,citys c,houses ho where
+		s.hotelType=t.valueId and
+		c.id=h.citysid and s.countryid=c.id and t.typeName="酒店类型" and ho.hotelId=s.id
+		<if test="brand!=0">
+			and h.id=#{brand} and s.brandId=#{brand} 
+		</if>
+		<if test="rating!=0">
+			and s.hotelType=#{rating}
+		</if>
+		<if test="cid!=0">
+			and countryid=#{cid}
+		</if>
+		<if test="keyword!='' and keyword!=null">
+			and hotelName LIKE CONCAT('%',#{keyword},'%')
+		</if>
+		and roomPrice BETWEEN #{price1} and #{price2}
+		GROUP BY hotelName
+		<if test="rankts==1">
+			ORDER BY minimum
+		</if>
+	</select>
+	<!-- 根据id查询城市名称 -->
+	<select id="queryCid" resultType="String">
+		select name from citys where
+		id=#{cid}
+	</select>
+	<!-- 根据城市id查询品牌 -->
+	<select id="queryBrand" resultType="Hotelbrand">
+		select * from hotelbrand
+		where citysid=#{citysid}
+	</select>
+	<!-- 查询字典表的酒店类型 -->
+	<select id="queryDictionaries" resultType="Dictionaries">
+		select
+		valueId,valueName from dictionaries where typeName=#{type}
+	</select>
+	<!-- =======================邹航结束=========================== -->
+
+	<!-- =======================谭凯开始=========================== -->
+	<!-- 查询酒店详细信息 -->
+	<select id="getHotelDatail" resultMap="DaseResultMap2">
+		select *,(select valueName
+		from dictionaries t where
+		s.hotelType=t.valueId and t.typeName="酒店类型")
+		alias
+		from hotel s where id=#{id}
+	</select>
+	<!-- 查询酒店房型 -->
+	<select id="getHotelRoom" resultMap="HousesResultMap">
+		select s.id,d.valueName
+		valueName,s.roomSize,s.BedArea,s.floor,s.isHavingbed,s.window,s.roomImage
+		from houses s
+		,dictionaries d where s.roomNameId= d.valueId
+		and d.typeName="房型" and s.hotelId=#{id}
+	</select>
+	<!-- 查询酒店名称下分类价格 -->
+	<select id="getHouses" resultType="Rooms">
+		select
+		r.houseId,r.roomTitle,r.isbreakfast,r.cancellationPolicy,r.number,
+		(r.Price+h.roomPrice)as price from houses h,rooms r
+		where r.hotelId = h.id and h.hotelId =#{id}
+	</select>
+
+	<!-- =======================谭凯结束=========================== -->
+</mapper>
