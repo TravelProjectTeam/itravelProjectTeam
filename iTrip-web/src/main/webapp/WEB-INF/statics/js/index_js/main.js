@@ -377,40 +377,7 @@ we.plugins.keywordSelect = function(t) {
     e = "",
     n = "",
     a = !1,
-    l = function() {
-        var t = $("#keyword-box").html(),
-        l = $("#key_input").val(),
-        y = $("#selectCity").attr("data-city-code");
-        if (y || (y = "AR04567"), void 0 != t && e == y && (i == l || a)) return void $("#keyword-box").show();
-        void 0 != t ? $("#keyword-box").html("正在搜索中，请稍候。。。") : (n = "<div class=\"keyword-box\" id='keyword-box'>正在搜索中，请稍候。。。</div>", $(".banner .hanging").append(n)),
-        i = l,
-        e = y,
-        a = !0;
-        
-        c = {
-            channelCode: "CA00046",
-            cityCode: y,
-            keyword: l
-        };
-        we.common.ajaxPost(o, c,
-        function(t) {
-            if (n = "", t.success && null != t.data) {
-                for (var i = t.data,
-                e = i.length,
-                a = "",
-                l = "",
-                o = "",
-                c = $("#inDatePicker").val(), s = $("#outDatePicker").val(), d = 0; d < e; d++) {
-                    var g = i[d];
-                }
-                a.length > 0 && (a = "<div class='keyword-main'><p class='tit'>酒店</p><ul>" + a + "</ul></div>"),
-                l.length > 0 && (l = "<div class='keyword-main'><p class='tit'>商圈</p><ul>" + l + "</ul></div>"),
-                o.length > 0 && (o = "<div class='keyword-main'><p class='tit'>地标</p><ul>" + o + "</ul></div>"),
-                n = a + l + o
-            }
-            r()
-        })
-    },
+    l = function() {},
     
     y = function() {
         $("#key_input").click(function() {

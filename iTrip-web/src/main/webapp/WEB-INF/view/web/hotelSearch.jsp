@@ -4,6 +4,7 @@
 <head>
 <link rel="stylesheet" type="text/css"
 	href="images/hotelSearch/style1536672475627.css">
+
 <style type="text/css">
 .amap-indoor-map .label-canvas {
 	position: absolute;
@@ -235,7 +236,15 @@
 
 
 
+
+
+
+
 :rotate(360deg)
+
+
+
+
 
 
 
@@ -250,7 +259,15 @@ transform
 
 
 
+
+
+
+
 :rotate(360deg)
+
+
+
+
 
 
 
@@ -273,7 +290,15 @@ transform
 
 
 
+
+
+
+
 :rotate(360deg)
+
+
+
+
 
 
 
@@ -288,7 +313,15 @@ transform
 
 
 
+
+
+
+
 :rotate(360deg)
+
+
+
+
 
 
 
@@ -312,7 +345,15 @@ keyframes amap-indrm-loader { 0%{
 
 
 
+
+
+
+
 :rotate(360deg)
+
+
+
+
 
 
 
@@ -327,7 +368,15 @@ keyframes amap-indrm-loader { 0%{
 
 
 
+
+
+
+
 :rotate(360deg)
+
+
+
+
 
 
 
@@ -342,7 +391,15 @@ keyframes amap-indrm-loader { 0%{
 
 
 
+
+
+
+
 :rotate(360deg)
+
+
+
+
 
 
 
@@ -357,7 +414,15 @@ transform
 
 
 
+
+
+
+
 :rotate(360deg)
+
+
+
+
 
 
 
@@ -391,7 +456,7 @@ ng\:form {
 </style>
 <!-- META SECTION -->
 
-<title>铂涛集团官网-铂涛旅行官网-官方直订：7天酒店、IU、派酒店、麗枫、喆啡、希岸等品牌酒店</title>
+<title>品牌酒店</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -402,8 +467,15 @@ ng\:form {
 
 <!-- CSS INCLUDE -->
 <link rel="stylesheet" href="css/hotelSearch.css">
+<link rel="stylesheet" href="css/citySelect.css	">
 <!-- EOF CSS INCLUDE -->
-<script type="text/javascript" src="js/hotelSearch/tongji.js"></script>
+<script type="text/javascript" src="jquery/jquery-1.8.3.min.js"></script>
+<!-- <script src="js/hotelSearch/wehotel.js"></script>
+ -->
+<!-- <script src="js/hotelSearch/siteConfig.js"></script>
+
+<script type="text/javascript" src="js/hotelSearch/tongji.js"></script> -->
+<script src="js/hotelSearch/vendor.js"></script>
 </head>
 <body ng-controller="hotelSearchController" ng-init="init()"
 	ng-class="{'plateno':$root.siteConfig.site_id==$root.siteEnum.Plateno}"
@@ -446,34 +518,13 @@ ng\:form {
 					<!-- end ngIf: $root.siteConfig.site_id==$root.siteEnum.WeHotel -->
 					<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
 					<div class="header-action clearfix">
-						<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
-						<div class="divider2" style="margin-left: 25px;"></div>
-						<div class="header-phone-container">
-							<div class="header-phone"></div>
-							<div class="qrcode-box clearfix">
-								<div class="qrcode-cover"></div>
-								<div class="qrcode">
-									<img ng-src="/dist/images/qrcode1.jpg"
-										src="images/hotelSearch/qrcode1.jpg"> <a
-										class="ng-binding">锦江旅行APP</a>
-								</div>
-								<div class="divider3"></div>
-								<div class="qrcode">
-									<img ng-src="/dist/images/qrcode2.jpg"
-										src="images/hotelSearch/qrcode2.jpg"> <a
-										class="ng-binding">锦江旅行公众号</a>
-								</div>
-							</div>
-						</div>
-						<div class="divider2"></div>
+
 						<div class="header-login">
 							<!-- ngIf: !$root.isLogined -->
-							<a class="btn bluebtn ng-scope" href="login.jsp">登录</a>
-							<!-- end ngIf: !$root.isLogined -->
-							<!-- ngIf: !$root.isLogined -->
-							<a class="btn whitebtn ng-scope" href="register.jsp"
+							<a class="btn bluebtn ng-scope" href="login.jsp">登录</a> <a
+								class="btn whitebtn ng-scope" href="register.jsp"
 								ng-if="!$root.isLogined">注册</a>
-							<!-- end ngIf: !$root.isLogined -->
+
 						</div>
 						<!-- ngIf: $root.isLogined -->
 
@@ -488,218 +539,24 @@ ng\:form {
 				<div class="input-section clearfix"
 					ng-class="{'international': options.isAbroad &amp;&amp; $root.siteConfig.site_id == $root.siteEnum.WeHotel}">
 					<label class="ng-binding">目的地</label> <input type="text"
-						placeholder="请输入汉字或拼音"
-						ng-click="options.showCityPanel=!options.showCityPanel;"
-						ng-change="showFilterCity(selectedCityName)"
-						ng-model="selectedCityName" id="selectCity"
-						class="ng-pristine ng-valid" value="上海">
-					<!--城市筛选层begin-->
-					<div class="filter-city-box ng-hide" id="filter-city-box"
-						ng-show="options.showFilterCity">
-						<div class="filter-city-main">
-							<p class="tit">国内城市</p>
-							<ul>
-								<!-- ngRepeat: city in allCities.otaCitys | filter:{cityName:selectedCityName} -->
-								<li
-									ng-repeat="city in allCities.otaCitys | filter:{cityName:selectedCityName}"
-									class="ng-scope"><a ng-click="selectCity(city)"
-									class="ng-binding">上海</a></li>
-								<!-- end ngRepeat: city in allCities.otaCitys | filter:{cityName:selectedCityName} -->
-							</ul>
-							<ul>
-								<!-- ngRepeat: city in allCities.otaCitys | filter:{pinyin:selectedCityName} -->
-							</ul>
-
-						</div>
-					</div>
-					<!--城市筛选层begin-->
+						placeholder="请输入汉字" id="citySelect" name="destination"
+						class="ng-pristine ng-valid" value="${namet}">
+					<!-- 城市 -->
+					<div id="in_city" style="display: none"></div>
 					<label class="ng-binding">日期</label> <input type="text"
 						placeholder="入住离店日期" class="date" id="inOutDatePicker"
-						readonly="readonly" data-timein="1544140800000"
-						data-timeout="1544227200000" value="2018-12-07 至 2018-12-08">
-					<label class="ng-binding">关键词</label> <input type="text"
-						placeholder="酒店名/地标/商圈" ng-model="params.keyword" id="key_input"
-						ng-enter="queryHotels(true)" ng-keyup="keywordSearch()"
-						ng-click="keywordSearch()" class="ng-pristine ng-valid">
-					<button ng-click="queryHotels(true)" class="ng-binding">搜索</button>
+						data-timein="1544140800000" data-timeout="1544227200000"
+						value="2018-12-07 至 2018-12-08"> <label class="ng-binding">关键词</label>
+					<input type="text" name="keyword" placeholder="酒店名" id="key_input"
+						value="${keyword}" class="ng-pristine ng-valid">
+					<button onclick="queryHotels()" class="ng-binding">搜索</button>
+					<!-- 上版查询 -->
 
-					<!-- 显示城市选择器面板 -->
-					<div class="city-panel ng-isolate-scope ng-hide"
-						ng-show="showCityPanel" id="city-panel" city-selector=""
-						brand-name="params.brand" show-city-panel="options.showCityPanel"
-						selected-city-name="selectedCityName" is-abroad="options.isAbroad"
-						is-oversea-city="options.isOverseaCity"
-						after-callback="getCityCenterAndHotels()">
-						<!-- Tab top panels -->
-						<ul class="nation">
-							<li ng-class="{'active': !isAbroad}" ng-click="isAbroad = false;"
-								class="active">国内</li>
-							<li ng-class="{'active': isAbroad}" ng-click="isAbroad = true;">国际</li>
-						</ul>
-						<!-- Tab panels -->
-						<ul class="nav nav-tabs" role="tablist">
-							<!-- ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<li ng-repeat="navTab in navTabs"
-								ng-if="(!isAbroad &amp;&amp; !navTab.isAbroad &amp;&amp; navTab.count) || (isAbroad &amp;&amp; navTab.isAbroad &amp;&amp; navTab.count &gt; 0)"
-								ng-class="{'active': selectedIndex == navTab.index}"
-								class="ng-scope active"><a ng-click="selectTab(navTab)"
-								class="ng-binding">热门城市</a></li>
-							<!-- end ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<li ng-repeat="navTab in navTabs"
-								ng-if="(!isAbroad &amp;&amp; !navTab.isAbroad &amp;&amp; navTab.count) || (isAbroad &amp;&amp; navTab.isAbroad &amp;&amp; navTab.count &gt; 0)"
-								ng-class="{'active': selectedIndex == navTab.index}"
-								class="ng-scope"><a ng-click="selectTab(navTab)"
-								class="ng-binding">ABCDE</a></li>
-							<!-- end ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<li ng-repeat="navTab in navTabs"
-								ng-if="(!isAbroad &amp;&amp; !navTab.isAbroad &amp;&amp; navTab.count) || (isAbroad &amp;&amp; navTab.isAbroad &amp;&amp; navTab.count &gt; 0)"
-								ng-class="{'active': selectedIndex == navTab.index}"
-								class="ng-scope"><a ng-click="selectTab(navTab)"
-								class="ng-binding">FGHIJ</a></li>
-							<!-- end ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<li ng-repeat="navTab in navTabs"
-								ng-if="(!isAbroad &amp;&amp; !navTab.isAbroad &amp;&amp; navTab.count) || (isAbroad &amp;&amp; navTab.isAbroad &amp;&amp; navTab.count &gt; 0)"
-								ng-class="{'active': selectedIndex == navTab.index}"
-								class="ng-scope"><a ng-click="selectTab(navTab)"
-								class="ng-binding">KLMNO</a></li>
-							<!-- end ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<li ng-repeat="navTab in navTabs"
-								ng-if="(!isAbroad &amp;&amp; !navTab.isAbroad &amp;&amp; navTab.count) || (isAbroad &amp;&amp; navTab.isAbroad &amp;&amp; navTab.count &gt; 0)"
-								ng-class="{'active': selectedIndex == navTab.index}"
-								class="ng-scope"><a ng-click="selectTab(navTab)"
-								class="ng-binding">PQRST</a></li>
-							<!-- end ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<li ng-repeat="navTab in navTabs"
-								ng-if="(!isAbroad &amp;&amp; !navTab.isAbroad &amp;&amp; navTab.count) || (isAbroad &amp;&amp; navTab.isAbroad &amp;&amp; navTab.count &gt; 0)"
-								ng-class="{'active': selectedIndex == navTab.index}"
-								class="ng-scope"><a ng-click="selectTab(navTab)"
-								class="ng-binding">UVWXYZ</a></li>
-							<!-- end ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-							<!-- ngIf: (!isAbroad && !navTab.isAbroad && navTab.count) || (isAbroad && navTab.isAbroad && navTab.count > 0) -->
-							<!-- end ngRepeat: navTab in navTabs -->
-						</ul>
-						<!-- Tab content -->
-						<div class="tab-content">
-							<div role="tabpanel" class="tab-pane">
-								<!-- ngRepeat: area in cities -->
-								<ul class="clearfix ng-scope" ng-repeat="area in cities">
-									<li class="tit ng-binding"></li>
-									<!-- ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="北京" class="ng-binding">北京</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="广州" class="ng-binding">广州</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="深圳" class="ng-binding">深圳</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="武汉" class="ng-binding">武汉</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="成都" class="ng-binding">成都</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="重庆" class="ng-binding">重庆</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="上海" class="ng-binding">上海</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="西安" class="ng-binding">西安</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="长沙" class="ng-binding">长沙</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="天津" class="ng-binding">天津</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="南京" class="ng-binding">南京</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="贵阳" class="ng-binding">贵阳</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="南昌" class="ng-binding">南昌</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="济南" class="ng-binding">济南</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="郑州" class="ng-binding">郑州</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="厦门" class="ng-binding">厦门</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="杭州" class="ng-binding">杭州</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="青岛" class="ng-binding">青岛</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="哈尔滨" class="ng-binding">哈尔滨</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-									<li ng-repeat="city in area.cities" class="ng-scope"><a
-										ng-click="selectCity(city)" title="珠海" class="ng-binding">珠海</a>
-									</li>
-									<!-- end ngRepeat: city in area.cities -->
-								</ul>
-								<!-- end ngRepeat: area in cities -->
-							</div>
-						</div>
-					</div>
 
-					<div class="keyword-box ng-hide" id="keyword-box"
-						ng-show="options.showKeywordPanel">
-						<!-- ngRepeat: keywordItem in keywordList -->
-						<!-- ngIf: keywordList.length == 0 -->
-						<div class="no-keyword ng-binding ng-scope"
-							ng-if="keywordList.length == 0">请输入关键字进行搜索</div>
-						<!-- end ngIf: keywordList.length == 0 -->
+					<div class="keyword-box ng-hide" id="keyword-box">
+
+						<div class="no-keyword ng-binding ng-scope">请输入关键字进行搜索</div>
+
 					</div>
 
 
@@ -707,148 +564,50 @@ ng\:form {
 
 				<div class="option-section">
 					<div class="row clearfix">
-						<label class="title ng-binding">位置</label> <label
-							class="all ng-binding yep"
-							ng-class="{'yep': params.zoneType == ''}"
-							ng-click="changeZoneType('all')">不限</label>
-						<div class="checkbox-box clearfix">
-							<label
-								ng-class="{'active': params.zoneType != '' &amp;&amp; 'BUSINESS,LANDMARK'.indexOf(params.zoneType) &gt; -1}"
-								ng-click="changeZoneType('BUSINESS,LANDMARK')"><span
-								class="ng-binding">商圈/地标</span></label> <label
-								ng-class="{'active': params.zoneType != '' &amp;&amp; 'AIR,TRAIN'.indexOf(params.zoneType) &gt; -1}"
-								ng-click="changeZoneType('AIR,TRAIN')"><span
-								class="ng-binding">飞机场/火车站</span></label> <label
-								ng-class="{'active': params.zoneType != '' &amp;&amp; 'METRO'.indexOf(params.zoneType) &gt; -1}"
-								ng-click="changeZoneType('METRO')" class=""><span
-								class="ng-binding">轨道交通</span></label> <label
-								ng-class="{'active': params.zoneType != '' &amp;&amp; 'DISTRICT'.indexOf(params.zoneType) &gt; -1}"
-								ng-click="changeZoneType('DISTRICT')" class=""><span
-								class="ng-binding">行政区</span></label> <label
-								ng-class="{'active': params.zoneType != '' &amp;&amp; 'SCENIC'.indexOf(params.zoneType) &gt; -1}"
-								ng-click="changeZoneType('SCENIC')"><span
-								class="ng-binding">景点</span></label>
-
-							<!-- ngIf: zones.length > 0 -->
-						</div>
-					</div>
-					<div class="row clearfix">
 						<label class="title ng-binding">品牌</label> <label
-							class="all ng-binding yep"
-							ng-class="{'yep': params.brands == ''}"
-							ng-click="changeBrand('all')">不限</label>
+							class="all ng-binding yep" id="brand">不限</label>
+
 						<div class="checkbox-box clearfix brand-area">
-							<!-- ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()" data-hotel-brand="KL"><span
-								class="ng-binding">昆仑</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()"
-								data-hotel-brand="JINJIANG"><span class="ng-binding">锦江</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()" data-hotel-brand="GTC"><span
-								class="ng-binding">郁锦香</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()"
-								data-hotel-brand="METROPOLO"><span class="ng-binding">锦江都城</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()" data-hotel-brand="137"><span
-								class="ng-binding">康铂</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()"
-								data-hotel-brand="MAGNOTEL"><span class="ng-binding">白玉兰</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()" data-hotel-brand="90"><span
-								class="ng-binding">麗枫</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()" data-hotel-brand="91"><span
-								class="ng-binding">喆啡</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()" data-hotel-brand="96"><span
-								class="ng-binding">希岸</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()" data-hotel-brand="106"><span
-								class="ng-binding">希岸·轻雅</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()"
-								data-hotel-brand="JJPINSHANG"><span class="ng-binding">锦江之星品尚</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()"
-								data-hotel-brand="JJINN"><span class="ng-binding">锦江之星</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()"
-								data-hotel-brand="JJFENGSHANG"><span class="ng-binding">锦江之星风尚</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()" data-hotel-brand="2"><span
-								class="ng-binding">7天优品</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()" data-hotel-brand="1"><span
-								class="ng-binding">7天酒店</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()" data-hotel-brand="4"><span
-								class="ng-binding">IU酒店</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()"
-								data-hotel-brand="GOLDMETINN"><span class="ng-binding">金广快捷</span></label>
-							<!-- end ngRepeat: brand in brandList -->
-							<label ng-repeat="brand in brandList" class="ng-scope"><input
-								type="checkbox" ng-click="changeBrand()"
-								data-hotel-brand="BESTAY"><span class="ng-binding">百时快捷</span></label>
-							<!-- end ngRepeat: brand in brandList -->
+							<c:forEach items="${llts}" var="lst">
+								<!-- 需要循环品牌 -->
+								<label class="ng-scope"><input
+									<c:if test="${lst.id==brand}">checked</c:if> type="radio"
+									name="brand" value="${lst.id}" data-hotel-brand="KL"><span
+									class="ng-binding">${lst.brandName}</span></label>
+							</c:forEach>
 						</div>
 					</div>
 					<div class="row">
-						<label class="title ng-binding">星级</label> <label
-							class="all ng-binding yep"
-							ng-class="{'yep': params.starRatings.length == 0}"
-							ng-click="changeStarRating('all')">不限</label>
-						<div class="checkbox-box clearfix starRating-area">
-							<label><input type="checkbox"
-								ng-click="changeStarRating()" data-hotel-star="NO_STARS"><span
-								class="ng-binding">经济型</span></label> <label><input
-								type="checkbox" ng-click="changeStarRating()"
-								data-hotel-star="THREE_STARS"><span class="ng-binding">舒适型</span></label>
-							<label><input type="checkbox"
-								ng-click="changeStarRating()" data-hotel-star="FOUR_STARS"><span
-								class="ng-binding">高档型</span></label> <label><input
-								type="checkbox" ng-click="changeStarRating()"
-								data-hotel-star="FIVE_STARS"><span class="ng-binding">豪华型</span></label>
+						<label class="title ng-binding">星级</label> <label id="rating"
+							class="all ng-binding yep">不限</label>
+						<div style="text-align: left; text-indent: 1.25em">
+							<!-- 查询全部星级 -->
+
+							<c:forEach items="${Typelist}" var="ty">
+								<label><input type="radio"
+									<c:if test="${ty.valueId==rating}">checked</c:if> name="rating"
+									value="${ty.valueId}"><span>${ty.valueName}</span></label>
+							</c:forEach>
 						</div>
 					</div>
 					<div class="row">
-						<label class="title ng-binding">价格(元)</label> <label
-							class="all ng-binding yep"
-							ng-class="{'yep': params.minPrice == 0 &amp;&amp; params.maxPrice == '1000'}"
-							ng-click="changePrice('all')">不限</label>
+						<label class="title ng-binding">价格(元)</label> <label id="yep"
+							class="all ng-binding yep">不限</label>
 						<div class="checkbox-box clearfix price-area">
 							<label><input name="priceArea" type="radio"
-								ng-click="changePrice(1)"><span>200以下</span></label> <label><input
-								name="priceArea" type="radio" ng-click="changePrice(2)"><span>200-400</span></label>
-							<label><input name="priceArea" type="radio"
-								ng-click="changePrice(3)"><span>400-600</span></label> <label><input
-								name="priceArea" type="radio" ng-click="changePrice(4)"><span>600以上</span></label>
-							<label class="price-input"><span class="ng-binding">价格区间</span><input
-								type="text" ng-model="params.minPrice"
-								class="ng-pristine ng-valid" value="0"><span>-</span><input
-								type="text" ng-model="params.maxPrice"
-								class="ng-pristine ng-valid" value="1000"></label>
-							<button class="price-confirm" ng-click="changePrice('custom')">确定</button>
+								name="priceArea" value="1"
+								<c:if test="${price2==199}">checked</c:if>><span>200以下</span></label>
+							<label><input <c:if test="${price2==400}">checked</c:if>
+								name="priceArea" value="2" type="radio"><span>200-400</span></label>
+							<label><input name="priceArea" type="radio" value="3"
+								<c:if test="${price2==600}">checked</c:if>><span>400-600</span></label>
+							<label><input name="priceArea" value="4"
+								<c:if test="${price2==1000 and price1==600}">checked</c:if>
+								name="priceArea" type="radio"><span>600以上</span></label> <label
+								class="price-input"><span class="ng-binding">价格区间</span><input
+								type="text" id="price1" class="ng-pristine ng-valid" value="0"
+								readonly><span>-</span><input id="price2" type="text"
+								class="ng-pristine ng-valid" value="1000" readonly></label>
 						</div>
 					</div>
 				</div>
@@ -857,28 +616,19 @@ ng\:form {
 				<div class="hotel-section clearfix">
 					<div class="tags clearfix">
 						<div class="result ng-binding">
-							查询到 <span class="ng-binding">210</span> 家酒店
+							查询到 <span class="ng-binding">${hotelsize}</span> 家酒店
 						</div>
-						<!--<div class="tag-sec">锦江之星<i></i></div>-->
-						<!--<div class="tag-sec">500元以上<i></i></div>-->
-						<!-- ngRepeat: item in selectedTags -->
-						<!-- ngIf: selectedTags.length > 0 -->
+						<div id="condition"></div>
 					</div>
 					<div class="info">
 						<div class="nav clearfix">
 							<div class="title ng-binding">排序&nbsp;:</div>
-							<div class="tab chosen"
-								onclick="window.location.href ='hotelSearch.jsp'"
-								ng-class="{'chosen': params.sortType == 'DEFAULT_SORT'}">默认排序</div>
-							<div class="tab ng-binding"
-								onclick="window.location.href ='hotelSearch.jsp'"
-								ng-class="{'chosen': params.sortType == 'DISTANCE_SORT'}">由近到远</div>
-							<div class="tab ng-binding"
-								onclick="window.location.href ='hotelSearch.jsp'"
-								ng-class="{'chosen': params.sortType == 'PRICE_ASC' || params.sortType == 'PRICE_DESC'}">
+							<div class="tab chosen">默认排序</div>
+							<div class="tab ng-binding" onclick="javascript(0);">由近到远</div>
+							<!-- <input class="tab ng-binding" style="background-color:#94c9ff;margin:auto 0px;padding:0px;" type="text" value="价格"/> -->
+							<div class="tab ng-binding">
 								价格
-								<div class="price-arrow"
-									ng-class="{'down':params.sortType == 'PRICE_DESC'}">
+								<div class="price-arrow">
 									<div class="square"></div>
 									<div class="triangle"></div>
 								</div>
@@ -886,91 +636,98 @@ ng\:form {
 						</div>
 
 						<!-- ngRepeat: item in hotelList -->
-						<c:forEach items="${hotelList}" var="hotelList">
-							<div class="block ng-scope" ng-repeat="item in hotelList"
-								id="hotel_JJ60133">
-								<div class="pic">
-									<!-- ngIf: item.preSale -->
-									<a href="hotelDatail.jsp" target="_blank"> <!-- "http://hotel.bestwehotel.com/HotelDetail?hotelId=JJ60133&amp;checkInDate=2018-12-07&amp;checkOutDate=2018-12-08&amp;extend=1,1,0,0,0,0" -->
-										<img
-										ng-src="http://images.bestwehotel.com/images/4bcff28a3f88d111_400_300.jpg"
-										onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'"
-										src="images/hotelSearch/4bcff28a3f88d111_400_300.jpg">
-									</a>
-								</div>
-								<div class="top clearfix">
-									<i class="pin ng-binding">1</i>
-									<p class="name">
-										<!--<span class="name-text">{{item.hotelName}}</span>-->
-										<a class="name-text ng-binding" href="hotelDatail.jsp"
-											target="_blank"> ${hotelList.hotelName} </a>
-										<!-- ngIf: false -->
-									</p>
-									<p class="address ng-binding">
-										地址：<span title="上海市浦东新区浦电路57号" class="ng-binding">上海市浦东新区浦电路57号</span>
-									</p>
-									<!-- ngIf: item.distance && item.distance !='null' -->
-									<p class="distance ng-binding ng-scope"
-										ng-if="item.distance &amp;&amp; item.distance !='null'">距离市中心
-										4.8 km</p>
-									<!-- end ngIf: item.distance && item.distance !='null' -->
-
-									<!--<i class="icon-member-hotel" ng-if="item.isScoreHotel"></i>-->
-
-									<div class="type clearfix">
-										<!--<i class="icon-topclass"></i>-->
-										<!--<i class="icon-club"></i>-->
+						<c:if test="${hotelList!=null}">
+							<c:forEach items="${hotelList}" var="hotelList">
+								<div class="block ng-scope" ng-repeat="item in hotelList"
+									id="hotel_JJ60133">
+									<div class="pic">
+										<!-- ngIf: item.preSale -->
+										<a href="webHotelDatail?hotelId=${hotelList.id}"
+											target="_blank"> <!-- "http://hotel.bestwehotel.com/HotelDetail?hotelId=JJ60133&amp;checkInDate=2018-12-07&amp;checkOutDate=2018-12-08&amp;extend=1,1,0,0,0,0" -->
+											<img
+											ng-src="http://images.bestwehotel.com/images/4bcff28a3f88d111_400_300.jpg"
+											onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'"
+											src="${hotelList.photograph}">
+										</a>
 									</div>
-									<div class="rank">
-										<div class="score">
-											<span class="ng-binding">4.7</span>/5分
+									<div class="top clearfix">
+										<i class="pin ng-binding">1</i>
+										<p class="name">
+											<!--<span class="name-text">{{item.hotelName}}</span>-->
+											<a class="name-text ng-binding"
+												href="webHotelDatail?hotelId=${hotelList.id}"
+												target="_blank"> ${hotelList.hotelName} </a>
+											<!-- ngIf: false -->
+										</p>
+										<p class="address ng-binding">
+											地址：<span class="ng-binding">${hotelList.address}</span>
+										</p>
+										<!-- ngIf: item.distance && item.distance !='null' -->
+										<p class="distance ng-binding ng-scope"
+											ng-if="item.distance &amp;&amp; item.distance !='null'">距离市中心
+											*** km</p>
+										<!-- end ngIf: item.distance && item.distance !='null' -->
+
+										<!--<i class="icon-member-hotel" ng-if="item.isScoreHotel"></i>-->
+
+										<div class="type clearfix">
+											<!--<i class="icon-topclass"></i>-->
+											<!--<i class="icon-club"></i>-->
 										</div>
-										<div class="star clearfix comment-level ng-binding"
-											ng-bind-html="item.starsHtml | html">
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_half"></li>
+										<div class="rank">
+											<div class="score">
+												<span class="ng-binding">${hotelList.score}</span>/5分
+											</div>
 										</div>
 									</div>
-
-								</div>
-								<div class="middle clearfix">
-									<!-- ngIf: item.ratingDesc -->
-									<div class="tag ng-binding ng-scope" ng-if="item.ratingDesc">经济型</div>
-									<!-- end ngIf: item.ratingDesc -->
-									<!-- ngRepeat: tagName in item.labels -->
-								</div>
-								<div class="icon clearfix">
-									<!-- ngIf: $parent.hasFacility(item, 'PARKING') -->
-									<!-- ngIf: $parent.hasFacility(item, 'WIFI') -->
-									<!--<span ng-if="$parent.hasFacility(item, 'METTING')"><i class="meeting"></i>会议室</span>-->
-									<!-- ngIf: $parent.hasFacility(item, 'RESTAURANT') -->
-									<!-- ngIf: $parent.hasFacility(item, 'WIRED') -->
-									<!-- ngIf: item.supportForeignGuest -->
-									<span ng-if="item.supportForeignGuest" class="ng-scope"><i
-										class="foreigner"></i>接待外宾</span>
-									<!-- end ngIf: item.supportForeignGuest -->
-								</div>
-								<div class="bottom clearfix">
-									<div class="more">
-										<div class="price ng-binding">
-											￥<span class="ng-binding">199</span>起
+									<div class="middle clearfix">
+										<!-- ngIf: item.ratingDesc -->
+										<div class="tag ng-binding ng-scope" ng-if="item.ratingDesc">${hotelList.alias}</div>
+										<!-- end ngIf: item.ratingDesc -->
+										<!-- ngRepeat: tagName in item.labels -->
+									</div>
+									<div class="icon clearfix">
+										<span ng-if="item.supportForeignGuest" class="ng-scope"><i
+											class="foreigner"></i>接待外宾</span>
+										<!-- end ngIf: item.supportForeignGuest -->
+									</div>
+									<div class="bottom clearfix">
+										<div class="more">
+											<div class="price ng-binding">
+												￥<span class="ng-binding">${hotelList.minimum}</span>起
+											</div>
+											<!--<button ng-click="goHotelDetail(item)">{{'HOTELSEARCH_MORE_ROOM_TYPE' | T}}</button>-->
+											<a href="webHotelDatail?hotelId=${hotelList.id}"
+												target="_blank" class="ng-binding">查看详情</a>
+											<!-- http://hotel.bestwehotel.com/HotelDetail?hotelId=JJ60133&amp;checkInDate=2018-12-07&amp;checkOutDate=2018-12-08&amp;extend=1,1,0,0,0, -->
 										</div>
-										<!--<button ng-click="goHotelDetail(item)">{{'HOTELSEARCH_MORE_ROOM_TYPE' | T}}</button>-->
-										<a href="hotelDatail.jsp" target="_blank" class="ng-binding">查看详情</a>
-										<!-- http://hotel.bestwehotel.com/HotelDetail?hotelId=JJ60133&amp;checkInDate=2018-12-07&amp;checkOutDate=2018-12-08&amp;extend=1,1,0,0,0, -->
 									</div>
 								</div>
-							</div>
-						</c:forEach>
+							</c:forEach>
+						</c:if>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 						<!-- 分页组件 -->
 						<!-- ngIf: pagination.pageCount > 1 -->
 						<div class="pager ng-isolate-scope" hotel-pagination=""
 							pagination="pagination" callback="queryHotels(false)"
 							ng-if="pagination.pageCount &gt; 1">
+
 							<!-- ngIf: pagination.pageIndex > 1 -->
 							<!-- ngRepeat: item in pagination.pages -->
 							<div ng-repeat="item in pagination.pages"
@@ -1002,7 +759,11 @@ ng\:form {
 									class="ng-pristine ng-valid" value="1">页
 							</div>
 							<button ng-click="goPage(pagination.jumpPageIndex)">确&nbsp;&nbsp;定</button>
+
 						</div>
+
+
+
 						<!-- end ngIf: pagination.pageCount > 1 -->
 					</div>
 					<div class="map-box">
@@ -1141,173 +902,11 @@ ng\:form {
 					</div>
 				</div>
 			</div>
-
 			<!-- CONTENT ED -->
-
 			<jsp:include page="footer.jsp" />
 		</div>
 	</div>
-
-	<script src="js/hotelSearch/siteConfig.js"></script>
-
-	<script src="js/hotelSearch/vendor.js"></script>
-
-	<script src="js/hotelSearch/wehotel.js"></script>
-
-
-	<div id="inOutDatePickerBox" class="date-mainBox"
-		style="display: none;">
-		<div class="date-box ">
-			<div class="date_main">
-				<div class="date_box_top">
-					<div class="date_minus date_backL"></div>
-					<div class="date_month"></div>
-				</div>
-				<ul class="date_week_ul">
-					<li>日</li>
-					<li>一</li>
-					<li>二</li>
-					<li>三</li>
-					<li>四</li>
-					<li>五</li>
-					<li>六</li>
-				</ul>
-				<table class="ate_box_table" cellspacing="1" cellpadding="0">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="date-box date-ml4">
-			<div class="date_main">
-				<div class="date_box_top">
-					<div class="date_month"></div>
-					<div class="date_add date_backR"></div>
-				</div>
-				<ul class="date_week_ul">
-					<li>日</li>
-					<li>一</li>
-					<li>二</li>
-					<li>三</li>
-					<li>四</li>
-					<li>五</li>
-					<li>六</li>
-				</ul>
-				<table class="ate_box_table" cellspacing="1" cellpadding="0">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
 	<script charset="utf-8" src="images/hotelSearch/main"></script>
+	<script src="js/cityTemplate.js"></script>
 </body>
 </html>

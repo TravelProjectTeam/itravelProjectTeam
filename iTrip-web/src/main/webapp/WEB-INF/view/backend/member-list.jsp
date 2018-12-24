@@ -56,7 +56,7 @@
 					批量删除</a> <a href="javascript:;"
 				onclick="member_add('添加用户','memberAdd','','510')"
 				class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i>
-					添加用户</a></span> <span class="r">共有数据：<strong>88</strong> 条
+					添加用户</a></span> <span class="r">共有数据：<strong>${count}</strong> 条
 			</span>
 		</div>
 		<div class="mt-20">
@@ -83,13 +83,17 @@
 							<td>${status.index+1}</td>
 							<td><u style="cursor: pointer" class="text-primary"
 								onclick="member_show('张三','member-show.html','10001','360','400')">${userList.userName}</u></td>
-							<td>${userList.sex}</td>
+							<td><c:if test="${userList.sex == 0}">男</c:if>
+							    <c:if test="${userList.sex == 1}">女</c:if>
+							    <c:if test="${userList.sex == 2}">保密</c:if> </td>
 							<td>${userList.phone}</td>
 							<td>${userList.email}</td>
 							<td class="text-l">${userList.address}</td>
 							<td>${userList.joinDate}</td>
 							<td class="td-status"><span
-								class="label label-success radius">${userList.status}</span></td>
+								class="label label-success radius"><c:if
+										test="${userList.status==1}">普通用户</c:if> <c:if
+										test="${userList.status==2}">会员用户</c:if></span></td>
 							<td class="td-manage"><a style="text-decoration: none"
 								onClick="member_stop(this,'10001')" href="javascript:;"
 								title="停用"><i class="Hui-iconfont">&#xe631;</i></a> <a
@@ -100,9 +104,9 @@
 								style="text-decoration: none" class="ml-5"
 								onClick="change_password('修改密码','change-password.html','10001','600','270')"
 								href="javascript:;" title="修改密码"><i class="Hui-iconfont">&#xe63f;</i></a>
-								<a title="删除" href="javascript:;" onclick="datadel(${userList.id})"
-								class="ml-5" style="text-decoration: none"><i
-									class="Hui-iconfont">&#xe6e2;</i></a></td>
+								<a title="删除" href="javascript:;"
+								onclick="datadel(${userList.id})" class="ml-5"
+								style="text-decoration: none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
 						</tr>
 					</c:forEach>
 				</tbody>

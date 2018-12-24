@@ -32,7 +32,7 @@ public class WebUsersController {
 	}
 
 	@RequestMapping("/webIndex")
-	public String getWebIndex() {
+	public String getWebIndex(HttpServletRequest request) {
 		return "web/index";
 	}
 	
@@ -61,6 +61,7 @@ public class WebUsersController {
 		User user = new User();
 		user.setPhone(phone);
 		user.setPwd(pwd);
+		user.setStatus("1");
 		userService.add(user);
 		return "redirect:webLogin";
 	}
@@ -82,6 +83,7 @@ public class WebUsersController {
 		String code = (String) request.getSession().getAttribute("verifyCodeValue");
 		if (verifyCode.equalsIgnoreCase(code)) {//比较验证码是否相同
 			if (user != null) {
+				request.getSession().setAttribute("userSession", user);
 				return user.toString();
 			}
 			return null;

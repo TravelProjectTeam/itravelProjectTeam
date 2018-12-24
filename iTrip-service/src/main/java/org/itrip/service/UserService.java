@@ -23,11 +23,12 @@ public interface UserService {
 	
 	public List<User> getAllUser();
 	
+	public int getNotAdminCount();
+	
 	public User getById(int id);
 	
 	public int updateUser(User user);
 	
 	public int deleteManyUser(List<Integer> ids);
-
-	
+		
 }

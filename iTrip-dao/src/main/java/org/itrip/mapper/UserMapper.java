@@ -72,6 +72,12 @@ public interface UserMapper {
 	public List<User> getAllUser();
 	
 	/**
+	 * 查询后台非管理员用户的数量
+	 * @author inslok666
+	 */
+	public int getNotAdminCount();
+	
+	/**
 	 * 后台新增用户
 	 * @param 邹航
 	 * @return

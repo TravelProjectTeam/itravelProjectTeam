@@ -54,6 +54,11 @@ public class UserServiceImpl implements UserService {
 	public List<User> getAllUser() {
 		return userMapper.getAllUser();
 	}
+	
+	@Override
+	public int getNotAdminCount() {
+		return userMapper.getNotAdminCount();
+	}
 
 	@Override
 	public User getById(int id) {

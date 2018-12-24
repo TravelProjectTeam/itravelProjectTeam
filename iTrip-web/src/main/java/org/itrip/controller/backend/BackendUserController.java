@@ -3,8 +3,11 @@ package org.itrip.controller.backend;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.itrip.pojo.User;
 import org.itrip.service.UserService;
+import org.itrip.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,12 +32,24 @@ public class BackendUserController {
 	@RequestMapping("login")
 	@ResponseBody
 	public User getLogin(@RequestParam(value = "u", required = false) String phone,
-			@RequestParam(value = "p", required = false) String pwd) {
+			@RequestParam(value = "p", required = false) String pwd,HttpSession session) {
+		pwd = MD5Util.convertMD5(pwd);
 		User user = userService.getIsAdmin(phone, pwd);
 		if (user != null) {
+			session.setAttribute("backUserSession", user);
 			return user;
 		}
 		return null;
+	}
+	
+	/**
+	 * 后台退出，清除session
+	 * @author inslok666
+	 */
+	@RequestMapping("logout")
+	public String getLogout(HttpSession session) {
+		session.invalidate();
+		return "forward:backendLogin";
 	}
 
 	/**
@@ -53,6 +68,7 @@ public class BackendUserController {
 	 */
 	@RequestMapping("memberList")
 	public String getMemberList(Model model) {
+		model.addAttribute("count", userService.getNotAdminCount());
 		model.addAttribute("userList", userService.getAllUser());
 		return "backend/member-list";
 	}
@@ -123,7 +139,7 @@ public class BackendUserController {
 	}
 	
 	// 访问login.jps页面
-	@RequestMapping("bakckendLogin")
+	@RequestMapping("backendLogin")
 	public String getLogin() {
 
 		return "backend/login";

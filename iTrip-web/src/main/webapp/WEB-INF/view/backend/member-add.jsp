@@ -54,11 +54,11 @@
 					class="c-red">*</span>性别：</label>
 				<div class="formControls col-xs-8 col-sm-9 skin-minimal">
 					<div class="radio-box">
-						<input name="sex" type="radio" id="sex-1" value="0" checked <c:if test="${userInfo.sex == 0}">checked</c:if>>
+						<input name="sex" type="radio" id="sex-1" value="0" checked <c:if test="${userInfo.sex == 1}">checked</c:if>>
 						<label for="sex-1">男</label>
 					</div>
 					<div class="radio-box">
-						<input type="radio" id="sex-2" name="sex" value="1" <c:if test="${userInfo.sex == 1}">checked</c:if>> <label
+						<input type="radio" id="sex-2" name="sex" value="1" <c:if test="${userInfo.sex == 0}">checked</c:if>> <label
 							for="sex-2">女</label>
 					</div>
 					<div class="radio-box">

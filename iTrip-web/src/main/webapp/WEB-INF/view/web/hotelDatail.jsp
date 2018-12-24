@@ -1,5 +1,11 @@
 <%@ page language="java" import="java.util.*"
 	contentType="text/html;charset=UTF-8"%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<%@page import="java.text.SimpleDateFormat"%>
 <head>
 <link rel="stylesheet" type="text/css"
 	href="css/hotelDatail.css">
@@ -300,11 +306,32 @@ ng\:form {
 <!-- EOF CSS INCLUDE -->
 <script type="text/javascript" src="js/hotelDatail_js/tongji.js"></script>
 <script type="text/javascript" src="js/hotelDatail_js/maps"></script>
+<script language="JavaScript" type="text/javascript"> 
+function GetDateStr(AddDayCount) { 
+	var dd = new Date(); 
+	dd.setDate(dd.getDate()+AddDayCount);//获取AddDayCount天后的日期 
+	var y = dd.getFullYear(); 
+	var m = dd.getMonth()+1;//获取当前月份的日期 
+	var d = dd.getDate(); 
+	return y+"-"+m+"-"+d; 
+} 
 
+$(function(){
+	alert(GetDateStr(1));
+})
+</script>
 </head>
 <body ng-controller="hotelDetailController" ng-init="init()"
 	ng-class="{'plateno':$root.siteConfig.site_id==$root.siteEnum.Plateno}"
 	class="ng-scope">
+
+	<%
+		
+		Date d = new Date();
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		String now = df.format(d);
+		
+	%>
 
 	<!-- ngInclude: $root.siteConfig.hotelDetail.template_url -->
 	<div class="container ng-scope"
@@ -410,7 +437,7 @@ ng\:form {
 				<div class="crumbs">
 					<a href="index.jsp" class="ng-binding"><i
 						class="icon-hotel_home"></i>首页</a> &gt; <a href="hotelSearch.jsp"
-						class="ng-binding">酒店列表</a> &gt; <a class="active ng-binding">锦江之星上海陆家嘴酒店</a>
+						class="ng-binding">酒店列表</a> &gt; <a class="active ng-binding">${hotel.hotelName}</a>
 				</div>
 				<div class="hotel-info">
 					<!--滚动图-->
@@ -771,22 +798,22 @@ ng\:form {
 
 					<div class="hotelInfo-main">
 						<div class="hotelInfo-main-section">
-							<h1 class="ng-binding">锦江之星上海陆家嘴酒店</h1>
+							<h1 class="ng-binding">${hotel.hotelName}</h1>
 							<!-- ngIf: 0 -->
 							<p class="clearfix">
 								<!-- ngRepeat: label in params.labels -->
 								<span class="tag ng-binding ng-scope"
-									ng-repeat="label in params.labels">经济型</span>
+									ng-repeat="label in params.labels">${hotel.roomAlias}</span>
 								<!-- end ngRepeat: label in params.labels -->
 							</p>
 							<address>
-								<p class="ng-binding">地址：上海市浦东新区浦电路57号</p>
-								<p class="ng-binding">电话：021-68753358</p>
+								<p class="ng-binding">地址：${hotel.address}</p>
+								<p class="ng-binding">电话：${hotel.phone}</p>
 							</address>
 							<!--评分-->
 							<div class="userStar">
 								<p class="score ng-binding">
-									<b class="ng-binding">4.7</b>/5分
+									<b class="ng-binding">${hotel.score}/5分</b>
 								</p>
 								<ul class="comment-level ng-binding"
 									ng-bind-html="entireScoreVO.starsHtml | html">
@@ -808,16 +835,8 @@ ng\:form {
 						<div class="hotelInfo-main-tips">
 							<p class="ng-binding">酒店简介：</p>
 							<p ng-bind-html="hotelInfo.description[0]" class="ng-binding">
-								锦
-								江之星上海陆家嘴酒店位于上海市浦东新区浦电路57号靠近浦城路口.周边交通便利，公交82、01、454、818等均可到达酒店。酒店毗邻地铁2号线东
-								昌路站，4号线塘桥站，6号线浦电路站，9号线商城路站.
-								酒店驱车前往上海陆家嘴迪士尼旗舰店（全球最大）、第一八佰伴商业圈、东方明珠、金茂大厦、世界环球金融中心、海洋水族馆、陆家嘴商务圈、东方医院、仁济
-								医院、上海儿童医学中心仅需起步价左右。驱车前往上海新国际博览中心、世博中国馆和沙特馆（月亮船）约15分钟。酒店前往迪斯尼乐园交通路线：一、迪斯尼
-								专线——酒店出门右转直行300米浦东南路浦电路公交站台乘坐818路
-								（82路）5站至白莲泾客运总站，乘坐“度假区快线”直接抵达上海迪斯尼乐园；二、酒店出门直行至浦电路浦城路，乘坐公交1019路3站至地铁6号线浦电
-								路站，乘坐地铁6号线浦电路站至东方体育中心站换乘11号线至迪士尼乐园站.酒店内配套“星连心”茶餐厅和设备齐全的会议室，无线上网（WIFI）全覆
-								盖，是您商务、会展以及旅游下榻的首选酒店。<br>酒店新增影视房，爱奇艺正版影库，每天定期更新；100寸金属幕布,流畅高清投影机+5,1立体环绕声音响，在客房还原影院真实观影效果，私密的独立空间，随点随播；住宿+娱乐的多元化消费。
-							</p>
+								${hotel.details}
+								</p>
 							<p></p>
 						</div>
 					</div>
@@ -883,13 +902,13 @@ ng\:form {
 						<div class="room-date-item">
 							<label class="ng-binding">入住日期</label> <input type="text"
 								placeholder="入住日期" class="input-date" id="checkInDate"
-								value="2018-12-07" readonly="readonly"
+								value="<%=now %>" 
 								data-timer="1544112000000">
 						</div>
 						<div class="room-date-item">
 							<label class="ng-binding">离店日期</label> <input type="text"
 								placeholder="离店日期" class="input-date" id="checkOutDate"
-								value="2018-12-08" readonly="readonly"
+								value="${dayBefore}"
 								data-timer="1544198400000">
 						</div>
 
@@ -969,6 +988,7 @@ ng\:form {
 					<!--尊享会banner-->
 					<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
 					<!--房型列表-->
+					<c:forEach items="${housesList}" var="houses">
 					<div class="room-list">
 						<ul>
 							<!-- ngRepeat: room in roomList -->
@@ -985,28 +1005,39 @@ ng\:form {
 																<div class="room-photo">
 																	<div class="pic">
 																		<img
-																			ng-src="http://images.bestwehotel.com/images/8ff1a5e871891049_640_480.jpg"
 																			onerror="this.parentNode.removeChild(this)"
-																			src="images/hotelDatail/8ff1a5e871891049_640_480.jpg">
+																			src="${houses.roomImage}">
 																	</div>
 																	<div class="room-photo-section">
-																		<span class="ng-binding">商务房A</span>
+																		<span class="ng-binding">${houses.valueName}</span>
 																		<div class="room-photo-detail">
 																			<a class="ng-binding">详情</a>
 																			<ul>
 																				<!-- ngIf: room.bedTypeDesc -->
 																				<li ng-if="room.bedTypeDesc"
-																					class="ng-binding ng-scope">床型：大床 1.8米</li>
+																					class="ng-binding ng-scope">床型:
+																						<c:choose>
+																						   <c:when test="${fn:contains(houses.valueName,'双')}">  
+																						        双床   ${houses.bedArea}
+																						   </c:when>
+																						   <c:otherwise> 
+																						    大床
+																						   </c:otherwise>
+																						</c:choose>
+																						${houses.bedArea}																 </li>
 																				<!-- end ngIf: room.bedTypeDesc -->
 																				<!-- ngIf: room.area -->
-																				<li ng-if="room.area" class="ng-binding ng-scope">面积：21-25㎡</li>
+																				<li ng-if="room.area" class="ng-binding ng-scope">面积：${houses.roomSize}</li>
 																				<!-- end ngIf: room.area -->
 																				<!-- ngIf: room.endFloor -->
 																				<li ng-if="room.endFloor"
-																					class="ng-binding ng-scope">楼层：5,6</li>
+																					class="ng-binding ng-scope">楼层：${houses.floor}</li>
 																				<!-- end ngIf: room.endFloor -->
-																				<li class="ng-binding">不允许加床</li>
-																				<li class="ng-binding">外窗</li>
+																				<li class="ng-binding">
+																					<c:if test="${houses.isHavingbed ==0}">可以加床</c:if>
+																					<c:if test="${houses.isHavingbed ==1}">不可以加床</c:if>
+																				</li>
+																				<li class="ng-binding">${houses.window}</li>
 																				<!-- ngIf: hotelInfo.nonSmokingRoomsNum!=null -->
 																			</ul>
 																		</div>
@@ -1017,9 +1048,12 @@ ng\:form {
 													</tbody>
 												</table>
 											</td>
+											
 											<td valign="top">
 												<div class="room-detail">
 													<table width="100%" cellspacing="0" cellpadding="0">
+													<c:forEach items="${roomsList}" var="rooms">
+														<c:if test="${houses.id == rooms.houseId}">
 														<tbody>
 															<!--价格列表-->
 															<!-- ngRepeat: rate in room.rate -->
@@ -1029,7 +1063,7 @@ ng\:form {
 																class="ng-scope">
 																<td width="230px;">
 																	<p class="ng-binding">
-																		双11特价房199元 <i class="icon-gift ng-hide"
+																		${rooms.roomTitle} <i class="icon-gift ng-hide"
 																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
 																			<a class="gift-detail"> <span
 																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
@@ -1039,23 +1073,33 @@ ng\:form {
 																	</p>
 																</td>
 																<td>
-																	<p class="ng-binding">不含早</p>
+																	<p class="ng-binding">
+																		<c:if test="${rooms.isbreakfast ==1}">不含早餐</c:if>
+																		<c:if test="${rooms.isbreakfast ==2}">含单早</c:if>
+																		<c:if test="${rooms.isbreakfast ==3}">含双早</c:if>
+																	</p>
 																</td>
 																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
+																	<p class="ng-binding">
+																		<c:if test="${rooms.cancellationPolicy ==0}">限时取消</c:if>
+																		<c:if test="${rooms.cancellationPolicy ==1}">免费取消</c:if>
+																	</p> <span
 																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
 																		12:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
 																</td>
 																<td>
 																	<p class="ng-binding">
 																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
+																			ng-class="{'single':room.maxCheckIn==1}">
+																			</i><c:if test="${rooms.number ==1}">x1</c:if>
+																				<c:if test="${rooms.number ==2}">x2</c:if>
+																				<c:if test="${rooms.number ==3}">x3</c:if>
 																	</p>
 																</td>
 																<td>
 																	<p class="price">
 																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">199</span><i
+																		￥<span class="ng-binding">${rooms.price}</span><i
 																			class="ng-binding"></i>
 																	</p>
 																</td>
@@ -1067,1387 +1111,23 @@ ng\:form {
 																	</div>
 																</td>
 															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡价 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">不含早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">313</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含单早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含单早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">343</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含双早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含双早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">373</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
+															
 														</tbody>
+														</c:if>
+														</c:forEach>
 													</table>
 												</div> <!--点击展开更多房型--> <!-- ngIf: room.rate.length > 5 -->
 											</td>
+										
 										</tr>
 									</tbody>
+									
 								</table>
 							</li>
-							<!-- end ngRepeat: room in roomList -->
-							<li class="room-box ng-scope" ng-repeat="room in roomList" id="">
-								<table class="room-table" width="100%" cellspacing="0"
-									cellpadding="0">
-									<tbody>
-										<tr class="table-content">
-											<td width="245px;">
-												<table cellspacing="0" cellpadding="0">
-													<tbody>
-														<tr>
-															<td>
-																<div class="room-photo">
-																	<div class="pic">
-																		<img
-																			ng-src="http://images.bestwehotel.com/images/e547b05b4a8f110d_200_150.jpg"
-																			onerror="this.parentNode.removeChild(this)"
-																			src="images/hotelDatail/e547b05b4a8f110d_200_150.jpg">
-																	</div>
-																	<div class="room-photo-section">
-																		<span class="ng-binding">标准房C</span>
-																		<div class="room-photo-detail">
-																			<a class="ng-binding">详情</a>
-																			<ul>
-																				<!-- ngIf: room.bedTypeDesc -->
-																				<li ng-if="room.bedTypeDesc"
-																					class="ng-binding ng-scope">床型：双床 1.35米，1.1米</li>
-																				<!-- end ngIf: room.bedTypeDesc -->
-																				<!-- ngIf: room.area -->
-																				<li ng-if="room.area" class="ng-binding ng-scope">面积：16-20㎡</li>
-																				<!-- end ngIf: room.area -->
-																				<!-- ngIf: room.endFloor -->
-																				<li ng-if="room.endFloor"
-																					class="ng-binding ng-scope">楼层：5,6</li>
-																				<!-- end ngIf: room.endFloor -->
-																				<li class="ng-binding">不允许加床</li>
-																				<li class="ng-binding">外窗</li>
-																				<!-- ngIf: hotelInfo.nonSmokingRoomsNum!=null -->
-																			</ul>
-																		</div>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</td>
-											<td valign="top">
-												<div class="room-detail">
-													<table width="100%" cellspacing="0" cellpadding="0">
-														<tbody>
-															<!--价格列表-->
-															<!-- ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡价 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">不含早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x3
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">237</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含单早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含单早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x3
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">267</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含双早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含双早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x3
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">297</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-														</tbody>
-													</table>
-												</div> <!--点击展开更多房型--> <!-- ngIf: room.rate.length > 5 -->
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</li>
-							<!-- end ngRepeat: room in roomList -->
-							<li class="room-box ng-scope" ng-repeat="room in roomList" id="">
-								<table class="room-table" width="100%" cellspacing="0"
-									cellpadding="0">
-									<tbody>
-										<tr class="table-content">
-											<td width="245px;">
-												<table cellspacing="0" cellpadding="0">
-													<tbody>
-														<tr>
-															<td>
-																<div class="room-photo">
-																	<div class="pic">
-																		<img
-																			ng-src="http://images.bestwehotel.com/images/e547b05b4a8f110d_200_150.jpg"
-																			onerror="this.parentNode.removeChild(this)"
-																			src="images/hotelDatail/e547b05b4a8f110d_200_150.jpg">
-																	</div>
-																	<div class="room-photo-section">
-																		<span class="ng-binding">标准房B</span>
-																		<div class="room-photo-detail">
-																			<a class="ng-binding">详情</a>
-																			<ul>
-																				<!-- ngIf: room.bedTypeDesc -->
-																				<li ng-if="room.bedTypeDesc"
-																					class="ng-binding ng-scope">床型：双床 1.35米，1.1米</li>
-																				<!-- end ngIf: room.bedTypeDesc -->
-																				<!-- ngIf: room.area -->
-																				<li ng-if="room.area" class="ng-binding ng-scope">面积：16-20㎡</li>
-																				<!-- end ngIf: room.area -->
-																				<!-- ngIf: room.endFloor -->
-																				<li ng-if="room.endFloor"
-																					class="ng-binding ng-scope">楼层：5,6</li>
-																				<!-- end ngIf: room.endFloor -->
-																				<li class="ng-binding">不允许加床</li>
-																				<li class="ng-binding">外窗</li>
-																				<!-- ngIf: hotelInfo.nonSmokingRoomsNum!=null -->
-																			</ul>
-																		</div>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</td>
-											<td valign="top">
-												<div class="room-detail">
-													<table width="100%" cellspacing="0" cellpadding="0">
-														<tbody>
-															<!--价格列表-->
-															<!-- ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡价 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">不含早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x3
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">265</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含单早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含单早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x3
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">295</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含双早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含双早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x3
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">325</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-														</tbody>
-													</table>
-												</div> <!--点击展开更多房型--> <!-- ngIf: room.rate.length > 5 -->
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</li>
-							<!-- end ngRepeat: room in roomList -->
-							<li class="room-box ng-scope" ng-repeat="room in roomList" id="">
-								<table class="room-table" width="100%" cellspacing="0"
-									cellpadding="0">
-									<tbody>
-										<tr class="table-content">
-											<td width="245px;">
-												<table cellspacing="0" cellpadding="0">
-													<tbody>
-														<tr>
-															<td>
-																<div class="room-photo">
-																	<div class="pic">
-																		<img
-																			ng-src="http://images.bestwehotel.com/images/8ff1a5e871891049_200_150.jpg"
-																			onerror="this.parentNode.removeChild(this)"
-																			src="images/hotelDatail/8ff1a5e871891049_200_150.jpg">
-																	</div>
-																	<div class="room-photo-section">
-																		<span class="ng-binding">商务房B</span>
-																		<div class="room-photo-detail">
-																			<a class="ng-binding">详情</a>
-																			<ul>
-																				<!-- ngIf: room.bedTypeDesc -->
-																				<li ng-if="room.bedTypeDesc"
-																					class="ng-binding ng-scope">床型：大床 1.8米</li>
-																				<!-- end ngIf: room.bedTypeDesc -->
-																				<!-- ngIf: room.area -->
-																				<li ng-if="room.area" class="ng-binding ng-scope">面积：16-20㎡</li>
-																				<!-- end ngIf: room.area -->
-																				<!-- ngIf: room.endFloor -->
-																				<li ng-if="room.endFloor"
-																					class="ng-binding ng-scope">楼层：5,6</li>
-																				<!-- end ngIf: room.endFloor -->
-																				<li class="ng-binding">不允许加床</li>
-																				<li class="ng-binding">部分无窗</li>
-																				<!-- ngIf: hotelInfo.nonSmokingRoomsNum!=null -->
-																			</ul>
-																		</div>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</td>
-											<td valign="top">
-												<div class="room-detail">
-													<table width="100%" cellspacing="0" cellpadding="0">
-														<tbody>
-															<!--价格列表-->
-															<!-- ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡价 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">不含早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">265</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含单早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含单早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">295</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含双早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含双早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">325</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-														</tbody>
-													</table>
-												</div> <!--点击展开更多房型--> <!-- ngIf: room.rate.length > 5 -->
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</li>
-							<!-- end ngRepeat: room in roomList -->
-							<li class="room-box ng-scope" ng-repeat="room in roomList" id="">
-								<table class="room-table" width="100%" cellspacing="0"
-									cellpadding="0">
-									<tbody>
-										<tr class="table-content">
-											<td width="245px;">
-												<table cellspacing="0" cellpadding="0">
-													<tbody>
-														<tr>
-															<td>
-																<div class="room-photo">
-																	<div class="pic">
-																		<img
-																			ng-src="http://images.bestwehotel.com/images/e547b05b4a8f110d_200_150.jpg"
-																			onerror="this.parentNode.removeChild(this)"
-																			src="images/hotelDatail/e547b05b4a8f110d_200_150.jpg">
-																	</div>
-																	<div class="room-photo-section">
-																		<span class="ng-binding">标准房A</span>
-																		<div class="room-photo-detail">
-																			<a class="ng-binding">详情</a>
-																			<ul>
-																				<!-- ngIf: room.bedTypeDesc -->
-																				<li ng-if="room.bedTypeDesc"
-																					class="ng-binding ng-scope">床型：双床 1.35米，1.1米</li>
-																				<!-- end ngIf: room.bedTypeDesc -->
-																				<!-- ngIf: room.area -->
-																				<li ng-if="room.area" class="ng-binding ng-scope">面积：21-25㎡</li>
-																				<!-- end ngIf: room.area -->
-																				<!-- ngIf: room.endFloor -->
-																				<li ng-if="room.endFloor"
-																					class="ng-binding ng-scope">楼层：5,6</li>
-																				<!-- end ngIf: room.endFloor -->
-																				<li class="ng-binding">不允许加床</li>
-																				<li class="ng-binding">外窗</li>
-																				<!-- ngIf: hotelInfo.nonSmokingRoomsNum!=null -->
-																			</ul>
-																		</div>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</td>
-											<td valign="top">
-												<div class="room-detail">
-													<table width="100%" cellspacing="0" cellpadding="0">
-														<tbody>
-															<!--价格列表-->
-															<!-- ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡价 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">不含早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x3
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">313</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含单早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含单早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x3
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">343</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含双早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含双早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x3
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">373</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-														</tbody>
-													</table>
-												</div> <!--点击展开更多房型--> <!-- ngIf: room.rate.length > 5 -->
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</li>
-							<!-- end ngRepeat: room in roomList -->
-							<li class="room-box ng-scope" ng-repeat="room in roomList" id="">
-								<table class="room-table" width="100%" cellspacing="0"
-									cellpadding="0">
-									<tbody>
-										<tr class="table-content">
-											<td width="245px;">
-												<table cellspacing="0" cellpadding="0">
-													<tbody>
-														<tr>
-															<td>
-																<div class="room-photo">
-																	<div class="pic">
-																		<img
-																			ng-src="http://images.bestwehotel.com/images/55a67b052400be2f_400_300.jpg"
-																			onerror="this.parentNode.removeChild(this)"
-																			src="images/hotelDatail/55a67b052400be2f_400_300.jpg">
-																	</div>
-																	<div class="room-photo-section">
-																		<span class="ng-binding">影视商务房A</span>
-																		<div class="room-photo-detail">
-																			<a class="ng-binding">详情</a>
-																			<ul>
-																				<!-- ngIf: room.bedTypeDesc -->
-																				<li ng-if="room.bedTypeDesc"
-																					class="ng-binding ng-scope">床型：大床 1.8米</li>
-																				<!-- end ngIf: room.bedTypeDesc -->
-																				<!-- ngIf: room.area -->
-																				<li ng-if="room.area" class="ng-binding ng-scope">面积：21-25㎡</li>
-																				<!-- end ngIf: room.area -->
-																				<!-- ngIf: room.endFloor -->
-																				<li ng-if="room.endFloor"
-																					class="ng-binding ng-scope">楼层：6</li>
-																				<!-- end ngIf: room.endFloor -->
-																				<li class="ng-binding">不允许加床</li>
-																				<li class="ng-binding">外窗</li>
-																				<!-- ngIf: hotelInfo.nonSmokingRoomsNum!=null -->
-																			</ul>
-																		</div>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</td>
-											<td valign="top">
-												<div class="room-detail">
-													<table width="100%" cellspacing="0" cellpadding="0">
-														<tbody>
-															<!--价格列表-->
-															<!-- ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡价 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">不含早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">427</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含单早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含单早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">457</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含双早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含双早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">487</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-														</tbody>
-													</table>
-												</div> <!--点击展开更多房型--> <!-- ngIf: room.rate.length > 5 -->
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</li>
-							<!-- end ngRepeat: room in roomList -->
-							<li class="room-box ng-scope" ng-repeat="room in roomList" id="">
-								<table class="room-table" width="100%" cellspacing="0"
-									cellpadding="0">
-									<tbody>
-										<tr class="table-content">
-											<td width="245px;">
-												<table cellspacing="0" cellpadding="0">
-													<tbody>
-														<tr>
-															<td>
-																<div class="room-photo">
-																	<div class="pic">
-																		<img
-																			ng-src="http://images.bestwehotel.com/images/8ff1a5e871891049_200_150.jpg"
-																			onerror="this.parentNode.removeChild(this)"
-																			src="images/hotelDatail/8ff1a5e871891049_200_150.jpg">
-																	</div>
-																	<div class="room-photo-section">
-																		<span class="ng-binding">商务套房A</span>
-																		<div class="room-photo-detail">
-																			<a class="ng-binding">详情</a>
-																			<ul>
-																				<!-- ngIf: room.bedTypeDesc -->
-																				<li ng-if="room.bedTypeDesc"
-																					class="ng-binding ng-scope">床型：大床 2米</li>
-																				<!-- end ngIf: room.bedTypeDesc -->
-																				<!-- ngIf: room.area -->
-																				<li ng-if="room.area" class="ng-binding ng-scope">面积：40-50㎡</li>
-																				<!-- end ngIf: room.area -->
-																				<!-- ngIf: room.endFloor -->
-																				<li ng-if="room.endFloor"
-																					class="ng-binding ng-scope">楼层：6</li>
-																				<!-- end ngIf: room.endFloor -->
-																				<li class="ng-binding">不允许加床</li>
-																				<li class="ng-binding">外窗</li>
-																				<!-- ngIf: hotelInfo.nonSmokingRoomsNum!=null -->
-																			</ul>
-																		</div>
-																	</div>
-																</div>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</td>
-											<td valign="top">
-												<div class="room-detail">
-													<table width="100%" cellspacing="0" cellpadding="0">
-														<tbody>
-															<!--价格列表-->
-															<!-- ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡价 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">不含早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">569</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含单早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含单早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">599</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-															<!-- ngIf: room.showAllPlan || $index < 5 -->
-															<tr ng-repeat="rate in room.rate"
-																ng-if="room.showAllPlan || $index &lt; 5"
-																class="ng-scope">
-																<td width="230px;">
-																	<p class="ng-binding">
-																		普卡会员含双早 <i class="icon-gift ng-hide"
-																			ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																			<a class="gift-detail"> <span
-																				class="section ng-binding">会员本人入住酒店，可赠送礼包 </span> <span
-																				class="section ng-binding"></span>
-																		</a>
-																		</i>
-																	</p>
-																</td>
-																<td>
-																	<p class="ng-binding">含双早</p>
-																</td>
-																<td class="policy">
-																	<p class="ng-binding">限时取消</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		18:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
-																</td>
-																<td>
-																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}"></i>x2
-																	</p>
-																</td>
-																<td>
-																	<p class="price">
-																		<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																		￥<span class="ng-binding">629</span><i
-																			class="ng-binding"></i>
-																	</p>
-																</td>
-																<td>
-																	<div class="room-link">
-																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding"
-																			ng-class="{'disabled': rate.bookingType != 0}"
-																			ng-click="redirectNewOrder(rate,room)">立即预订</a>
-																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																	</div>
-																</td>
-															</tr>
-															<!-- end ngIf: room.showAllPlan || $index < 5 -->
-															<!-- end ngRepeat: rate in room.rate -->
-														</tbody>
-													</table>
-												</div> <!--点击展开更多房型--> <!-- ngIf: room.rate.length > 5 -->
-											</td>
-										</tr>
-									</tbody>
-								</table>
-							</li>
-							<!-- end ngRepeat: room in roomList -->
+							
 						</ul>
 					</div>
+					</c:forEach>
 				</div>
 			</div>
 
@@ -2456,24 +1136,6 @@ ng\:form {
 					<ul class="nav-tabs">
 						<li class="active"><a class="scroll-five"><span
 								class="ng-binding">酒店信息</span></a></li>
-						<!-- ngIf: hotelInfo.policy[0] -->
-						<li ng-if="hotelInfo.policy[0]" class="ng-scope"><a
-							class="scroll-four"><span class="ng-binding">酒店政策</span></a></li>
-						<!-- end ngIf: hotelInfo.policy[0] -->
-						<!-- ngIf: hotelDetailInfo.facilities.facList.length>0 -->
-						<li ng-if="hotelDetailInfo.facilities.facList.length&gt;0"
-							class="ng-scope"><a class="scroll-four"><span
-								class="ng-binding">酒店设施</span></a></li>
-						<!-- end ngIf: hotelDetailInfo.facilities.facList.length>0 -->
-						<!-- ngIf: hotelDetailInfo.facilities.serList.length>0 -->
-						<li ng-if="hotelDetailInfo.facilities.serList.length&gt;0"
-							class="ng-scope"><a class="scroll-four"><span
-								class="ng-binding">酒店服务</span></a></li>
-						<!-- end ngIf: hotelDetailInfo.facilities.serList.length>0 -->
-						<!-- ngIf: comments.length>0 -->
-						<li ng-if="comments.length&gt;0" class="ng-scope"><a
-							class="scroll-four"><span class="ng-binding">用户评论</span></a></li>
-						<!-- end ngIf: comments.length>0 -->
 					</ul>
 				</div>
 				<div class="wapper-content tab-content" id="tab-con">
@@ -2484,31 +1146,22 @@ ng\:form {
 							<b class="ng-binding">预订保留：</b>预订保留到
 						</p>
 						<p class="ng-binding">
-							<b class="ng-binding">入住时间：</b>12:00
+							<b class="ng-binding">入住时间：</b>中午 13:00
 						</p>
 						<p class="ng-binding">
-							<b class="ng-binding">退房时间：</b>12:00
+							<b class="ng-binding">退房时间：</b>中午 12:00
 						</p>
 						<p>
 							<b class="ng-binding">酒店介绍：</b>
 						</p>
 						<p ng-bind-html="hotelInfo.description[0]" class="ng-binding">
-							锦
-							江之星上海陆家嘴酒店位于上海市浦东新区浦电路57号靠近浦城路口.周边交通便利，公交82、01、454、818等均可到达酒店。酒店毗邻地铁2号线东
-							昌路站，4号线塘桥站，6号线浦电路站，9号线商城路站.
-							酒店驱车前往上海陆家嘴迪士尼旗舰店（全球最大）、第一八佰伴商业圈、东方明珠、金茂大厦、世界环球金融中心、海洋水族馆、陆家嘴商务圈、东方医院、仁济
-							医院、上海儿童医学中心仅需起步价左右。驱车前往上海新国际博览中心、世博中国馆和沙特馆（月亮船）约15分钟。酒店前往迪斯尼乐园交通路线：一、迪斯尼
-							专线——酒店出门右转直行300米浦东南路浦电路公交站台乘坐818路
-							（82路）5站至白莲泾客运总站，乘坐“度假区快线”直接抵达上海迪斯尼乐园；二、酒店出门直行至浦电路浦城路，乘坐公交1019路3站至地铁6号线浦电
-							路站，乘坐地铁6号线浦电路站至东方体育中心站换乘11号线至迪士尼乐园站.酒店内配套“星连心”茶餐厅和设备齐全的会议室，无线上网（WIFI）全覆
-							盖，是您商务、会展以及旅游下榻的首选酒店。<br>酒店新增影视房，爱奇艺正版影库，每天定期更新；100寸金属幕布,流畅高清投影机+5,1立体环绕声音响，在客房还原影院真实观影效果，私密的独立空间，随点随播；住宿+娱乐的多元化消费。
-						</p>
+							${hotel.details}	</p>
 						<p></p>
 					</div>
 					<!-- ngIf: hotelInfo.policy[0] -->
 					<div class="tab-pane ng-scope" ng-if="hotelInfo.policy[0]">
 						<h4 class="ng-binding">酒店政策</h4>
-						<p ng-bind-html="hotelInfo.policy[0]" class="ng-binding">周末以及节假日的房价会有不同幅度的调整。</p>
+						<p ng-bind-html="hotelInfo.policy[0]" class="ng-binding">${hotel.hotelPolicy}</p>
 					</div>
 					<!-- end ngIf: hotelInfo.policy[0] -->
 					<!-- ngIf: hotelDetailInfo.facilities.facList.length>0 -->
@@ -2519,24 +1172,9 @@ ng\:form {
 							<!-- ngRepeat: fac in hotelDetailInfo.facilities.facList -->
 							<!-- ngIf: fac.facType==0 -->
 							<li ng-repeat="fac in hotelDetailInfo.facilities.facList"
-								ng-if="fac.facType==0" class="ng-binding ng-scope">大堂上网电脑</li>
+								ng-if="fac.facType==0" class="ng-binding ng-scope">${hotel.facilitiesName}</li>
 							<!-- end ngIf: fac.facType==0 -->
-							<!-- end ngRepeat: fac in hotelDetailInfo.facilities.facList -->
-							<!-- ngIf: fac.facType==0 -->
-							<li ng-repeat="fac in hotelDetailInfo.facilities.facList"
-								ng-if="fac.facType==0" class="ng-binding ng-scope">免费停车</li>
-							<!-- end ngIf: fac.facType==0 -->
-							<!-- end ngRepeat: fac in hotelDetailInfo.facilities.facList -->
-							<!-- ngIf: fac.facType==0 -->
-							<li ng-repeat="fac in hotelDetailInfo.facilities.facList"
-								ng-if="fac.facType==0" class="ng-binding ng-scope">星连心茶餐厅</li>
-							<!-- end ngIf: fac.facType==0 -->
-							<!-- end ngRepeat: fac in hotelDetailInfo.facilities.facList -->
-							<!-- ngIf: fac.facType==0 -->
-							<li ng-repeat="fac in hotelDetailInfo.facilities.facList"
-								ng-if="fac.facType==0" class="ng-binding ng-scope">前台保险柜</li>
-							<!-- end ngIf: fac.facType==0 -->
-							<!-- end ngRepeat: fac in hotelDetailInfo.facilities.facList -->
+							
 						</ul>
 					</div>
 					<!-- end ngIf: hotelDetailInfo.facilities.facList.length>0 -->
@@ -2547,14 +1185,9 @@ ng\:form {
 						<ul class="list">
 							<!-- ngRepeat: ser in hotelDetailInfo.facilities.serList -->
 							<li ng-repeat="ser in hotelDetailInfo.facilities.serList"
-								class="ng-binding ng-scope">24小时保安</li>
+								class="ng-binding ng-scope">${hotel.hotelservices}</li>
 							<!-- end ngRepeat: ser in hotelDetailInfo.facilities.serList -->
-							<li ng-repeat="ser in hotelDetailInfo.facilities.serList"
-								class="ng-binding ng-scope">24小时前台服务</li>
-							<!-- end ngRepeat: ser in hotelDetailInfo.facilities.serList -->
-							<li ng-repeat="ser in hotelDetailInfo.facilities.serList"
-								class="ng-binding ng-scope">叫醒服务</li>
-							<!-- end ngRepeat: ser in hotelDetailInfo.facilities.serList -->
+							
 						</ul>
 					</div>
 					<!-- end ngIf: hotelDetailInfo.facilities.serList.length>0 -->
@@ -2670,113 +1303,6 @@ ng\:form {
 								</div>
 							</li>
 							<!-- end ngRepeat: comment in comments -->
-							<li ng-repeat="comment in comments" class="ng-scope">
-								<div class="review-userImg">
-									<div class="user-photo">
-
-										<span class="user-raduis icon-hotel_user-bg hotel"></span>
-									</div>
-									<div class="user-name user-reviewName ng-binding">31***22</div>
-								</div>
-								<div class="review-comment">
-									<div class="review-main">
-										<p class="ng-binding">中评</p>
-									</div>
-									<div class="review-userStar">
-										<ul class="comment-level ng-binding"
-											ng-bind-html="comment.starsHtml | html">
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li></li>
-										</ul>
-										<div class="user-time ng-binding">2018年12月</div>
-									</div>
-									<!-- ngIf: comment.childrenEvaluations.length>0 -->
-								</div>
-							</li>
-							<!-- end ngRepeat: comment in comments -->
-							<li ng-repeat="comment in comments" class="ng-scope">
-								<div class="review-userImg">
-									<div class="user-photo">
-
-										<span class="user-raduis icon-hotel_user-bg hotel"></span>
-									</div>
-									<div class="user-name user-reviewName ng-binding">31***22</div>
-								</div>
-								<div class="review-comment">
-									<div class="review-main">
-										<p class="ng-binding">中评</p>
-									</div>
-									<div class="review-userStar">
-										<ul class="comment-level ng-binding"
-											ng-bind-html="comment.starsHtml | html">
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li></li>
-										</ul>
-										<div class="user-time ng-binding">2018年12月</div>
-									</div>
-									<!-- ngIf: comment.childrenEvaluations.length>0 -->
-								</div>
-							</li>
-							<!-- end ngRepeat: comment in comments -->
-							<li ng-repeat="comment in comments" class="ng-scope">
-								<div class="review-userImg">
-									<div class="user-photo">
-
-										<span class="user-raduis icon-hotel_user-bg hotel"></span>
-									</div>
-									<div class="user-name user-reviewName ng-binding">50***15</div>
-								</div>
-								<div class="review-comment">
-									<div class="review-main">
-										<p class="ng-binding">期待下一次</p>
-									</div>
-									<div class="review-userStar">
-										<ul class="comment-level ng-binding"
-											ng-bind-html="comment.starsHtml | html">
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-										</ul>
-										<div class="user-time ng-binding">2018年11月</div>
-									</div>
-									<!-- ngIf: comment.childrenEvaluations.length>0 -->
-								</div>
-							</li>
-							<!-- end ngRepeat: comment in comments -->
-							<li ng-repeat="comment in comments" class="ng-scope">
-								<div class="review-userImg">
-									<div class="user-photo">
-
-										<span class="user-raduis icon-hotel_user-bg hotel"></span>
-									</div>
-									<div class="user-name user-reviewName ng-binding">50***15</div>
-								</div>
-								<div class="review-comment">
-									<div class="review-main">
-										<p class="ng-binding">期待下一次</p>
-									</div>
-									<div class="review-userStar">
-										<ul class="comment-level ng-binding"
-											ng-bind-html="comment.starsHtml | html">
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-										</ul>
-										<div class="user-time ng-binding">2018年11月</div>
-									</div>
-									<!-- ngIf: comment.childrenEvaluations.length>0 -->
-								</div>
-							</li>
 							<!-- end ngRepeat: comment in comments -->
 						</ul>
 						<!-- 分页组件 -->
@@ -2816,9 +1342,7 @@ ng\:form {
 							</div>
 							<button ng-click="goPage(pagination.jumpPageIndex)">确&nbsp;&nbsp;定</button>
 						</div>
-						<!-- end ngIf: pagination.pageCount > 1 -->
 					</div>
-					<!-- end ngIf: params.commentLength>0 -->
 				</div>
 			</div>
 
@@ -2835,326 +1359,15 @@ ng\:form {
 							ng-class="{'scroll-container':params.scrollContainer}">
 							<div ng-bind-html="params.content | html" class="ng-binding"></div>
 						</div>
-						<!-- ngIf: params.buttons.length>0 -->
 					</div>
-					<!-- /.modal-content -->
 				</div>
-				<!-- /.modal-dialog -->
 			</div>
 
-			<!-- CONTENT ED -->
 			<jsp:include page="footer.jsp" />
 		</div>
 	</div>
 	<script src="js/hotelDatail_js/siteConfig.js"></script>
-
 	<script src="js/hotelDatail_js/vendor.js"></script>
 	<script src="js/hotelDatail_js/wehotel.js"></script>
-
-
-	<div id="checkInDateBox" class="date-mainBox" style="display: none;">
-		<div class="date-box ">
-			<div class="date_main">
-				<div class="date_box_top">
-					<div class="date_minus date_backL"></div>
-					<div class="date_month"></div>
-				</div>
-				<ul class="date_week_ul">
-					<li>日</li>
-					<li>一</li>
-					<li>二</li>
-					<li>三</li>
-					<li>四</li>
-					<li>五</li>
-					<li>六</li>
-				</ul>
-				<table class="ate_box_table" cellspacing="1" cellpadding="0">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="date-box date-ml4">
-			<div class="date_main">
-				<div class="date_box_top">
-					<div class="date_month"></div>
-					<div class="date_add date_backR"></div>
-				</div>
-				<ul class="date_week_ul">
-					<li>日</li>
-					<li>一</li>
-					<li>二</li>
-					<li>三</li>
-					<li>四</li>
-					<li>五</li>
-					<li>六</li>
-				</ul>
-				<table class="ate_box_table" cellspacing="1" cellpadding="0">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div id="checkOutDateBox" class="date-mainBox" style="display: none;">
-		<div class="date-box ">
-			<div class="date_main">
-				<div class="date_box_top">
-					<div class="date_minus date_backL"></div>
-					<div class="date_month"></div>
-				</div>
-				<ul class="date_week_ul">
-					<li>日</li>
-					<li>一</li>
-					<li>二</li>
-					<li>三</li>
-					<li>四</li>
-					<li>五</li>
-					<li>六</li>
-				</ul>
-				<table class="ate_box_table" cellspacing="1" cellpadding="0">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="date-box date-ml4">
-			<div class="date_main">
-				<div class="date_box_top">
-					<div class="date_month"></div>
-					<div class="date_add date_backR"></div>
-				</div>
-				<ul class="date_week_ul">
-					<li>日</li>
-					<li>一</li>
-					<li>二</li>
-					<li>三</li>
-					<li>四</li>
-					<li>五</li>
-					<li>六</li>
-				</ul>
-				<table class="ate_box_table" cellspacing="1" cellpadding="0">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
 </body>
 </html>
