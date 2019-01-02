@@ -11,7 +11,7 @@
 					<link rel="stylesheet" href="h-ui.admin/css/layer.css"
 						id="layui_layer_skinlayercss" style="">
 </head>
-<body style="background-image: url('h-ui.admin/images/timg.jpg');">
+<body style="background-image: url('h-ui.admin/images/3.jpg');">
 	<div class="login">
 		<div class="message">锦江国际后台登录</div>
 		<div id="darkbannerwrap"></div>

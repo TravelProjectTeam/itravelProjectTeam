@@ -240,7 +240,11 @@
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -263,7 +267,11 @@ transform
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -294,7 +302,11 @@ transform
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -317,7 +329,11 @@ transform
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -349,7 +365,11 @@ keyframes amap-indrm-loader { 0%{
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -372,7 +392,11 @@ keyframes amap-indrm-loader { 0%{
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -395,7 +419,11 @@ keyframes amap-indrm-loader { 0%{
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -418,7 +446,11 @@ transform
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -470,6 +502,7 @@ ng\:form {
 <link rel="stylesheet" href="css/citySelect.css	">
 <!-- EOF CSS INCLUDE -->
 <script type="text/javascript" src="jquery/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ikPVLLkgWCboYmkQBEZXaZlb9pLzmuzG"></script>
 <!-- <script src="js/hotelSearch/wehotel.js"></script>
  -->
 <!-- <script src="js/hotelSearch/siteConfig.js"></script>
@@ -639,7 +672,7 @@ ng\:form {
 						<c:if test="${hotelList!=null}">
 							<c:forEach items="${hotelList}" var="hotelList">
 								<div class="block ng-scope" ng-repeat="item in hotelList"
-									id="hotel_JJ60133">
+									id="hotel_JJ60133" onmouseover="queryss('${hotelList.address}')">
 									<div class="pic">
 										<!-- ngIf: item.preSale -->
 										<a href="webHotelDatail?hotelId=${hotelList.id}"
@@ -659,6 +692,7 @@ ng\:form {
 												target="_blank"> ${hotelList.hotelName} </a>
 											<!-- ngIf: false -->
 										</p>
+										<input type="hidden" name="addresse" value="${hotelList.address}"/>
 										<p class="address ng-binding">
 											地址：<span class="ng-binding">${hotelList.address}</span>
 										</p>
@@ -722,38 +756,38 @@ ng\:form {
 
 
 
-						<!-- 分页组件 -->
-						<!-- ngIf: pagination.pageCount > 1 -->
+						<!-- 
+						ngIf: pagination.pageCount > 1
 						<div class="pager ng-isolate-scope" hotel-pagination=""
 							pagination="pagination" callback="queryHotels(false)"
 							ng-if="pagination.pageCount &gt; 1">
 
-							<!-- ngIf: pagination.pageIndex > 1 -->
-							<!-- ngRepeat: item in pagination.pages -->
+							ngIf: pagination.pageIndex > 1
+							ngRepeat: item in pagination.pages
 							<div ng-repeat="item in pagination.pages"
 								ng-class="{'page': item.index != 'omit', 'omit': item.index == 'omit', 'active': item.index == $parent.pagination.pageIndex }"
 								ng-click="goPage(item.index)"
 								class="ng-binding ng-scope page active">1</div>
-							<!-- end ngRepeat: item in pagination.pages -->
+							end ngRepeat: item in pagination.pages
 							<div ng-repeat="item in pagination.pages"
 								ng-class="{'page': item.index != 'omit', 'omit': item.index == 'omit', 'active': item.index == $parent.pagination.pageIndex }"
 								ng-click="goPage(item.index)" class="ng-binding ng-scope page">2</div>
-							<!-- end ngRepeat: item in pagination.pages -->
+							end ngRepeat: item in pagination.pages
 							<div ng-repeat="item in pagination.pages"
 								ng-class="{'page': item.index != 'omit', 'omit': item.index == 'omit', 'active': item.index == $parent.pagination.pageIndex }"
 								ng-click="goPage(item.index)" class="ng-binding ng-scope omit">...</div>
-							<!-- end ngRepeat: item in pagination.pages -->
+							end ngRepeat: item in pagination.pages
 							<div ng-repeat="item in pagination.pages"
 								ng-class="{'page': item.index != 'omit', 'omit': item.index == 'omit', 'active': item.index == $parent.pagination.pageIndex }"
 								ng-click="goPage(item.index)" class="ng-binding ng-scope page">21</div>
-							<!-- end ngRepeat: item in pagination.pages -->
-							<!-- ngIf: pagination.pageIndex < pagination.pageCount -->
+							end ngRepeat: item in pagination.pages
+							ngIf: pagination.pageIndex < pagination.pageCount
 							<div class="next ng-scope"
 								ng-if="pagination.pageIndex &lt; pagination.pageCount"
 								ng-click="goPage('next')">
 								<icon class="triangle-right"></icon>
 							</div>
-							<!-- end ngIf: pagination.pageIndex < pagination.pageCount -->
+							end ngIf: pagination.pageIndex < pagination.pageCount
 							<div class="skip">
 								到<input type="text" ng-model="pagination.jumpPageIndex"
 									class="ng-pristine ng-valid" value="1">页
@@ -761,7 +795,7 @@ ng\:form {
 							<button ng-click="goPage(pagination.jumpPageIndex)">确&nbsp;&nbsp;定</button>
 
 						</div>
-
+ -->
 
 
 						<!-- end ngIf: pagination.pageCount > 1 -->
@@ -769,103 +803,10 @@ ng\:form {
 					<div class="map-box">
 						<div class="hotel-map amap-container" id="hotel-map"
 							style="position: relative; background: rgb(252, 249, 242) none repeat scroll 0% 0%;">
-							<object
-								style="display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; pointer-events: none; z-index: -1;"
-								type="text/html" data="images/hotelSearch/a"></object>
-							<div class="amap-maps">
-								<div class="amap-drags" style="">
-									<div class="amap-layers" style="transform: translateZ(0px);">
-										<canvas class="amap-layer" width="362" height="525"
-											style="position: absolute; z-index: 0; transform-origin: 181px 262.5px 0px; transform: scale3d(0.8, 0.8, 1); top: -53px; left: -36px; height: 525px; width: 362px;"></canvas>
-										<div class="amap-markers"
-											style="position: absolute; z-index: 120; top: 210px; left: 145px;">
-											<div class="amap-marker"
-												style="top: -39px; left: 52px; z-index: 100; transform: rotate(0deg); transform-origin: 9px 31px 0px; display: block;">
-												<div class="amap-marker-content" style="opacity: 1;">
-													<div data-id="JJ60133"
-														class="mapHotelItem sprite_icon_hotel_map">1</div>
-												</div>
-											</div>
-											<div class="amap-marker"
-												style="top: -70px; left: 10px; z-index: 100; transform: rotate(0deg); transform-origin: 9px 31px 0px; display: block;">
-												<div class="amap-marker-content" style="opacity: 1;">
-													<div data-id="JJ65003"
-														class="mapHotelItem sprite_icon_hotel_map">2</div>
-												</div>
-											</div>
-											<div class="amap-marker"
-												style="top: -43px; left: -51px; z-index: 100; transform: rotate(0deg); transform-origin: 9px 31px 0px; display: block;">
-												<div class="amap-marker-content" style="opacity: 1;">
-													<div data-id="JJ1059"
-														class="mapHotelItem sprite_icon_hotel_map">3</div>
-												</div>
-											</div>
-											<div class="amap-marker"
-												style="top: -67px; left: -13px; z-index: 100; transform: rotate(0deg); transform-origin: 9px 31px 0px; display: block;">
-												<div class="amap-marker-content" style="opacity: 1;">
-													<div data-id="JJ1062"
-														class="mapHotelItem sprite_icon_hotel_map">4</div>
-												</div>
-											</div>
-											<div class="amap-marker"
-												style="top: -43px; left: -27px; z-index: 100; transform: rotate(0deg); transform-origin: 9px 31px 0px; display: block;">
-												<div class="amap-marker-content" style="opacity: 1;">
-													<div data-id="JJ1086"
-														class="mapHotelItem sprite_icon_hotel_map">5</div>
-												</div>
-											</div>
-											<div class="amap-marker"
-												style="top: -45px; left: -26px; z-index: 100; transform: rotate(0deg); transform-origin: 9px 31px 0px; display: block;">
-												<div class="amap-marker-content" style="opacity: 1;">
-													<div data-id="JJ1050"
-														class="mapHotelItem sprite_icon_hotel_map">6</div>
-												</div>
-											</div>
-											<div class="amap-marker"
-												style="top: 8px; left: -62px; z-index: 100; transform: rotate(0deg); transform-origin: 9px 31px 0px; display: block;">
-												<div class="amap-marker-content" style="opacity: 1;">
-													<div data-id="JJ1090"
-														class="mapHotelItem sprite_icon_hotel_map">7</div>
-												</div>
-											</div>
-											<div class="amap-marker"
-												style="top: -56px; left: -2px; z-index: 100; transform: rotate(0deg); transform-origin: 9px 31px 0px; display: block;">
-												<div class="amap-marker-content" style="opacity: 1;">
-													<div data-id="JJ65036"
-														class="mapHotelItem sprite_icon_hotel_map">8</div>
-												</div>
-											</div>
-											<div class="amap-marker"
-												style="top: -32px; left: -70px; z-index: 100; transform: rotate(0deg); transform-origin: 9px 31px 0px; display: block;">
-												<div class="amap-marker-content" style="opacity: 1;">
-													<div data-id="JJ65001"
-														class="mapHotelItem sprite_icon_hotel_map">9</div>
-												</div>
-											</div>
-											<div class="amap-marker"
-												style="top: -68px; left: -12px; z-index: 100; transform: rotate(0deg); transform-origin: 9px 31px 0px; display: block;">
-												<div class="amap-marker-content" style="opacity: 1;">
-													<div data-id="JJ1058"
-														class="mapHotelItem sprite_icon_hotel_map">10</div>
-												</div>
-											</div>
-										</div>
-										<canvas class="amap-labels" draggable="false" width="580"
-											height="840"
-											style="position: absolute; z-index: 99; height: 420px; width: 290px; top: 0px; left: 0px;"></canvas>
-									</div>
-									<div class="amap-overlays" style=""></div>
-								</div>
-							</div>
-							<div style="display: none;"></div>
-							<div class="amap-controls"></div>
-							<a class="amap-logo" href="http://gaode.com/" target="_blank"><img
-								src="images/hotelSearch/logo2x.png"></a>
-							<div class="amap-copyright" style="display: none;"></div>
+							<div id="r-result">
+
+							<div id="result"></div>
 						</div>
-						<div class="map-button" ng-click="toggleBigMap()">
-							<i></i>
-							<p class="ng-binding">查看大图</p>
 						</div>
 					</div>
 				</div>
@@ -908,5 +849,104 @@ ng\:form {
 	</div>
 	<script charset="utf-8" src="images/hotelSearch/main"></script>
 	<script src="js/cityTemplate.js"></script>
+	<script type="text/javascript">
+	$.fn.smartFloat = function() {
+
+	    var position = function(element) {
+
+	        var top = element.position().top, pos = element.css("position");
+
+	        $(window).scroll(function() {
+
+	            var scrolls = $(this).scrollTop();
+
+	            if (scrolls > top) {
+
+	                if (window.XMLHttpRequest) {
+
+	                    element.css({
+
+	                        position: "fixed",
+
+	                        top: 0,
+	                    width:"300px",
+	                    height:"400px"
+	                    });    
+
+	                } else {
+
+	                    element.css({
+
+	                        top: scrolls
+
+	                    });    
+
+	                }
+
+	            }else {
+
+	                element.css({
+
+	                    position: "absolute",
+
+	                    top: top
+
+	                });    
+
+	            }
+
+	        });
+
+	    };
+
+	    return $(this).each(function() {
+
+	        position($(this));                         
+
+	    });
+
+	};
+	//$("#hotel-map").css("width":"200px","height":"400px");
+	$("#hotel-map").smartFloat();
+
+		// 百度地图API功能，根据城市与酒店位置定位
+		var addresse = $("input[name=addresse]");
+		var di = $("#citySelect").val();
+		var adds = [];
+		$("input[name=addresse]").each(function() {
+			adds.push($(this).val());
+		})
+		var map = new BMap.Map("hotel-map");
+		//map.centerAndZoom(new BMap.Point(117.269945, 31.86713), 13);
+		map.enableScrollWheelZoom(true);
+		var index = 0;
+		var myGeo = new BMap.Geocoder();
+		bdGEO();
+		function bdGEO() {
+			var add = adds[index];
+			geocodeSearch(add);
+			index++;
+		}
+		function geocodeSearch(add) {
+			if (index < adds.length) {
+				setTimeout(window.bdGEO, 400);
+			}
+			myGeo.getPoint(add, function(point) {
+				if (point) {
+					var address = new BMap.Point(point.lng, point.lat);
+					map.centerAndZoom(address,11);
+					addMarker(address, new BMap.Label(index + ":" + add, {
+						offset : new BMap.Size(20, -10)
+					}));
+				}
+			}, di);
+		}
+		// 编写自定义函数,创建标注
+		function addMarker(point, label) {
+			var marker = new BMap.Marker(point);
+			map.addOverlay(marker);
+			//marker.setLabel(label);
+		}
+	</script>
 </body>
 </html>

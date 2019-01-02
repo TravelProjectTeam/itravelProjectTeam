@@ -1,6 +1,8 @@
 <%@ page language="java" import="java.util.*"
 	contentType="text/html;charset=UTF-8"%>
+	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <head>
+<script type="text/javascript" src="jquery/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="newOrdel/openPage.txt"></script>
 <style type="text/css">
 @charset "UTF-8";
@@ -25,7 +27,7 @@ ng\:form {
 </style>
 <!-- META SECTION -->
 
-<title>铂涛集团官网-铂涛旅行官网-官方直订：7天酒店、IU、派酒店、麗枫、喆啡、希岸等品牌酒店</title>
+<title>铂涛集团官网品牌酒店</title>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -154,10 +156,10 @@ ng\:form {
 								ng-class="{'international': options.isAbroad &amp;&amp; $root.siteConfig.site_id == $root.siteEnum.WeHotel}">
 								<label>入住日期:</label> <input type="text" id="inDatepicker"
 									disabled="disabled" class="form-control"
-									data-timer="1544112000000" value="2018-12-07"> <label>离店日期:</label>
+									data-timer="1544112000000" value="${checkInDate}"> <label>离店日期:</label>
 								<input type="text" id="outDatepicker" disabled="disabled"
 									class="form-control" data-timer="1544198400000"
-									value="2018-12-08">
+									value="${checkOutDate}">
 								<div class="kids clearfix">
 									<label>入住人数:</label>
 									<div class="fake-input disabled ng-binding">
@@ -180,9 +182,9 @@ ng\:form {
 							<div class="hotel-box clearfix">
 								<!-- ngRepeat: rate in roomRate.rates -->
 								<div class="hotel ng-scope" ng-repeat="rate in roomRate.rates">
-									<span class="ng-binding">12月07日</span> <span class="ng-binding">1间</span>
+									<span class="ng-binding">${month}月${day}日</span> <span class="ng-binding">1间</span>
 									<span class="ng-binding">不含早</span> <span
-										class="price ng-binding">￥199.00</span>
+										class="price ng-binding">￥${houses.roomPrice+rooms.price}</span>
 								</div>
 								<!-- end ngRepeat: rate in roomRate.rates -->
 							</div>
@@ -342,23 +344,25 @@ ng\:form {
 										onerror="this.parentNode.removeChild(this)"
 										src="newOrdel/8ff1a5e871891049_640_480.jpg">
 								</div>
-								<p class="title ng-binding">锦江之星上海陆家嘴酒店</p>
-								<p class="address ng-binding">地址：上海市浦东新区浦电路57号</p>
+								<p class="title ng-binding">${hotel.hotelName}</p>
+								<p class="address ng-binding">地址：${hotel.address}</p>
 							</div>
 							<div class="section">
 								<div class="label">入住房型</div>
 								<p class="ng-binding">
-									商务房A<span class="ng-binding">1间</span>
+									${houses.valueName}<span class="ng-binding">1间</span>
 								</p>
 								<div class="label">价格名称</div>
-								<p class="ng-binding">双11特价房199元</p>
+								<p class="ng-binding">${rooms.roomTitle}</p>
 								<div class="label">入住日期</div>
 								<p class="ng-binding">
-									2018-12-07 至 2018-12-08<span class="ng-binding">1晚</span>
+									<fmt:parseDate var="s" value="${checkInDate}" pattern="yyyy-MM-dd"/>${checkInDate}至<fmt:parseDate var="e" value="${checkOutDate}" pattern="yyyy-MM-dd"/> ${checkOutDate}<span class="ng-binding">
+									
+									<fmt:formatNumber value="${(e.getTime()-s.getTime())/1000/60/60/24}" pattern="#0" var="num"/>${num}晚</span>
 								</p>
 								<div class="price-detail">
 									<p>
-										房费小计:<span class="ng-binding">￥199.00</span>
+										房费小计:<span class="ng-binding">￥${(houses.roomPrice+rooms.price)*num}</span>
 									</p>
 									<!-- ngIf: params.taxAndService>0 -->
 									<!-- ngIf: params.isNeedInsurance -->
@@ -368,7 +372,7 @@ ng\:form {
 							</div>
 							<div class="section">
 								<div class="price-total">
-									总金额:<span class="ng-binding">￥<b class="ng-binding">199</b>.00
+									总金额:<span class="ng-binding">￥<b class="ng-binding"><fmt:formatNumber type="number" value=" ${(houses.roomPrice+rooms.price)*num}" maxFractionDigits="0"/></b>.00
 									</span>
 								</div>
 								<button id="btnAddOrder"

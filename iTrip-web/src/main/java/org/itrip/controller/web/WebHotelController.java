@@ -11,14 +11,12 @@ import org.itrip.pojo.Dictionaries;
 import org.itrip.pojo.Hotel;
 import org.itrip.pojo.Hotelbrand;
 import org.itrip.pojo.Houses;
-import org.itrip.pojo.Rooms;
 import org.itrip.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class WebHotelController {
@@ -35,6 +33,7 @@ public class WebHotelController {
 		List<Hotelbrand> llts = hotelService.queryBrand(cityId);//全部品牌信息
 		String namet = hotelService.queryCid(cityId);
 		request.setAttribute("namet", namet);
+		System.out.println(namet);
 		request.setAttribute("llts",llts);
 		request.setAttribute("Typelist",list);
 		return "web/hotelSearch";
@@ -92,16 +91,13 @@ public class WebHotelController {
 				request.setAttribute("rankts",rank);
 			}
 		}
-		System.out.println(map);
 		Integer cid=0;
 		cid = hotelService.queryName(namet);//根据城市名称查询id
-		System.out.println(map);
 		if(cid!=null) {
 		map.put("cid",cid);
 		List<Hotelbrand> llts = hotelService.queryBrand(cid);//全部品牌信息
 		request.setAttribute("llts",llts);
 		}
-		
 		List<Hotel> list = hotelService.queryMap(map);
 		List<Dictionaries> lists = hotelService.queryDictionaries("酒店类型");//查询全部房型信息
 		request.setAttribute("hotelsize",list.size());
@@ -111,27 +107,19 @@ public class WebHotelController {
 		return "web/hotelSearch";
 	}
 	
-	@RequestMapping("hotelSearch")
-	@ResponseBody
-	public List<Hotel> hotelSearch(){
-		
-		
-		return null;
-	}
-	
-	
-	
 	
 	//跳转hotelDatail.jsp页面
 		@RequestMapping("webHotelDatail")
 		public String getHotelDatail(@RequestParam(value="hotelId",required=false)Integer hotelId,Model model,String specifiedDay) {
 			Hotel hotel= hotelService.getHotelDatail(hotelId);
 			List<Houses> housesList=hotelService.getHotelRoom(hotelId);
-			List<Rooms> roomsList=hotelService.getHouses(hotelId);
-			
+			for (Houses houses : housesList) {
+				houses.setRoomsList(hotelService.getHouses(houses.getId()));
+			}
+			System.out.println(hotel.getCityName());
+			System.out.println(hotel.getAddress());
 			model.addAttribute("hotel", hotel);
 			model.addAttribute("housesList", housesList);
-			model.addAttribute("roomsList", roomsList);
 			return "web/hotelDatail";
 		}
 }

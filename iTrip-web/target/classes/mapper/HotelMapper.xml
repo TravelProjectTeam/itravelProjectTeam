@@ -11,10 +11,14 @@
 		<result property="roomAlias" column="alias" jdbcType="VARCHAR" />
 		<result property="details" column="details" jdbcType="VARCHAR" />
 		<result property="score" column="score" jdbcType="DOUBLE" />
+		<result property="cityName" column="cityName"
+			jdbcType="VARCHAR" />
 	</resultMap>
 	<!-- Houses 表 -->
 	<resultMap type="org.itrip.pojo.Houses" id="HousesResultMap">
 		<result property="valueName" column="valueName"
+			jdbcType="VARCHAR" />
+		<result property="hotelName" column="hotelName"
 			jdbcType="VARCHAR" />
 		<result property="roomTitle" column="roomTitle"
 			jdbcType="VARCHAR" />
@@ -24,9 +28,10 @@
 		<result property="cancellationPolicy"
 			column="cancellationPolicy" jdbcType="INTEGER" />
 		<result property="number" column="number" jdbcType="INTEGER" />
+
 	</resultMap>
 
-<!-- =======================邹航开始=========================== -->
+	<!-- =======================邹航开始=========================== -->
 	<!-- 根据首页值查询酒店信息 -->
 	<select id="query" resultType="Hotel" parameterType="Integer">
 		select
@@ -35,9 +40,11 @@
 		from
 		hotel s,hotelbrand h,dictionaries t,citys c,houses ho where
 		s.hotelType=t.valueId and
-		c.id=h.citysid and s.countryid=c.id and t.typeName="酒店类型" and ho.hotelId=s.id and
+		c.id=h.citysid and s.countryid=c.id and
+		t.typeName="酒店类型" and ho.hotelId=s.id and
 		countryid=#{countryid}
-		GROUP BY hotelName
+		GROUP
+		BY hotelName
 	</select>
 
 	<!-- 根据城市名称查询城市id -->
@@ -49,13 +56,16 @@
 	<!-- price1:价格下限;price2价格上限;brand品牌Id;rating星级id;cid目的地id;keyword关键字 -->
 	<select id="queryMap" parameterType="Map" resultType="Hotel">
 		select DISTINCT(hotelName),countryid,t.valueName
-		alias,address,photograph,hotelType,score,MIN(roomPrice) minimum,s.id,s.brandId
+		alias,address,photograph,hotelType,score,MIN(roomPrice)
+		minimum,s.id,s.brandId
 		from
-		hotel s,hotelbrand h,dictionaries t,citys c,houses ho where
+		hotel s,hotelbrand h,dictionaries t,citys
+		c,houses ho where
 		s.hotelType=t.valueId and
-		c.id=h.citysid and s.countryid=c.id and t.typeName="酒店类型" and ho.hotelId=s.id
+		c.id=h.citysid and
+		s.countryid=c.id and t.typeName="酒店类型" and ho.hotelId=s.id
 		<if test="brand!=0">
-			and h.id=#{brand} and s.brandId=#{brand} 
+			and h.id=#{brand} and s.brandId=#{brand}
 		</if>
 		<if test="rating!=0">
 			and s.hotelType=#{rating}
@@ -74,18 +84,21 @@
 	</select>
 	<!-- 根据id查询城市名称 -->
 	<select id="queryCid" resultType="String">
-		select name from citys where
+		select name from
+		citys where
 		id=#{cid}
 	</select>
 	<!-- 根据城市id查询品牌 -->
 	<select id="queryBrand" resultType="Hotelbrand">
-		select * from hotelbrand
+		select id,brandName,citysid
+		from hotelbrand
 		where citysid=#{citysid}
 	</select>
 	<!-- 查询字典表的酒店类型 -->
 	<select id="queryDictionaries" resultType="Dictionaries">
 		select
-		valueId,valueName from dictionaries where typeName=#{type}
+		id,typeName,valueId,valueName from dictionaries
+		<if test="type!=null">where typeName=#{type}</if>
 	</select>
 	<!-- =======================邹航结束=========================== -->
 
@@ -95,8 +108,9 @@
 		select *,(select valueName
 		from dictionaries t where
 		s.hotelType=t.valueId and t.typeName="酒店类型")
-		alias
-		from hotel s where id=#{id}
+		alias,(SELECT name FROM citys c WHERE c.id=s.countryid) cityName
+		from
+		hotel s where id=#{id}
 	</select>
 	<!-- 查询酒店房型 -->
 	<select id="getHotelRoom" resultMap="HousesResultMap">
@@ -104,15 +118,160 @@
 		valueName,s.roomSize,s.BedArea,s.floor,s.isHavingbed,s.window,s.roomImage
 		from houses s
 		,dictionaries d where s.roomNameId= d.valueId
-		and d.typeName="房型" and s.hotelId=#{id}
+		and
+		d.typeName="房型" and s.hotelId=#{id}
 	</select>
 	<!-- 查询酒店名称下分类价格 -->
 	<select id="getHouses" resultType="Rooms">
+		<!-- select r.houseId,r.roomTitle,r.isbreakfast,r.cancellationPolicy,r.number, 
+			(r.Price+h.roomPrice)as price from houses h,rooms r where r.hotelId = h.id 
+			and h.hotelId =#{id} -->
 		select
 		r.houseId,r.roomTitle,r.isbreakfast,r.cancellationPolicy,r.number,
 		(r.Price+h.roomPrice)as price from houses h,rooms r
-		where r.hotelId = h.id and h.hotelId =#{id}
+		where r.hotelId =
+		h.id and r.houseId =#{id}
 	</select>
 
 	<!-- =======================谭凯结束=========================== -->
+
+	<!-- 后台查询所有酒店相关信息 -->
+	<select id="getAllHotel" resultType="Hotel">
+		select hb.brandName,h.* from
+		hotel h,hotelbrand hb where h.brandId = hb.id
+	</select>
+
+	<!-- 查询酒店类型 -->
+	<select id="getHotelType" resultType="Dictionaries">
+		select
+		id,typeName,valueId,valueName from dictionaries where typeName='酒店类型'
+	</select>
+
+	<!-- 查询所有省份 -->
+	<select id="getProvinces" resultType="Provinces">
+		select id, name from
+		provinces
+	</select>
+
+	<!-- 根据省份id查询城市 -->
+	<select id="getCitysById" resultType="Citys">
+		select id,name,provinceId
+		from citys where provinceId= #{pId}
+	</select>
+
+	<!-- 添加酒店信息 -->
+	<insert id="addHotelInfo" parameterType="Hotel"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		hotel(hotelName,countryid,provinceid,address,details,hotelPolicy,hotelType,phone,photograph,facilitiesName,hotelservices,brandId)
+		values(#{hotelName},#{countryid},#{provinceid},#{address},#{details},#{hotelPolicy},#{hotelType},#{phone},#{photograph},#{facilitiesName},#{hotelservices},#{brandId})
+	</insert>
+
+	<!-- 查询房型 -->
+	<select id="getRoomsType" resultType="Dictionaries">
+		select
+		id,typeName,valueId,valueName from dictionaries where typeName='房型'
+	</select>
+
+	<!-- 查询床型 -->
+	<select id="getBeds" resultType="Beds">
+		select id,type from beds
+	</select>
+
+	<!-- 添加房型信息 -->
+	<insert id="addRoomsInfo" parameterType="houses"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		houses(hotelId,roomNameId,roomPrice,roomSize,bedArea,floor,isHavingbed,window,roomImage,bedsId)
+		values(#{hotelId},#{roomNameId},#{roomPrice},#{roomSize},#{bedArea},#{floor},#{isHavingbed},#{window},#{roomImage},#{bedsId})
+	</insert>
+
+	<!-- 根据id查询字典表信息 -->
+	<select id="queryDicId" parameterType="Integer"
+		resultType="Dictionaries">
+		select id,typeName,valueId,valueName from dictionaries
+		where id=#{id}
+	</select>
+	<!-- 判断字典表类型值是否存在 -->
+	<select id="judge" parameterType="Dictionaries"
+		resultType="Integer">
+		select count(*) from dictionaries where
+		typeName=#{typeName} and valueName
+		=#{valueName}
+	</select>
+	<!-- 查询该类型最大值 -->
+	<select id="queryDicz" parameterType="Dictionaries"
+		resultType="Integer">
+		select MAX(valueId) from dictionaries where
+		typeName=#{typeName}
+	</select>
+	<!-- 添加字典类型值 -->
+	<insert id="addDicz" parameterType="Dictionaries">
+		insert into
+		dictionaries(id,typeName,valueId,valueName)
+		values(null,#{typeName},#{valueId},#{valueName});
+	</insert>
+	<!-- 修改字典类型值 -->
+	<update id="updDicz" parameterType="Dictionaries">
+		UPDATE dictionaries set
+		valueName=#{valueName} where id=#{id}
+	</update>
+
+	<select id="queryDic" resultType="Dictionaries">
+		select id,typeName from
+		dictionaries GROUP BY typeName
+	</select>
+	<!-- 批量删除字典表类型值 -->
+	<delete id="deleteDic">
+		delete from dictionaries where id in
+		<foreach collection="ids" item="ids" open="(" separator=","
+			close=")">
+			#{ids}
+		</foreach>
+	</delete>
+	<select id="queryCeil" resultType="Map">
+		SELECT
+		MONTH ( checkInDate ) as
+		month,
+		SUM( payAmount ) as sale,count(id) as orders
+		FROM
+		orders WHERE
+		YEAR( checkInDate ) = #{year}
+		GROUP BY
+		MONTH ( checkInDate )
+	</select>
+	<!-- 修改酒店信息 -->
+	<update id="updateHotel" parameterType="Hotel">
+		update hotel set
+		hotelName=#{hotelName},hotelType=#{hotelType},provinceid=#{provinceid},countryid=#{countryid},brandId=#{brandId},
+		phone=#{phone},address=#{address},hotelPolicy=#{hotelPolicy},facilitiesName=#{facilitiesName},hotelservices=#{hotelservices},details=#{details},photograph=#{photograph}
+		where id=#{id}
+	</update>
+	<!-- 查看全部的房型信息 -->
+	<select id="getAllHouses" resultMap="HousesResultMap">
+		select s.id,hotel.hotelName,d.valueName
+		valueName,s.roomSize,s.BedArea,s.floor,s.isHavingbed,s.window,s.roomImage
+		from houses s,hotel,dictionaries d 
+		where s.hotelId = hotel.id and s.roomNameId= d.valueId
+		and	d.typeName="房型"
+	</select>
+	<delete id="deleteManyHotel">
+		delete t1,t2,t3 from (hotel t1 left join houses t2 on t1.id=t2.hotelId) left join rooms t3 on t2.id=t3.houseId where t1.id in
+		<foreach collection="id" item="id" open="(" separator="," close=")">
+	 		#{id}
+	 	</foreach>
+	</delete>
+	<select id="queryId" resultType="Hotel">
+		select * from hotel where
+		id=#{id}
+	</select>
+	<select id="queryRid" resultType="Rooms">
+		select * from rooms where
+		id=#{rid}
+	</select>
+	<select id="querySid" resultType="Houses">
+		select * from houses s,dictionaries d where s.roomNameId = d.valueId and
+		d.typeName='房型' and s.id=#{sid}
+	</select>
+	
 </mapper>

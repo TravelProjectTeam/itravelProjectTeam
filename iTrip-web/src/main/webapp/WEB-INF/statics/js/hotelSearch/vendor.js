@@ -3,7 +3,16 @@ var brand=0;//品牌
 	var price2=1000;//价格上限
 	var rating=0;//星级
 $(function() {
+	// 百度地图API功能，根据城市名称定位
+	/*var map = new BMap.Map("hotel-map");
+	var point = new BMap.Point(116.331398,39.897445);
+	map.centerAndZoom(point,11);
 	
+		var city = $("#citySelect").val();
+		if(city != ""){
+			map.centerAndZoom(city,11);      // 用城市名设置地图中心点
+		}*/
+
 	//品牌相关操作
 	$("#brand").click(function() {
 		var radioLength = $("input[name='brand']").length;
@@ -164,4 +173,25 @@ function queryHotels(){
 	var arr =[price1,price2,rating,brand,country,name,rankts];
 	location.href="queryH?arr="+arr;
 	
+}
+
+//获取地图定位地址
+function queryss(address) {
+	var di = $("#citySelect").val();
+	var map = new BMap.Map("hotel-map");
+	// 开启鼠标滚轮缩放
+	map.enableScrollWheelZoom(true);
+	var point = new BMap.Point();
+	map.centerAndZoom(point, 15);
+	// 创建地址解析器实例
+	var myGeo = new BMap.Geocoder();
+	// 将地址解析结果显示在地图上,并调整地图视野
+	myGeo.getPoint(address, function(point) {
+		if (point) {
+			map.centerAndZoom(point,19);
+			map.addOverlay(new BMap.Marker(point));
+		} else {
+			alert("您选择地址没有解析到结果!");
+		}
+	}, di);
 }

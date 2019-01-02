@@ -4,7 +4,7 @@ package org.itrip.pojo;
  * @author Administrator
  *
  */
-public class citys {
+public class Citys {
 	private Integer id;
 	private String name;
 	private Integer provinceId;

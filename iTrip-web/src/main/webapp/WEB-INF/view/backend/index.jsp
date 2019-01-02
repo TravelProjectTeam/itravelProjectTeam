@@ -44,8 +44,8 @@
 									onclick="picture_add('添加资讯','picture-add.jsp')"><i
 										class="Hui-iconfont">&#xe613;</i> 图片</a></li>
 								<li><a href="javascript:;"
-									onclick="product_add('添加资讯','product-add.jsp')"><i
-										class="Hui-iconfont">&#xe620;</i> 产品</a></li>
+									onclick="product_add('添加资讯','backendProductAdd')"><i
+										class="Hui-iconfont">&#xe620;</i> 酒店</a></li>
 								<li><a href="javascript:;"
 									onclick="member_add('添加用户','memberAdd','','510')"><i
 										class="Hui-iconfont">&#xe60d;</i> 用户</a></li>
@@ -116,11 +116,11 @@
 				</dt>
 				<dd>
 					<ul>
-						<li><a data-href="product-brand.jsp" data-title="品牌管理"
-							href="javascript:void(0)">品牌管理</a></li>
+						<li><a data-href="backendProductBrand" data-title="房型管理"
+							href="javascript:void(0)">房型管理</a></li>
 						<li><a data-href="product-category.jsp" data-title="分类管理"
 							href="javascript:void(0)">分类管理</a></li>
-						<li><a data-href="product-list.jsp" data-title="产品管理"
+						<li><a data-href="backendProductList" data-title="酒店管理"
 							href="javascript:void(0)">酒店管理</a></li>
 					</ul>
 				</dd>
@@ -178,18 +178,12 @@
 				</dt>
 				<dd>
 					<ul>
-						<li><a data-href="charts-1.jsp" data-title="折线图"
+						<li><a data-href="getCharts_1" data-title="折线图"
 							href="javascript:void(0)">折线图</a></li>
-						<li><a data-href="charts-3.jsp" data-title="区域图"
-							href="javascript:void(0)">区域图</a></li>
-						<li><a data-href="charts-4.jsp" data-title="柱状图"
+						<li><a data-href="getCharts_4" data-title="柱状图"
 							href="javascript:void(0)">柱状图</a></li>
-						<li><a data-href="charts-5.jsp" data-title="饼状图"
+						<li><a data-href="getCharts_5" data-title="饼状图"
 							href="javascript:void(0)">饼状图</a></li>
-						<li><a data-href="charts-6.jsp" data-title="3D柱状图"
-							href="javascript:void(0)">3D柱状图</a></li>
-						<li><a data-href="charts-7.jsp" data-title="3D饼状图"
-							href="javascript:void(0)">3D饼状图</a></li>
 					</ul>
 				</dd>
 			</dl>
@@ -202,7 +196,7 @@
 					<ul>
 						<li><a data-href="system-category.jsp" data-title="栏目管理"
 							href="javascript:void(0)">栏目管理</a></li>
-						<li><a data-href="system-data.jsp" data-title="数据字典"
+						<li><a data-href="dictionaries" data-title="数据字典"
 							href="javascript:void(0)">数据字典</a></li>
 						<li><a data-href="system-shielding.jsp" data-title="屏蔽词"
 							href="javascript:void(0)">屏蔽词</a></li>

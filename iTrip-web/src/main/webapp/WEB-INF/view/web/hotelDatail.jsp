@@ -270,9 +270,12 @@ keyframes amap-indrm-loader { 0%{
 :rotate(360deg)
 }
 }
+
+
+
 </style>
 <style type="text/css">
-@charset "UTF-8"; 
+@charset "UTF-8";
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak,
 	.x-ng-cloak, .ng-hide {
@@ -291,6 +294,23 @@ ng\:form {
 .ng-hide-add-active, .ng-hide-remove {
 	display: block !important;
 }
+
+.tupian {
+	width: 192px;
+	height: 150px;
+	
+}
+
+.tupian img {
+	width: 200px;
+	height: 150px;
+	cursor: pointer;
+	transition: all 0.6s;
+}
+
+.tupian img:hover {
+	transform: scale(1.4);
+}
 </style>
 <!-- META SECTION -->
 
@@ -306,20 +326,8 @@ ng\:form {
 <!-- EOF CSS INCLUDE -->
 <script type="text/javascript" src="js/hotelDatail_js/tongji.js"></script>
 <script type="text/javascript" src="js/hotelDatail_js/maps"></script>
-<script language="JavaScript" type="text/javascript"> 
-function GetDateStr(AddDayCount) { 
-	var dd = new Date(); 
-	dd.setDate(dd.getDate()+AddDayCount);//获取AddDayCount天后的日期 
-	var y = dd.getFullYear(); 
-	var m = dd.getMonth()+1;//获取当前月份的日期 
-	var d = dd.getDate(); 
-	return y+"-"+m+"-"+d; 
-} 
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ikPVLLkgWCboYmkQBEZXaZlb9pLzmuzG"></script>
 
-$(function(){
-	alert(GetDateStr(1));
-})
-</script>
 </head>
 <body ng-controller="hotelDetailController" ng-init="init()"
 	ng-class="{'plateno':$root.siteConfig.site_id==$root.siteEnum.Plateno}"
@@ -798,6 +806,8 @@ $(function(){
 
 					<div class="hotelInfo-main">
 						<div class="hotelInfo-main-section">
+							<input type="hidden" id="city" value="${hotel.cityName}"/>
+							<input type="hidden" id="address" value="${hotel.address}"/>
 							<h1 class="ng-binding">${hotel.hotelName}</h1>
 							<!-- ngIf: 0 -->
 							<p class="clearfix">
@@ -807,7 +817,7 @@ $(function(){
 								<!-- end ngRepeat: label in params.labels -->
 							</p>
 							<address>
-								<p class="ng-binding">地址：${hotel.address}</p>
+								<p class="ng-binding" >地址：${hotel.address}</p>
 								<p class="ng-binding">电话：${hotel.phone}</p>
 							</address>
 							<!--评分-->
@@ -908,81 +918,13 @@ $(function(){
 						<div class="room-date-item">
 							<label class="ng-binding">离店日期</label> <input type="text"
 								placeholder="离店日期" class="input-date" id="checkOutDate"
-								value="${dayBefore}"
-								data-timer="1544198400000">
-						</div>
-
-						<div class="kids room-date-item hide"
-							ng-class="{'hide': !options.isAbroad || $root.siteConfig.site_id != $root.siteEnum.WeHotel}"
-							id="selectKids">
-							<label>入住详情</label>
-							<div class="fake-input ng-binding">
-								1<span>成人</span>，0<span>儿童</span>
-							</div>
-						</div>
-
-						<p class="total-date ng-binding">共1晚</p>
-
-						<a class="btn bluebtn ng-binding" ng-click="queryRooms()"
-							ng-class="{'disabled':params.isLoading==true}">确认修改</a>
-					</div>
-
-					<!-- 显示成人儿童选择器面板 -->
-					<div class="kids-box ng-isolate-scope ng-hide" id="kids-box"
-						ng-show="showKidsPanel" kids-selector=""
-						show-kids-panel="options.showKidsPanel" extend-data="extendData"
-						max-age="maxAge">
-						<div class="section" onselectstart="return false;">
-							<div class="row">
-								<label>房间数:</label>
-								<div class="number">
-									<i ng-class="{'disabled': extendData.rooms &lt; 2}"
-										ng-click="changeRoom(-1)" class="disabled">-</i><span
-										class="ng-binding">1</span><i
-										ng-class="{'disabled': (extendData.rooms &gt; 2)}"
-										ng-click="changeRoom(1)">+</i>
-								</div>
-							</div>
-							<div class="row">
-								<label>成人数:</label>
-								<div class="number">
-									<i ng-class="{'disabled': extendData.adults &lt; 2}"
-										ng-click="changeAdult(-1)" class="disabled">-</i><span
-										class="ng-binding">1</span><i
-										ng-class="{'disabled': (extendData.adults + extendData.children &gt; 3)}"
-										ng-click="changeAdult(1)">+</i>
-								</div>
-							</div>
-							<div class="row">
-								<label>儿童数:</label>
-								<div class="number">
-									<i ng-class="{'disabled': extendData.children &lt; 1}"
-										ng-click="changeChild(-1)" class="disabled">-</i><span
-										class="ng-binding">0</span><i
-										ng-class="{'disabled': (extendData.adults + extendData.children &gt; 3)}"
-										ng-click="changeChild(1)">+</i>
-								</div>
-							</div>
-						</div>
-
-
-						<!-- ngIf: extendData.children > 0 -->
-
-						<!-- ngIf: extendData.children > 1 -->
-
-						<!-- ngIf: extendData.children > 2 -->
-
-						<div class="section">
-							<div class="row">
-								<a class="btn bluebtn" ng-click="showKidsPanel = false">确定</a>
-								<!--<a class="cancel">取消</a>-->
-							</div>
+								value="2019-01-01">
 						</div>
 					</div>
-
 					<div class="room-title">
-						<span class="room-title-first ng-binding">房型</span> <span
-							class="ng-binding">早餐</span> <span class="ng-binding">取消政策</span>
+						<span class="room-title-first ng-binding">房型</span><span
+							class="ng-binding">套餐</span> <span
+							class="ng-binding" style="padding-left: 110px;">早餐</span> <span class="ng-binding">取消政策</span>
 						<span class="ng-binding">人数上限</span> <span class="ng-binding">房价</span>
 					</div>
 					<!--尊享会banner-->
@@ -1003,10 +945,8 @@ $(function(){
 														<tr>
 															<td>
 																<div class="room-photo">
-																	<div class="pic">
-																		<img
-																			onerror="this.parentNode.removeChild(this)"
-																			src="${houses.roomImage}">
+																	<div class="tupian">
+																		<img src="${houses.roomImage}"/>
 																	</div>
 																	<div class="room-photo-section">
 																		<span class="ng-binding">${houses.valueName}</span>
@@ -1052,7 +992,7 @@ $(function(){
 											<td valign="top">
 												<div class="room-detail">
 													<table width="100%" cellspacing="0" cellpadding="0">
-													<c:forEach items="${roomsList}" var="rooms">
+													<c:forEach items="${houses.roomsList}" var="rooms">
 														<c:if test="${houses.id == rooms.houseId}">
 														<tbody>
 															<!--价格列表-->
@@ -1080,20 +1020,26 @@ $(function(){
 																	</p>
 																</td>
 																<td class="policy">
-																	<p class="ng-binding">
+																	<p class="ng-binding" style="padding-top: 8px;">
 																		<c:if test="${rooms.cancellationPolicy ==0}">限时取消</c:if>
 																		<c:if test="${rooms.cancellationPolicy ==1}">免费取消</c:if>
+																		<c:if test="${rooms.cancellationPolicy ==2}">不可取消</c:if>
 																	</p> <span
-																	class="show ng-binding" style="width: 300px">预付房费后，在2018年12月07日
-																		12:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</span>
+																	class="show ng-binding" style="width: 300px">
+																	<c:if test="${rooms.cancellationPolicy ==0}">预付房费后，在当天入住 18:00前可免费取消订单/申请退款，之后不可取消订单/退款。</c:if>
+																	
+																	<c:if test="${rooms.cancellationPolicy ==1}">预付房费后，在当天入住
+																		12:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</c:if>
+																		<c:if test="${rooms.cancellationPolicy ==2}">特价房，不可取消。</c:if>
+																	</span>
 																</td>
 																<td>
 																	<p class="ng-binding">
-																		<i class="person-icon"
-																			ng-class="{'single':room.maxCheckIn==1}">
-																			</i><c:if test="${rooms.number ==1}">x1</c:if>
+																		<i class="person-icon"></i>
+																				<c:if test="${rooms.number ==1}">x1</c:if>
 																				<c:if test="${rooms.number ==2}">x2</c:if>
 																				<c:if test="${rooms.number ==3}">x3</c:if>
+																				<c:if test="${rooms.number ==4}">x4</c:if>
 																	</p>
 																</td>
 																<td>
@@ -1106,7 +1052,7 @@ $(function(){
 																<td>
 																	<div class="room-link">
 																		<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																		<a class="btn redbtn ng-binding" href="newOrdel.jsp">立即预订</a>
+																		<input  class="btn redbtn ng-binding" type="button" value="立即预定" onclick='datail(${hotel.id},${houses.id},${rooms.id})'/>
 																		<!--<a class="btn redbtn" ng-class="{'disabled': rate.bookingType != 0}" ng-click="redirectNewOrder(rate,room)">{{(rate.bookingType == 0 ? (params.memberLevel == 9?'HOTELDETAIL_ORDER_BUTTON_LEAVE9_TEXT': 'HOTELDETAIL_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
 																	</div>
 																</td>
@@ -1136,6 +1082,7 @@ $(function(){
 					<ul class="nav-tabs">
 						<li class="active"><a class="scroll-five"><span
 								class="ng-binding">酒店信息</span></a></li>
+						
 					</ul>
 				</div>
 				<div class="wapper-content tab-content" id="tab-con">
@@ -1146,10 +1093,10 @@ $(function(){
 							<b class="ng-binding">预订保留：</b>预订保留到
 						</p>
 						<p class="ng-binding">
-							<b class="ng-binding">入住时间：</b>中午 13:00
+							<b class="ng-binding">入住时间：</b>${hotel.checkDate}
 						</p>
 						<p class="ng-binding">
-							<b class="ng-binding">退房时间：</b>中午 12:00
+							<b class="ng-binding">退房时间：</b>${hotel.leaveDate}
 						</p>
 						<p>
 							<b class="ng-binding">酒店介绍：</b>
@@ -1303,6 +1250,113 @@ $(function(){
 								</div>
 							</li>
 							<!-- end ngRepeat: comment in comments -->
+							<li ng-repeat="comment in comments" class="ng-scope">
+								<div class="review-userImg">
+									<div class="user-photo">
+
+										<span class="user-raduis icon-hotel_user-bg hotel"></span>
+									</div>
+									<div class="user-name user-reviewName ng-binding">31***22</div>
+								</div>
+								<div class="review-comment">
+									<div class="review-main">
+										<p class="ng-binding">中评</p>
+									</div>
+									<div class="review-userStar">
+										<ul class="comment-level ng-binding"
+											ng-bind-html="comment.starsHtml | html">
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li></li>
+										</ul>
+										<div class="user-time ng-binding">2018年12月</div>
+									</div>
+									<!-- ngIf: comment.childrenEvaluations.length>0 -->
+								</div>
+							</li>
+							<!-- end ngRepeat: comment in comments -->
+							<li ng-repeat="comment in comments" class="ng-scope">
+								<div class="review-userImg">
+									<div class="user-photo">
+
+										<span class="user-raduis icon-hotel_user-bg hotel"></span>
+									</div>
+									<div class="user-name user-reviewName ng-binding">31***22</div>
+								</div>
+								<div class="review-comment">
+									<div class="review-main">
+										<p class="ng-binding">中评</p>
+									</div>
+									<div class="review-userStar">
+										<ul class="comment-level ng-binding"
+											ng-bind-html="comment.starsHtml | html">
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li></li>
+										</ul>
+										<div class="user-time ng-binding">2018年12月</div>
+									</div>
+									<!-- ngIf: comment.childrenEvaluations.length>0 -->
+								</div>
+							</li>
+							<!-- end ngRepeat: comment in comments -->
+							<li ng-repeat="comment in comments" class="ng-scope">
+								<div class="review-userImg">
+									<div class="user-photo">
+
+										<span class="user-raduis icon-hotel_user-bg hotel"></span>
+									</div>
+									<div class="user-name user-reviewName ng-binding">50***15</div>
+								</div>
+								<div class="review-comment">
+									<div class="review-main">
+										<p class="ng-binding">期待下一次</p>
+									</div>
+									<div class="review-userStar">
+										<ul class="comment-level ng-binding"
+											ng-bind-html="comment.starsHtml | html">
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+										</ul>
+										<div class="user-time ng-binding">2018年11月</div>
+									</div>
+									<!-- ngIf: comment.childrenEvaluations.length>0 -->
+								</div>
+							</li>
+							<!-- end ngRepeat: comment in comments -->
+							<li ng-repeat="comment in comments" class="ng-scope">
+								<div class="review-userImg">
+									<div class="user-photo">
+
+										<span class="user-raduis icon-hotel_user-bg hotel"></span>
+									</div>
+									<div class="user-name user-reviewName ng-binding">50***15</div>
+								</div>
+								<div class="review-comment">
+									<div class="review-main">
+										<p class="ng-binding">期待下一次</p>
+									</div>
+									<div class="review-userStar">
+										<ul class="comment-level ng-binding"
+											ng-bind-html="comment.starsHtml | html">
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+											<li class="star_full"></li>
+										</ul>
+										<div class="user-time ng-binding">2018年11月</div>
+									</div>
+									<!-- ngIf: comment.childrenEvaluations.length>0 -->
+								</div>
+							</li>
 							<!-- end ngRepeat: comment in comments -->
 						</ul>
 						<!-- 分页组件 -->
@@ -1328,14 +1382,11 @@ $(function(){
 							<div ng-repeat="item in pagination.pages"
 								ng-class="{'page': item.index != 'omit', 'omit': item.index == 'omit', 'active': item.index == $parent.pagination.pageIndex }"
 								ng-click="goPage(item.index)" class="ng-binding ng-scope page">81</div>
-							<!-- end ngRepeat: item in pagination.pages -->
-							<!-- ngIf: pagination.pageIndex < pagination.pageCount -->
 							<div class="next ng-scope"
 								ng-if="pagination.pageIndex &lt; pagination.pageCount"
 								ng-click="goPage('next')">
 								<icon class="triangle-right"></icon>
 							</div>
-							<!-- end ngIf: pagination.pageIndex < pagination.pageCount -->
 							<div class="skip">
 								到<input type="text" ng-model="pagination.jumpPageIndex"
 									class="ng-pristine ng-valid" value="1">页
@@ -1346,15 +1397,12 @@ $(function(){
 				</div>
 			</div>
 
-			<!-- weModal 弹窗 -->
 			<div class="modal fade ng-isolate-scope" tabindex="-1"
 				ng-class="{'in': showModal == true,'base-modal':params.enableMiniModal}"
 				we-modal="" show-modal="options.showAlert" params="alertModal"
 				callback="alertModalCallback()" on-close="closeCallback()">
 				<div class="modal-dialog">
 					<div class="modal-content" ng-class="params.contentClass">
-						<!-- ngIf: params.enableMiniModal&&params.closeTag -->
-						<!-- ngIf: params.title -->
 						<div class="modal-body"
 							ng-class="{'scroll-container':params.scrollContainer}">
 							<div ng-bind-html="params.content | html" class="ng-binding"></div>
@@ -1362,12 +1410,41 @@ $(function(){
 					</div>
 				</div>
 			</div>
-
 			<jsp:include page="footer.jsp" />
 		</div>
 	</div>
 	<script src="js/hotelDatail_js/siteConfig.js"></script>
 	<script src="js/hotelDatail_js/vendor.js"></script>
 	<script src="js/hotelDatail_js/wehotel.js"></script>
+	
+	<script type="text/javascript">
+	function datail(id,sid,rid){
+		var checkInDate = $("#checkInDate").val();
+		var checkOutDate = $("#checkOutDate").val();
+		location.href="WebDatail?id="+id+"&sid="+sid+"&rid="+rid+"&checkInDate="+checkInDate+"&checkOutDate="+checkOutDate;
+	};
+	$(function() {
+		var address = $("#address").val();
+		var city = $("#city").val();
+		//地图div
+		var map = new BMap.Map("mini_map_box");
+		//开启鼠标滚轮缩放
+		map.enableScrollWheelZoom(true);
+		var point = new BMap.Point(116.331398,39.897445);
+		map.centerAndZoom(point,12);
+		// 创建地址解析器实例
+		var myGeo = new BMap.Geocoder();
+		// 将地址解析结果显示在地图上,并调整地图视野
+		myGeo.getPoint(address, function(point){
+			if (point) {
+				map.centerAndZoom(point, 19);
+				map.addOverlay(new BMap.Marker(point));
+			}else{
+				alert("您选择地址没有解析到结果!");
+			}
+		}, city);
+	});
+	</script>
+
 </body>
 </html>

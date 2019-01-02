@@ -59,7 +59,7 @@ ng\:form {
 			<!-- CONTENT OP -->
 
 			<div class="center"
-				style="background: url(images/login/banner.jpg) no-repeat center top;">
+				style="background: url(images/login/1.jpg);">
 				<div class="login-main">
 					<div class="login-container">
 						<ul class="login-mode clearfix">

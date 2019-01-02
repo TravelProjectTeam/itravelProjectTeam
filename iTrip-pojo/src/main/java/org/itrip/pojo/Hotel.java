@@ -2,6 +2,9 @@ package org.itrip.pojo;
 
 import java.sql.Date;
 
+import lombok.Data;
+
+@Data
 public class Hotel {
 	private Integer id;// 主键
 	private String hotelName;// 酒店名称
@@ -21,187 +24,20 @@ public class Hotel {
 	private String hotelservices;// 酒店服务
 	private String photograph;//酒店图片
 	private int brandId;//品牌ID
-	
+	private String brandName;//品牌
 	private Float minimum;// 最低值
 	private String alias;//酒店类型
-
+	private String checkDate;//入住时间
+	private String leaveDate;//退房时间
 	
-
-	public int getBrandId() {
-		return brandId;
-	}
-
-	public void setBrandId(int brandId) {
-		this.brandId = brandId;
-	}
-
-	/**
-	 * @return the alias
-	 */
-	public String getAlias() {
-		return alias;
-	}
-
-	/**
-	 * @param alias the alias to set
-	 */
-	public void setAlias(String alias) {
-		this.alias = alias;
-	}
-
-	public String getFacilitiesName() {
-		return facilitiesName;
-	}
-
-	public void setFacilitiesName(String facilitiesName) {
-		this.facilitiesName = facilitiesName;
-	}
-
-	public Double getScore() {
-		return score;
-	}
-
-	public void setScore(Double score) {
-		this.score = score;
-	}
-
+	//增加字段
+	private String cityName;//城市名称
 	// 添加属性
 	private String roomAlias;
-
-	public String getRoomAlias() {
-		return roomAlias;
+	
+	public static void main(String[] args) {
+		Hotel hotel = new Hotel();
+		hotel.setAddress("12313");
+		System.out.println(hotel.toString());
 	}
-
-	public void setRoomAlias(String roomAlias) {
-		this.roomAlias = roomAlias;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getHotelName() {
-		return hotelName;
-	}
-
-	public void setHotelName(String hotelName) {
-		this.hotelName = hotelName;
-	}
-
-	public Integer getCountryid() {
-		return countryid;
-	}
-
-	public void setCountryid(Integer countryid) {
-		this.countryid = countryid;
-	}
-
-	public Integer getProvinceid() {
-		return provinceid;
-	}
-
-	public void setProvinceid(Integer provinceid) {
-		this.provinceid = provinceid;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getDetails() {
-		return details;
-	}
-
-	public void setDetails(String details) {
-		this.details = details;
-	}
-
-	public String getHotelPolicy() {
-		return hotelPolicy;
-	}
-
-	public void setHotelPolicy(String hotelPolicy) {
-		this.hotelPolicy = hotelPolicy;
-	}
-
-	public Integer getHotelType() {
-		return hotelType;
-	}
-
-	public void setHotelType(Integer hotelType) {
-		this.hotelType = hotelType;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	public Integer getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(Integer createdBy) {
-		this.createdBy = createdBy;
-	}
-
-	public Date getModifyDate() {
-		return modifyDate;
-	}
-
-	public void setModifyDate(Date modifyDate) {
-		this.modifyDate = modifyDate;
-	}
-
-	public int getModifiedBy() {
-		return modifiedBy;
-	}
-
-	public void setModifiedBy(int modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public String getHotelservices() {
-		return hotelservices;
-	}
-
-	public void setHotelservices(String hotelservices) {
-		this.hotelservices = hotelservices;
-	}
-
-	public String getPhotograph() {
-		return photograph;
-	}
-
-	public void setPhotograph(String photograph) {
-		this.photograph = photograph;
-	}
-
-	public Float getMinimum() {
-		return minimum;
-	}
-
-	public void setMinimum(Float minimum) {
-		this.minimum = minimum;
-	}
-
 }
