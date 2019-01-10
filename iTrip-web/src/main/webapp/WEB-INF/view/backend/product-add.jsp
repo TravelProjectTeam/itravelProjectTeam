@@ -172,23 +172,25 @@
 						<div class="uploader-thum-container">
 							<div id="fileList" class="uploader-list"><img alt="酒店图片" src="${hotelInfo.photograph}" style="width:300px;height:300px;"></div>
 							<div id="filePicker">
-							<input type="text" value="${hotelInfo.photograph}" name="hotelPhoto">
+							<input type="hidden" value="${hotelInfo.photograph}" name="hotelPhoto">
 								<span class="btn btn-secondary radius"><i
 									class="Hui-iconfont">&#xe632;</i>选择图片</span>
 							</div>
 							<input type="file" id="btn_file" name="file"
-								style="display: block">
+								style="display: none">
 						</div>
 					</div>
 				</div>
 				<span id="shouqi"><a style="float: right;">收起酒店信息▲</a></span>
 			</div>
-
+			<br><br>
 			<c:if test="${hotelInfo.id == null}">
+			<div id="upAndClose">
+				<span><a id="housesInfo">收起房型信息▲</a></span>
+				<span id="del" style="margin-left: 460px; display: block;"><a><img
+						alt="关闭" src="images/timg.jpg" width="15px;" height="15px;"></a></span>
+			</div>
 			<div id="houses" name="houses">
-				<span id="housesInfo" style="display: none;"><a>展开房型信息▼</a></span> <span
-					id="del" style="margin-left: 550px;"><a><img alt="关闭"
-						src="images/timg.jpg" width="15px;" height="15px;"></a></span>
 				<div class="row cl">
 					<label class="form-label col-xs-4 col-sm-2"><span
 						class="c-red">*</span>房型标题：</label>
@@ -205,7 +207,7 @@
 				</div>
 				<div class="row cl">
 					<label class="form-label col-xs-4 col-sm-2"><span
-						class="c-red">*</span>房型价格：</label>
+						class="c-red">*</span>房间标准价格：</label>
 					<div class="formControls col-xs-8 col-sm-9">
 						<input type="text" class="input-text" value="" placeholder=""
 							id="" name="roomsPrice" style="width: 25%">元
@@ -239,6 +241,14 @@
 								</c:forEach>
 						</select>
 						</span>
+					</div>
+				</div>
+				<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2"><span
+						class="c-red">*</span>房间人数上限：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="" placeholder="此价格为套餐默认标准价格"
+							id="" name="ceiling" style="width: 25%">人
 					</div>
 				</div>
 				<div class="row cl">
@@ -281,7 +291,7 @@
 					<div class="formControls col-xs-8 col-sm-9">
 						<div class="uploader-thum-container">
 							<div id="roomPotoList" class="uploader-list"></div>
-							<div id="roomPoto" class="roomPoto" poto="">
+							<div id="roomPoto" class="roomPoto" poto="" style="width: 100px;">
 								<span class="btn btn-secondary radius"><i
 									class="Hui-iconfont">&#xe632;</i>选择图片</span>
 							</div>
@@ -291,14 +301,24 @@
 					</div>
 				</div>
 			</div>
-			<span id="contion"><a>继续</a></span>
 			</c:if>
 			<div class="row cl">
 				<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<c:choose>
+				<c:when test="${hotelInfo.id == null}">
+					<span id="contion" class="btn btn-secondary radius">继续添加房型信息</span>
 					<button id="article_save_submit"
 						class="btn btn-primary radius" type="submit">
 						<i class="Hui-iconfont">&#xe632;</i> 发布酒店信息
 					</button>
+				</c:when>
+				<c:otherwise> 
+					<button id="article_save_submit"
+						class="btn btn-primary radius" type="submit">
+						<i class="Hui-iconfont">&#xe632;</i> 修改酒店信息
+					</button>
+				</c:otherwise> 
+				</c:choose>
 					<button onClick="layer_close();" class="btn btn-default radius"
 						type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
 				</div>
@@ -339,7 +359,8 @@
 				var input = document.getElementById("roomFile"+num);
 				var file = input.files[0];
 				if (!/image\/\w+/.test(file.type)) {
-					alert("文件必须为图片！");
+					layer.msg("文件必须为图片！");
+					input.value="";
 					return false;
 				}
 				var reader = new FileReader();
@@ -352,32 +373,65 @@
 		$(function() {
 			var index = 0;
 			var strVar = null;
+			var info = null;
+			
+			$("#housesInfo").bind("click",function() {
+				if($(this).parent().parent().next().css("display")=="none"){
+					$(this).parent().parent().next().show(500);
+					$(this).text("收起房型信息▲");
+				}else{
+					$(this).parent().parent().next().hide(500);
+					$(this).text("展开房型信息▼");
+				}
+			});
+			
 			$("#contion").click(function() {
 				index += 1;
-				strVar = $(this).prev().clone(true); //克隆元素,注意不是javascript的cloneNode()
+				strVar = $(this).parent().parent().prev().clone(true); //克隆元素,注意不是javascript的cloneNode()
 				strVar.attr("id", "houses" + index); //改变克隆元素id,注意不是setAttribute()
-				$("#houses" + index).style = "display: block";
+
+				info = $(this).parent().parent().prev().prev().clone(true);
+				info.attr("id","upAndClose"+index);
+				
+				
 				var roomPotoList = null; //根据id查找子元素
 				var roomPoto = null;
 				var roomFile = null;
+				var up = null;
 				if (index > 1) {
-					roomPotoList = strVar.find("#roomPotoList"+(index-1)); //根据id查找子元素
-					roomPoto = strVar.find("#roomPoto"+(index-1));
-					roomFile = strVar.find("#roomFile"+(index-1));
+					roomPotoList = strVar.find("#roomPotoList" + (index - 1)); //根据id查找子元素
+					roomPoto = strVar.find("#roomPoto" + (index - 1));
+					roomFile = strVar.find("#roomFile" + (index - 1));
+					
+					up = info.find("#housesInfo");
 				} else {
 					roomPotoList = strVar.find("#roomPotoList"); //根据id查找子元素
 					roomPoto = strVar.find("#roomPoto");
 					roomFile = strVar.find("#roomFile");
+					
+					up = info.find("#housesInfo");
 				}
 				roomPotoList.attr("id", "roomPotoList" + index);//改变子元素id
 				roomPoto.attr("id", "roomPoto" + index);
-				roomPoto.attr("poto",index);
+				roomPoto.attr("poto", index);
 				roomFile.attr("id", "roomFile" + index);
+				up.text("收起房型信息▲");
 				strVar.find('input').val('');
-				strVar.find("#roomPotoList"+index).empty();
-				$(this).prev().after(strVar);
+				strVar.find("#roomPotoList" + index).empty();
+				$(this).parent().parent().prev().after(info);
+				$(this).parent().parent().prev().after(strVar);
+				$("#upAndClose"+index).show();
+				$("#houses" + index).show();
 			});
+			
 			$("#del").click(function() { // del为删除input的id
+				var delCount = $('[id=del]').length;
+				if (delCount == 1) {
+					layer.msg("只剩下一个啦，不能再删啦！");
+					return false;
+				}
+				
+				$(this).parent().next().remove();
 				$(this).parent().remove();
 			});
 			
@@ -477,13 +531,15 @@
 			$("#filePicker").click(function() {
 				document.getElementById("btn_file").click();
 			});
+			
 			$("#btn_file")
 					.change(
 							function() {
 								var input = document.getElementById("btn_file");
 								var file = input.files[0];
 								if (!/image\/\w+/.test(file.type)) {
-									alert("文件必须为图片！");
+									layer.msg("文件必须为图片！");
+									input.value="";
 									return false;
 								}
 								var reader = new FileReader();

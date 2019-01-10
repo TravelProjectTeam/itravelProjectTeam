@@ -61,16 +61,16 @@ ng\:form {
 					<!-- 预览模式 ED -->
 					<div class="header-center ng-scope">
 						<div class="logo">
-							<a href="index.jsp"></a>
+							<a href="webIndex"></a>
 						</div>
 						<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.WeHotel -->
 						<div class="navigation ng-scope"
 							ng-if="$root.siteConfig.site_id==$root.siteEnum.WeHotel">
 							<a
 								ng-class="{'active': $root.topNavIndex == $root.siteConfig.topNavEnum.home,'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club }"
-								href="hotel.jsp" class="ng-binding">酒店首页</a> <a
+								href="hotelIndex" class="ng-binding">酒店首页</a> <a
 								ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club }"
-								href="index.jsp" class="ng-binding hidden">会员首页</a> <a
+								href="webIndex" class="ng-binding hidden">会员首页</a> <a
 								ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club}"
 								href="hotelSearch.jsp" class="ng-binding hidden">酒店预订</a> <a
 								ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.partners||$root.topNavIndex == $root.siteConfig.topNavEnum.club,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.hotel}"
@@ -358,17 +358,13 @@ ng\:form {
 								<p class="ng-binding">
 									<fmt:parseDate var="s" value="${checkInDate}" pattern="yyyy-MM-dd"/>${checkInDate}至<fmt:parseDate var="e" value="${checkOutDate}" pattern="yyyy-MM-dd"/> ${checkOutDate}<span class="ng-binding">
 									
-									<fmt:formatNumber value="${(e.getTime()-s.getTime())/1000/60/60/24}" pattern="#0" var="num"/>${num}晚</span>
+									<fmt:formatNumber value="${(e.getTime() - s.getTime())/1000/60/60/24}" pattern="#0" var="num"/>${num}晚</span>
 								</p>
 								<div class="price-detail">
 									<p>
 										房费小计:<span class="ng-binding">￥${(houses.roomPrice+rooms.price)*num}</span>
 									</p>
-									<!-- ngIf: params.taxAndService>0 -->
-									<!-- ngIf: params.isNeedInsurance -->
-									<!-- ngIf: params.couponAmount>0 -->
 								</div>
-								<!-- ngIf: params.guaranteePayAmount>0 -->
 							</div>
 							<div class="section">
 								<div class="price-total">

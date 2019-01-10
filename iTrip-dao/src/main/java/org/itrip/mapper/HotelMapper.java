@@ -6,12 +6,14 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Param;
 import org.itrip.pojo.Beds;
 import org.itrip.pojo.Citys;
+import org.itrip.pojo.Comments;
 import org.itrip.pojo.Dictionaries;
 import org.itrip.pojo.Hotel;
 import org.itrip.pojo.Hotelbrand;
 import org.itrip.pojo.Houses;
 import org.itrip.pojo.Order;
 import org.itrip.pojo.Rooms;
+import org.itrip.pojo.User;
 import org.itrip.pojo.Provinces;
 
 public interface HotelMapper {
@@ -46,6 +48,12 @@ public interface HotelMapper {
 	 * @return
 	 */
 	public List<Hotel> queryMap(Map<String,Object> map);
+	
+	/**
+	 * 查询最低的套餐价格
+	public List<Rooms> queryMinPrice(Integer hotelId);
+	*/
+	
 	/**
 	 * 根据类型名称查询字典表
 	 * @return
@@ -109,6 +117,16 @@ public interface HotelMapper {
 	 * 添加房型信息
 	 */
 	public int addRoomsInfo(Houses houses);
+	
+	/**
+	 * 添加一个房型套餐
+	 */
+	public int addRoomTitle(Rooms rooms);
+	
+	/**
+	 * 根据id查询房型
+	 */
+	public Houses getHouseById(int houseId);
 	
 	/**
 	 * 判断字典表类型值是否存在
@@ -191,6 +209,51 @@ public interface HotelMapper {
 	 */
 	public Houses querySid(@Param("sid") String sid);
 
+	/**
+	 * 修改用户密码
+	 * @param user
+	 * @return
+	 */
+	public Integer updPwd(User user);
+	/**updOrder
+	 * 根据Id删除订单信息
+	 * @param id
+	 * @return
+	 */
+	public Integer delOrder(@Param("id") String id);
+	
+	/**
+	 * 根据Id修改订单信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Integer updOrder(@Param("id") String id);
+
+	/**
+	 * 根据登录人ID查询订单信息
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public List<Order> queryOrder(@Param("userId") Integer userId);
+	
+	/**
+	 * 修改房型信息
+	 */
+	public int updateHousesInfo(Houses houses);
+	
+	/**
+	 * 修改套餐价格
+	 */
+	public int updateRoomPrice(@Param("price") Float price,@Param("houseId") Integer houseId );
+	
+	/**
+	 * 根据酒店ID查询评论表
+	 * @param hotelId
+	 * @return
+	 */
+	public List<Comments> quComments(@Param("hotelId") Integer hotelId);
 
 
 }

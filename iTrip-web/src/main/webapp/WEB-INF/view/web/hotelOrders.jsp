@@ -1,5 +1,7 @@
 <%@ page language="java" import="java.util.*"
 	contentType="text/html;charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <head>
 <script type="text/javascript" src="js/hoteOrders/openPage.txt"></script>
 <style type="text/css">
@@ -36,15 +38,13 @@ ng\:form {
 <!-- CSS INCLUDE -->
 <link rel="stylesheet" href="css/hotelOrders.css">
 <!-- EOF CSS INCLUDE -->
-<script type="text/javascript" src="js/hoteOrders/tongji.js"></script>
+<script type="text/javascript" src="jquery/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="js/hotelOrders.js"></script>
 </head>
-<body ng-controller="hotelOrdersController" ng-init="init()"
-	ng-class="{'plateno':$root.siteConfig.site_id==$root.siteEnum.Plateno}"
-	class="ng-scope">
+<body class="ng-scope">
 
 	<!-- ngInclude: $root.siteConfig.hotelOrders.template_url -->
-	<div class="container ng-scope"
-		ng-include="$root.siteConfig.hotelOrders.template_url">
+	<div class="container ng-scope">
 		<div class="wehotel account hotelOrders  ng-scope">
 
 			<!-- header begin -->
@@ -66,13 +66,13 @@ ng\:form {
 						ng-if="$root.siteConfig.site_id==$root.siteEnum.WeHotel">
 						<a
 							ng-class="{'active': $root.topNavIndex == $root.siteConfig.topNavEnum.home,'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club }"
-							href="hotel.jsp" class="ng-binding hidden">酒店首页</a> <a
+							href="webIndex" class="ng-binding hidden">酒店首页</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club }"
-							href="index.jsp" class="ng-binding">会员首页</a> <a
+							href="#" class="ng-binding">会员首页</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club}"
-							href=hotelSearch.jsp class="ng-binding">酒店预订</a> <a
+							href=webIndex class="ng-binding">酒店预订</a> <a
 							ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.partners||$root.topNavIndex == $root.siteConfig.topNavEnum.club,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.hotel}"
-							href="hotelSearch.jsp" class="ng-binding hidden">酒店预订</a> <a
+							href="webIndex" class="ng-binding hidden">酒店预订</a> <a
 							ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club || $root.topNavIndex == $root.siteConfig.topNavEnum.partners }"
 							href="#" class="ng-binding hidden">会员中心</a> <a href=""
 							target="_blank" class="ng-binding">积分商城</a> <a
@@ -237,26 +237,18 @@ ng\:form {
 			<div class="center">
 				<div class="center-container">
 					<!--侧边栏-->
-					<div class="placeholder sidebar ng-isolate-scope"
-						account-left-side-bar="" active-index="1">
+					<div class="placeholder sidebar ng-isolate-scope">
 						<ul class="nav">
 							<li><a class="myList ng-binding"><i class="icon-list"></i>我的订单</a>
 								<ul class="item-list">
-									<li><a ng-class="{'active': activeIndex==1}"
-										ng-href="javascript:void(0);" class="ng-binding active"
+									<li><a  class="ng-binding active"
 										href="javascript:void(0);"><i>•&nbsp;</i>酒店订单</a></li>
 									<!--<li><a ng-class="{'active': activeIndex==2}" href="javascript:void(0);">其他订单</a></li>-->
 								</ul></li>
 							<li><a class="ng-binding"><i class="icon-account"></i>我的账户</a>
 								<ul class="item-list">
-									<li><a ng-class="{'active': activeIndex==3}"
-										ng-href="/Club/MemberInfo" class="ng-binding" href="#"><i>•&nbsp;</i>个人信息</a></li>
-									<li><a ng-class="{'active': activeIndex==4}"
-										ng-href="/Club/MemberScores" class="ng-binding" href="#"><i>•&nbsp;</i>积分管理</a></li>
-									<li><a ng-class="{'active': activeIndex==5}"
-										ng-href="/Club/MemberCoupon" class="ng-binding" href="#"><i>•&nbsp;</i>优惠券</a></li>
-									<li><a ng-class="{'active': activeIndex==6}"
-										ng-href="/Club/MemberSecurity" class="ng-binding" href="#"><i>•&nbsp;</i>账户安全</a></li>
+									<li><a class="ng-binding" href="webBerInfo"><i>•&nbsp;</i>个人信息</a></li>
+									<li><a  class="ng-binding" href="webSecurity"><i>•&nbsp;</i>账户安全</a></li>
 									<!--<li><a ng-class="{'active': activeIndex==7}" ng-href="{{activeIndex == 7 ? 'javascript:void(0);': '/Club/MemberSubscription'}}">我的订阅</a></li>-->
 									<!--<li><a ng-class="{'active': activeIndex==8}" href="javascript:void(0);">消息中心</a></li>-->
 									<!--<li><a ng-class="{'active': activeIndex==9}" href="{{activeIndex == 9 ? 'javascript:void(0);': '/Club/MemberCardManage'}}">银行卡管理</a></li>-->
@@ -265,31 +257,23 @@ ng\:form {
 							<li><a class="ng-binding"><i class="icon-member"></i>关于会员</a>
 								<ul class="item-list">
 									<!-- ngIf: $root.siteConfig.site_id!=$root.siteEnum.Plateno -->
-									<li ng-if="$root.siteConfig.site_id!=$root.siteEnum.Plateno"
-										class="ng-scope"><a
-										ng-class="{'active': activeIndex==11}" href="#"
-										class="ng-binding"><i>•&nbsp;</i>消费积分</a></li>
+									<li class="ng-scope"><a href="#" class="ng-binding"><i>•&nbsp;</i>消费积分</a></li>
 									<!-- end ngIf: $root.siteConfig.site_id!=$root.siteEnum.Plateno -->
 									<!-- ngIf: $root.siteConfig.site_id!=$root.siteEnum.Plateno -->
-									<li ng-if="$root.siteConfig.site_id!=$root.siteEnum.Plateno"
-										class="ng-scope"><a
-										ng-class="{'active': activeIndex==12}" href="#"
-										class="ng-binding"><i>•&nbsp;</i>关于WeHotel</a></li>
+									<li class="ng-scope"><a href="#" class="ng-binding"><i>•&nbsp;</i>关于WeHotel</a></li>
 									<!-- end ngIf: $root.siteConfig.site_id!=$root.siteEnum.Plateno -->
 									<!--<li><a ng-class="{'active': activeIndex==13}" href="">加入锦江礼享</a></li>-->
 									<!--<li><a ng-class="{'active': activeIndex==14}" href="">会员服务</a></li>-->
 									<!--<li><a ng-class="{'active': activeIndex==15}" href="">会员条款与细则</a></li>-->
-									<li><a ng-class="{'active': activeIndex==16}" href="#"><i>•&nbsp;</i>会员等级</a></li>
-									<!--<li><a ng-class="{'active': activeIndex==17}" href="">隐私权政策</a></li>-->
-									<li><a ng-class="{'active': activeIndex==13}" href="#"
-										class="ng-binding"><i>•&nbsp;</i>会员权益</a>
+									<li><a  href="#"><i>•&nbsp;</i>会员等级</a></li>
+									<!--<li><a  href="">隐私权政策</a></li>-->
+									<li><a  href="#" class="ng-binding"><i>•&nbsp;</i>会员权益</a>
 										<ul class="item-list">
-											<li><a href="#" ng-click="anchorScroll('memScore')">会员积分</a></li>
-											<li><a href="#" ng-click="anchorScroll('memSale')">会员折扣</a></li>
-											<li><a href="#" ng-click="anchorScroll('memGift')">会员礼遇</a></li>
+											<li><a href="#">会员积分</a></li>
+											<li><a href="#">会员折扣</a></li>
+											<li><a href="#">会员礼遇</a></li>
 										</ul></li>
-									<li><a ng-class="{'active': activeIndex==14}" href="#"
-										class="ng-binding"><i>•&nbsp;</i>常见问题</a></li>
+									<li><a  href="#" class="ng-binding"><i>•&nbsp;</i>常见问题</a></li>
 								</ul></li>
 
 						</ul>
@@ -340,131 +324,84 @@ ng\:form {
 
 
 								<!-- ngRepeat: order in hotelOrderList track by $index -->
-								<li ng-repeat="order in hotelOrderList track by $index"
-									class="ng-scope">
-									<div class="order-list-tit">
-										<span class="ng-binding">订单号： <a href="checkOrder.jsp"
-											target="_blank" class="ng-binding">102061450520</a></span> <span
-											class="ng-binding">预订日期：2018-12-07</span>
-									</div>
-									<div class="order-list-main">
-										<div class="hotel-info">
-											<div class="hotel-pic">
-												<a href="checkOrder.jsp" target="_blank"> <img
-													ng-src="/js/hoteOrders/4f4ac10fac9d553e_640_480.jpg"
-													onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'"
-													src="js/hoteOrders/4f4ac10fac9d553e_640_480.jpg">
-												</a>
-											</div>
-											<div class="section">
-												<a href="checkOrder.jsp" target="_blank"><h4
-														title="锦江之星上海陆家嘴酒店" class="ng-binding">锦江之星上海陆家嘴酒店</h4></a>
-												<p class="ng-binding">商务房A</p>
-												<p class="ng-binding">入住日期：2018-12-07</p>
-												<p class="ng-binding">离店日期：2018-12-08</p>
-												<p class="ng-binding">
-													共1晚
-													<!-- ngIf: false -->
-												</p>
-											</div>
+								<c:forEach items="${list}" var="order">
+									<li class="ng-scope">
+										<div class="order-list-tit">
+											<span class="ng-binding">订单号： <a href="checkOrder.jsp"
+												target="_blank" class="ng-binding">${order.orderNo}</a></span> <span
+												class="ng-binding">预订日期：<fmt:parseDate value="${order.creationDate}" pattern="yyyy-MM-dd" var="masterDate"/><fmt:formatDate value="${masterDate}" pattern="yyyy-MM-dd" /></span>
 										</div>
-										<div class="price-box">
-											<div class="section">
-												<p class="ng-binding">总价</p>
-												<!--<p class="price"><span>{{order.origRate | currency:'￥'}}</span></p>-->
-												<p class="price">
-													<span>￥<b class="ng-binding">199</b></span>
-												</p>
-												<!--<p class="price">{{order.paymentAmount | currency:'￥'}}</p>-->
-												<!--<p class="remark">（含服务费）</p>-->
+										<div class="order-list-main">
+											<div class="hotel-info">
+												<div class="hotel-pic">
+													<a href="checkOrder.jsp" target="_blank"> <img
+														onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'"
+														src="${order.detailsImage1}">
+													</a>
+												</div>
+												<div class="section">
+													<a href="checkOrder.jsp" target="_blank" title="${order.hotelName}" class="ng-binding">${order.hotelName}</a>
+													<p class="ng-binding">${order.valueName}</p>
+													<p class="ng-binding">入住日期:<fmt:parseDate value="${order.checkInDate}" pattern="yyyy-MM-dd" var="checkInDate"/><fmt:formatDate value="${checkInDate}" pattern="yyyy-MM-dd" /></p>
+													<p class="ng-binding">离店日期：<fmt:parseDate value="${order.checkOutDate}" pattern="yyyy-MM-dd" var="checkOutDate"/><fmt:formatDate value="${checkOutDate}" pattern="yyyy-MM-dd" /></p>
+													<p class="ng-binding">
+														共${order.bookingDays}晚
+														<!-- ngIf: false -->
+													</p>
+												</div>
 											</div>
-										</div>
-										<div class="order-state">
-											<!--<p class="payWaiting">{{order.payState}}</p>-->
-											<!--<p class="payWaiting" ng-if="order.payState == '0'">待支付</p>-->
-											<!--<p class="payFailure" ng-if="order.orderState == '2'">已取消</p>-->
-											<!--<p class="paySuccess" ng-if="order.orderState == '3'">待入住</p>-->
-											<!--<p class="payFailure" ng-if="order.orderState == '5'">已完成</p>-->
-
-											<p class="paySuccess ng-binding">待付款</p>
-										</div>
-										<div class="order-btn-box">
-											<div class="section"
-												ng-compile="order.orderStatus.buttonsHtml">
-												<!-- ngIf: !order.outerOrderFlag -->
-												<!-- <a class="btn redbtn ng-binding ng-scope" ng-click="payOrder(order)" ng-if="!order.outerOrderFlag">立即支付</a> -->
-												<a href="payment.jsp" class="btn redbtn ng-binding ng-scope">立即支付</a>
-												<!-- end ngIf: !order.outerOrderFlag -->
-												<!-- ngIf: order.canCancel && order.orderState == 'BOOK_SUCCESS' && !(order.outerOrderFlag == 1 && order.payState == 'PAY_SUCCESS') -->
-												<a class="btn defaultbtn ng-binding ng-scope"
-													ng-click="cancelOrder(order)"
-													ng-if="order.canCancel &amp;&amp; order.orderState == 'BOOK_SUCCESS' &amp;&amp; !(order.outerOrderFlag == 1 &amp;&amp; order.payState == 'PAY_SUCCESS')">取消订单</a>
-												<!-- end ngIf: order.canCancel && order.orderState == 'BOOK_SUCCESS' && !(order.outerOrderFlag == 1 && order.payState == 'PAY_SUCCESS') -->
+											<div class="price-box">
+												<div class="section">
+													<p class="ng-binding">总价</p>
+													<!--<p class="price"><span>{{order.origRate | currency:'￥'}}</span></p>-->
+													<p class="price">
+														<span>￥<b class="ng-binding">${order.payAmount}</b></span>
+													</p>
+													<!--<p class="price">{{order.paymentAmount | currency:'￥'}}</p>-->
+													<!--<p class="remark">（含服务费）</p>-->
+												</div>
 											</div>
-										</div>
-									</div>
-								</li>
-								<!-- end ngRepeat: order in hotelOrderList track by $index -->
-								<li ng-repeat="order in hotelOrderList track by $index"
-									class="ng-scope">
-									<div class="order-list-tit">
-										<span class="ng-binding">订单号： <a href="checkOrder.jsp"
-											target="_blank" class="ng-binding">102060788140</a></span> <span
-											class="ng-binding">预订日期：2018-12-06</span>
-									</div>
-									<div class="order-list-main">
-										<div class="hotel-info">
-											<div class="hotel-pic">
-												<a href="checkOrder.jsp" target="_blank"> <img
-													ng-src="js/hoteOrders/4f4ac10fac9d553e_640_480.jpg"
-													onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'"
-													src="js/hoteOrders/4f4ac10fac9d553e_640_480.jpg">
-												</a>
+											<div class="order-state">
+												<!--<p class="payWaiting">{{order.payState}}</p>-->
+												<!--<p class="payWaiting" ng-if="order.payState == '0'">待支付</p>-->
+												<!--<p class="payFailure" ng-if="order.orderState == '2'">已取消</p>-->
+												<!--<p class="paySuccess" ng-if="order.orderState == '3'">待入住</p>-->
+												<!--<p class="payFailure" ng-if="order.orderState == '5'">已完成</p>-->
+												<c:if test="${order.orderStatus==0}">
+												<p class="paySuccess ng-binding">待付款</p>
+												</c:if>
+												<c:if test="${order.orderStatus==1}">
+												<p class="paySuccess ng-binding">已取消</p>
+												</c:if>
+												<c:if test="${order.orderStatus==2}">
+												<p class="paySuccess ng-binding">已付款</p>
+												</c:if>
+												<c:if test="${order.orderStatus==3}">
+												<p class="paySuccess ng-binding">已消费</p>
+												</c:if>
 											</div>
-											<div class="section">
-												<a href="checkOrder.jsp" target="_blank"><h4
-														title="锦江之星上海陆家嘴酒店" class="ng-binding">锦江之星上海陆家嘴酒店</h4></a>
-												<p class="ng-binding">标准房C</p>
-												<p class="ng-binding">入住日期：2018-12-06</p>
-												<p class="ng-binding">离店日期：2018-12-07</p>
-												<p class="ng-binding">
-													共1晚
-													<!-- ngIf: false -->
-												</p>
+											<div class="order-btn-box">
+												<div class="section">
+													<!-- ngIf: !order.outerOrderFlag -->
+													<!-- <a class="btn redbtn ng-binding ng-scope" ng-click="payOrder(order)" ng-if="!order.outerOrderFlag">立即支付</a> -->
+													<c:if test="${order.orderStatus==0}">
+													<a href="#" class="btn redbtn ng-binding ng-scope">立即支付</a>
+													<a onclick="upds(${order.id})" class="btn defaultbtn ng-binding ng-scope">取消订单</a>
+													</c:if>
+													<c:if test="${order.orderStatus!=0}">
+													<a href="webHotelDatail?hotelId=${order.hotelId}"  class="btn redbtn ng-binding ng-scope">再次预定</a>
+													<a onclick="deletes(${order.id})" class="btn defaultbtn ng-binding ng-scope">删除订单</a>
+													</c:if>
+													
+													<!-- end ngIf: !order.outerOrderFlag -->
+													<!-- ngIf: order.canCancel && order.orderState == 'BOOK_SUCCESS' && !(order.outerOrderFlag == 1 && order.payState == 'PAY_SUCCESS') -->
+													
+													<!-- end ngIf: order.canCancel && order.orderState == 'BOOK_SUCCESS' && !(order.outerOrderFlag == 1 && order.payState == 'PAY_SUCCESS') -->
+												</div>
 											</div>
 										</div>
-										<div class="price-box">
-											<div class="section">
-												<p class="ng-binding">总价</p>
-												<!--<p class="price"><span>{{order.origRate | currency:'￥'}}</span></p>-->
-												<p class="price">
-													<span>￥<b class="ng-binding">237</b></span>
-												</p>
-												<!--<p class="price">{{order.paymentAmount | currency:'￥'}}</p>-->
-												<!--<p class="remark">（含服务费）</p>-->
-											</div>
-										</div>
-										<div class="order-state">
-											<!--<p class="payWaiting">{{order.payState}}</p>-->
-											<!--<p class="payWaiting" ng-if="order.payState == '0'">待支付</p>-->
-											<!--<p class="payFailure" ng-if="order.orderState == '2'">已取消</p>-->
-											<!--<p class="paySuccess" ng-if="order.orderState == '3'">待入住</p>-->
-											<!--<p class="payFailure" ng-if="order.orderState == '5'">已完成</p>-->
-
-											<p class="paySuccess ng-binding">已取消</p>
-										</div>
-										<div class="order-btn-box">
-											<div class="section"
-												ng-compile="order.orderStatus.buttonsHtml">
-												<!-- <a class="btn defaultbtn ng-binding ng-scope" ng-click="bookingAgain(order)">再次预订</a> -->
-												<a href="hotelDatail.jsp"
-													class="btn defaultbtn ng-binding ng-scope">再次预订</a> <a
-													class="btn defaultbtn ng-binding ng-scope"
-													ng-click="deleteOrder(order)">删除订单</a>
-											</div>
-										</div>
-									</div>
-								</li>
+									</li>
+								</c:forEach>
 								<!-- end ngRepeat: order in hotelOrderList track by $index -->
 							</ul>
 						</div>
@@ -479,17 +416,14 @@ ng\:form {
 				</div>
 			</div>
 			<!-- weModal 弹窗 -->
-			<div class="modal fade ng-isolate-scope" tabindex="-1"
-				ng-class="{'in': showModal == true,'base-modal':params.enableMiniModal}"
-				we-modal="" show-modal="showAlert" params="alertModal"
+			<div class="modal fade ng-isolate-scope" tabindex="-1" params="alertModal"
 				callback="modalAfterCallback()">
 				<div class="modal-dialog">
-					<div class="modal-content" ng-class="params.contentClass">
+					<div class="modal-content">
 						<!-- ngIf: params.enableMiniModal&&params.closeTag -->
 						<!-- ngIf: params.title -->
-						<div class="modal-body"
-							ng-class="{'scroll-container':params.scrollContainer}">
-							<div ng-bind-html="params.content | html" class="ng-binding"></div>
+						<div class="modal-body">
+							<div class="ng-binding"></div>
 						</div>
 						<!-- ngIf: params.buttons.length>0 -->
 					</div>
@@ -503,14 +437,5 @@ ng\:form {
 			<jsp:include page="footer.jsp" />
 		</div>
 	</div>
-
-	<script src="js/hoteOrders/siteConfig.js"></script>
-
-	<script src="js/hoteOrders/vendor.js"></script>
-
-	<script src="js/hoteOrders/wehotel.js"></script>
-
-
-
 </body>
 </html>

@@ -1,5 +1,8 @@
 package org.itrip.pojo;
 
+import lombok.Data;
+
+@Data
 public class Order {
 	private int id;//订单表id
 	private String userId;//用户id
@@ -22,148 +25,12 @@ public class Order {
 	private String modifyDate;//修改日期
 	private String modifiedBy;//修改人
 	
-	
+	//添加属性
 	private String month;//月份
 	private String sale;//总价
 	private String orders;//订单数
-	
-	public String getMonth() {
-		return month;
-	}
-	public void setMonth(String month) {
-		this.month = month;
-	}
-	public String getSale() {
-		return sale;
-	}
-	public void setSale(String sale) {
-		this.sale = sale;
-	}
-	public String getOrders() {
-		return orders;
-	}
-	public void setOrders(String orders) {
-		this.orders = orders;
-	}
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	public String getOrderNo() {
-		return orderNo;
-	}
-	public void setOrderNo(String orderNo) {
-		this.orderNo = orderNo;
-	}
-	public String getHotelId() {
-		return hotelId;
-	}
-	public void setHotelId(String hotelId) {
-		this.hotelId = hotelId;
-	}
-	public String getRoomId() {
-		return roomId;
-	}
-	public void setRoomId(String roomId) {
-		this.roomId = roomId;
-	}
-	public String getCount() {
-		return count;
-	}
-	public void setCount(String count) {
-		this.count = count;
-	}
-	public String getBookingDays() {
-		return bookingDays;
-	}
-	public void setBookingDays(String bookingDays) {
-		this.bookingDays = bookingDays;
-	}
-	public String getCheckInDate() {
-		return checkInDate;
-	}
-	public void setCheckInDate(String checkInDate) {
-		this.checkInDate = checkInDate;
-	}
-	public String getCheckOutDate() {
-		return checkOutDate;
-	}
-	public void setCheckOutDate(String checkOutDate) {
-		this.checkOutDate = checkOutDate;
-	}
-	public String getOrderStatus() {
-		return orderStatus;
-	}
-	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
-	}
-	public String getPayAmount() {
-		return payAmount;
-	}
-	public void setPayAmount(String payAmount) {
-		this.payAmount = payAmount;
-	}
-	public String getPayType() {
-		return payType;
-	}
-	public void setPayType(String payType) {
-		this.payType = payType;
-	}
-	public String getNoticePhone() {
-		return noticePhone;
-	}
-	public void setNoticePhone(String noticePhone) {
-		this.noticePhone = noticePhone;
-	}
-	public String getNoticeEmail() {
-		return noticeEmail;
-	}
-	public void setNoticeEmail(String noticeEmail) {
-		this.noticeEmail = noticeEmail;
-	}
-	public String getSpecialRequirement() {
-		return specialRequirement;
-	}
-	public void setSpecialRequirement(String specialRequirement) {
-		this.specialRequirement = specialRequirement;
-	}
-	public String getLinkUserName() {
-		return linkUserName;
-	}
-	public void setLinkUserName(String linkUserName) {
-		this.linkUserName = linkUserName;
-	}
-	public String getCreationDate() {
-		return creationDate;
-	}
-	public void setCreationDate(String creationDate) {
-		this.creationDate = creationDate;
-	}
-	public String getCreatedBy() {
-		return createdBy;
-	}
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-	public String getModifyDate() {
-		return modifyDate;
-	}
-	public void setModifyDate(String modifyDate) {
-		this.modifyDate = modifyDate;
-	}
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
+	private String valueName;//房型名称
+	private String hotelName;//酒店名称
+	private String detailsImage1;//酒店图片
 	
 }

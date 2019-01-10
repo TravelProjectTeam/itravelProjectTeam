@@ -1,6 +1,7 @@
 package org.itrip.pojo;
 
 import java.sql.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -29,15 +30,15 @@ public class Hotel {
 	private String alias;//酒店类型
 	private String checkDate;//入住时间
 	private String leaveDate;//退房时间
+	private String detailsImage1;//详情图片
+	private String detailsImage2;//详情图片
+	private String detailsImage3;//详情图片
+
 	
 	//增加字段
 	private String cityName;//城市名称
 	// 添加属性
 	private String roomAlias;
+//	private List<Rooms> roomsList;
 	
-	public static void main(String[] args) {
-		Hotel hotel = new Hotel();
-		hotel.setAddress("12313");
-		System.out.println(hotel.toString());
-	}
 }

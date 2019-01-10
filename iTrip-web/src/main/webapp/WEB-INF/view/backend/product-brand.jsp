@@ -51,6 +51,7 @@
 					<th width="80">酒店名称</th>
 					<th width="100">房型图片</th>
 					<th width="100">房型</th>
+					<th width="100">房型价格</th>
 					<th width="100">房型面积</th>
 					<th width="100">所处楼层</th>
 					<th width="100">窗型</th>
@@ -65,10 +66,11 @@
 						<td>${housesList.hotelName}</td>
 						<td><img width="60" height="70px;" alt="房型图片" src="${housesList.roomImage}"></td>
 						<td class="text-l">${housesList.valueName}</td>
+						<td class="text-l">${housesList.roomPrice}元</td>
 						<td class="text-l">${housesList.roomSize}</td>
 						<td class="text-l">${housesList.floor}</td>
 						<td class="text-l">${housesList.window}</td>
-						<td class="f-14 product-brand-manage"><a style="text-decoration:none" onClick="product_brand_edit('品牌编辑','codeing.html','1')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="active_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+						<td class="f-14 product-brand-manage"><a style="text-decoration:none" onClick="product_brand_edit('房型编辑','getAddHouses?houseId=${housesList.id}','1')" href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a> <a style="text-decoration:none" class="ml-5" onClick="active_del(this,'10001')" href="javascript:;" title="删除"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -95,14 +97,25 @@ $('.table-sort').dataTable({
 	]
 });
 /*房型-添加*/
+
 function product_add(title,url){
-	var index = layer.open({
+		var index = layer.open({
 		type: 2,
 		title: title,
 		content: url
 	});
 	layer.full(index);
 }
+/*房型-编辑*/
+function product_brand_edit(title,url,id){
+		var index = layer.open({
+		type: 2,
+		title: title,
+		content: url
+	});
+	layer.full(index);
+}
+
 </script>
 </body>
 </html>

@@ -82,6 +82,11 @@
 			ORDER BY minimum
 		</if>
 	</select>
+
+	<!-- 查询最低的酒店套餐价格 -->
+	<!-- <select id="queryMinPrice" resultType="Rooms"> select MIN(price) as 
+		price from rooms where hotelId=#{hotelId} </select> -->
+
 	<!-- 根据id查询城市名称 -->
 	<select id="queryCid" resultType="String">
 		select name from
@@ -115,7 +120,7 @@
 	<!-- 查询酒店房型 -->
 	<select id="getHotelRoom" resultMap="HousesResultMap">
 		select s.id,d.valueName
-		valueName,s.roomSize,s.BedArea,s.floor,s.isHavingbed,s.window,s.roomImage
+		valueName,s.roomSize,s.BedArea,s.floor,s.isHavingbed,s.window,s.roomImage,s.ceiling
 		from houses s
 		,dictionaries d where s.roomNameId= d.valueId
 		and
@@ -123,12 +128,10 @@
 	</select>
 	<!-- 查询酒店名称下分类价格 -->
 	<select id="getHouses" resultType="Rooms">
-		<!-- select r.houseId,r.roomTitle,r.isbreakfast,r.cancellationPolicy,r.number, 
-			(r.Price+h.roomPrice)as price from houses h,rooms r where r.hotelId = h.id 
-			and h.hotelId =#{id} -->
 		select
-		r.houseId,r.roomTitle,r.isbreakfast,r.cancellationPolicy,r.number,
-		(r.Price+h.roomPrice)as price from houses h,rooms r
+		r.houseId,r.roomTitle,r.isbreakfast,r.cancellationPolicy,
+		r.Price from
+		houses h,rooms r
 		where r.hotelId =
 		h.id and r.houseId =#{id}
 	</select>
@@ -179,13 +182,41 @@
 	</select>
 
 	<!-- 添加房型信息 -->
-	<insert id="addRoomsInfo" parameterType="houses"
+	<insert id="addRoomsInfo" parameterType="Houses"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into
 		houses(hotelId,roomNameId,roomPrice,roomSize,bedArea,floor,isHavingbed,window,roomImage,bedsId)
 		values(#{hotelId},#{roomNameId},#{roomPrice},#{roomSize},#{bedArea},#{floor},#{isHavingbed},#{window},#{roomImage},#{bedsId})
 	</insert>
 
+	<!-- 添加一个房型套餐 -->
+	<insert id="addRoomTitle" parameterType="Rooms">
+		insert into
+		rooms(hotelId,houseId,roomTitle,price,isbreakfast,cancellationPolicy)
+		values(#{hotelId},#{houseId},#{roomTitle},#{price},#{isbreakfast},#{cancellationPolicy})
+	</insert>
+
+	<!-- 根据id查询房型 -->
+	<select id="getHouseById" resultType="Houses">
+		select 
+		houses.id,hotel.provinceid,hotel.countryid,hotel.hotelName,houses.roomNameId,houses.roomPrice,houses.roomSize,
+		houses.bedArea,houses.bedsId,houses.ceiling,houses.floor,houses.isHavingbed,houses.window,houses.roomImage
+		from houses,hotel where houses.hotelId = hotel.id and
+		houses.id=#{houseId}
+	</select>
+	
+	<!-- 修改房型信息 -->
+	<update id="updateHousesInfo" parameterType="Houses">
+		update houses set
+		roomNameId=#{roomNameId},roomPrice=#{roomPrice},roomSize=#{roomSize},roomsId=#{roomsId},bedArea=#{bedArea},ceiling=#{ceiling},floor=#{floor},isHavingbed=#{isHavingbed},window=#{window},roomImage=#{roomImage}
+		where id=#{id}
+	</update>
+	
+	<!-- 修改套餐价格 -->
+	<update id="updateRoomPrice" parameterType="Rooms">
+		update rooms set price=#{price} where houseId=#{houseId}
+	</update>
+	
 	<!-- 根据id查询字典表信息 -->
 	<select id="queryDicId" parameterType="Integer"
 		resultType="Dictionaries">
@@ -249,17 +280,22 @@
 	</update>
 	<!-- 查看全部的房型信息 -->
 	<select id="getAllHouses" resultMap="HousesResultMap">
-		select s.id,hotel.hotelName,d.valueName
-		valueName,s.roomSize,s.BedArea,s.floor,s.isHavingbed,s.window,s.roomImage
-		from houses s,hotel,dictionaries d 
-		where s.hotelId = hotel.id and s.roomNameId= d.valueId
-		and	d.typeName="房型"
+		select
+		s.id,hotel.hotelName,d.valueName,
+		s.roomPrice,s.roomSize,s.BedArea,s.floor,s.isHavingbed,s.window,s.roomImage
+		from houses s,hotel,dictionaries d
+		where s.hotelId = hotel.id and
+		s.roomNameId= d.valueId
+		and d.typeName="房型"
 	</select>
 	<delete id="deleteManyHotel">
-		delete t1,t2,t3 from (hotel t1 left join houses t2 on t1.id=t2.hotelId) left join rooms t3 on t2.id=t3.houseId where t1.id in
-		<foreach collection="id" item="id" open="(" separator="," close=")">
-	 		#{id}
-	 	</foreach>
+		delete t1,t2,t3 from (hotel t1 left join houses t2 on
+		t1.id=t2.hotelId) left join rooms t3 on t2.id=t3.houseId where t1.id
+		in
+		<foreach collection="id" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
 	</delete>
 	<select id="queryId" resultType="Hotel">
 		select * from hotel where
@@ -270,8 +306,47 @@
 		id=#{rid}
 	</select>
 	<select id="querySid" resultType="Houses">
-		select * from houses s,dictionaries d where s.roomNameId = d.valueId and
-		d.typeName='房型' and s.id=#{sid}
+		select * from houses
+		s,dictionaries d where s.roomNameId = d.valueId and
+		d.typeName='房型' and
+		s.id=#{sid}
+	</select>
+	<!-- 前端修改密码 -->
+	<update id="updPwd" parameterType="User">
+		UPDATE user set pwd=#{pwd}
+		where id= #{id}
+	</update>
+	<delete id="delOrderId">
+		delete from orders where id=#{id}
+	</delete>
+	<!-- 根据用户ID查询订单信息 -->
+	<select id="queryOrder" parameterType="Integer"
+		resultType="Order">
+		select
+		o.id,orderNo,count,o.creationDate,checkInDate,checkOutDate,h.hotelName,valueName,detailsImage1,orderStatus,payAmount,o.hotelId,o.bookingDays
+		from orders o,hotel h,houses s,dictionaries d where o.hotelId=h.id and
+		o.roomId=s.id
+		and s.roomNameId=d.valueId and typeName="房型" and
+		userId=#{userId} and
+		o.creationDate &gt; date_sub(now(),interval 6
+		month)
+		ORDER
+		BY o.creationDate DESC
+	</select>
+	<!-- 根据ID删除订单信息 -->
+	<delete id="delOrder">
+		delete FROM orders where id=#{id}
+	</delete>
+	<!-- 根据ID修改订单状态 -->
+	<update id="updOrder">
+		UPDATE orders set orderStatus=1 where id=#{id}
+	</update>
+	
+	<!-- 用户评论 -->
+	<select id="quComments" resultType="Comments">
+		select
+		s.id,s.hotelId,userImage,commentRank,`comment`,createDate,replyName,reply,linkUserName
+		from comments s,orders o where s.orderId = o.id and s.hotelId=#{hotelId}
 	</select>
 	
 </mapper>

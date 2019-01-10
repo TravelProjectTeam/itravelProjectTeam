@@ -65,7 +65,7 @@ ng\:form {
 				<!-- 预览模式 ED -->
 				<div class="header-center ng-scope">
 					<div class="logo">
-						<a href="index.jsp"></a>
+						<a href="webIndex"></a>
 					</div>
 					<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.WeHotel -->
 					<div class="navigation ng-scope"

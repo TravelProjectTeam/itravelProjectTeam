@@ -6,12 +6,14 @@ import java.util.Map;
 import org.itrip.mapper.HotelMapper;
 import org.itrip.pojo.Beds;
 import org.itrip.pojo.Citys;
+import org.itrip.pojo.Comments;
 import org.itrip.pojo.Dictionaries;
 import org.itrip.pojo.Hotel;
 import org.itrip.pojo.Hotelbrand;
 import org.itrip.pojo.Houses;
 import org.itrip.pojo.Order;
 import org.itrip.pojo.Rooms;
+import org.itrip.pojo.User;
 import org.itrip.pojo.Provinces;
 import org.itrip.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -187,6 +189,47 @@ public class HotelServiceImpl implements HotelService{
 	@Override
 	public Houses querySid(String sid) {
 		return hotelMapper.querySid(sid);
+	}
+	/*@Override
+	public List<Rooms> queryMinPrice(Integer hotelId) {
+		return hotelMapper.queryMinPrice(hotelId);
+	}*/
+	@Override
+	public int addRoomTitle(Rooms rooms) {
+		return hotelMapper.addRoomTitle(rooms);
+	}
+	@Override
+	public Integer updPwd(User user) {
+		return hotelMapper.updPwd(user);
+	}
+	@Override
+	public Integer delOrder(String id) {
+		return hotelMapper.delOrder(id);
+	}
+	@Override
+	public Integer updOrder(String id) {
+		return hotelMapper.updOrder(id);
+	}
+	@Override
+	public List<Order> queryOrder(Integer userId) {
+		return hotelMapper.queryOrder(userId);
+	}
+	
+	@Override
+	public Houses getHouseById(int houseId) {
+		return hotelMapper.getHouseById(houseId);
+	}
+	@Override
+	public int updateHousesInfo(Houses houses) {
+		return hotelMapper.updateHousesInfo(houses);
+	}
+	@Override
+	public int updateRoomPrice(Float price, Integer houseId) {
+		return hotelMapper.updateRoomPrice(price, houseId);
+	}
+	@Override
+	public List<Comments> quComments(Integer hotelId) {
+		return hotelMapper.quComments(hotelId);
 	}
 
 }

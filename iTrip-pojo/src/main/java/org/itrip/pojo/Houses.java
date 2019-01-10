@@ -23,6 +23,7 @@ public class Houses {
 	private String window;//窗户
 	private String roomImage;//房型图片
 	private String bedsId;//床型id
+	private String ceiling;//该房型人数上限
 	
 	//增加字段
 	private String hotelName;//酒店名称
@@ -31,7 +32,7 @@ public class Houses {
 	private Float price;//价格
 	private Integer isbreakfast;//是否含早餐
 	private Integer cancellationPolicy;//取消政策
-	private Integer number;//房间人数
-	
+	private String provinceid;//所属省份
+	private String countryid;//所属城市
 	private List<Rooms> roomsList;
 }

@@ -25,7 +25,7 @@
 		<div class="header-container">
 			<div class="header-center">
 				<div class="header-logo" style="margin-top: 2px;">
-					<a href="index.jsp"><img alt="logo" src="images/index/logo.png"></a>
+					<a href="webIndex"><img alt="logo" src="images/index/logo.png"></a>
 				</div>
 				<div class="subnav">
 					<div class="header-nav">
@@ -33,10 +33,10 @@
 							<a href="#" target="_blank">关于锦江国际</a>
 						</div>
 						<div class="header-nav-item">
-							<a href="hotelOrders.jsp" target="_blank">会员中心</a>
+							<a href="hotelOrders" target="_blank">会员中心</a>
 						</div>
 						<div class="header-nav-item">
-							<a href="hotel.jsp" target="_blank">酒店</a>
+							<a href="hotelIndex" target="_blank">酒店</a>
 						</div>
 						<div class="header-nav-item">
 							<a href="#" target="_blank">旅游</a>
@@ -54,16 +54,14 @@
 						</div>
 						<c:choose>
 						<c:when test="${sessionScope.userSession==null}">
-							<div class="header-login"padding-top: 7px;">
+							<div class="header-login" style="padding-top: 7px;">
 								<a id="btnLogin" class="btn btn-blue" href="webLogin">登录</a><a
 									id="btnReg" class="btn btn-default" href="webRegister">注册</a>
 							</div>
 						</c:when>
 						<c:otherwise>
 						<div class="header-logined">
-							<a class="logined">注册会员
-								<div class="arrow arrow-down"></div>
-							</a>
+							<a class="logined">我的会员	<div class="arrow arrow-down"></div></a>
 							<ul id="logined_box" class="logined_box">
 								<li class="unit_box"><label>会员层级:</label> <span>We普卡</span>
 								</li>

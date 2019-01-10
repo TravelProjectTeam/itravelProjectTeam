@@ -533,13 +533,12 @@ ng\:form {
 						ng-if="$root.siteConfig.site_id==$root.siteEnum.WeHotel">
 						<a
 							ng-class="{'active': $root.topNavIndex == $root.siteConfig.topNavEnum.home,'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club }"
-							href="index.jsp" class="ng-binding">酒店首页</a> <a
+							href="webIndex" class="ng-binding">酒店首页</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club }"
 							href="hotelOrders.jsp" class="ng-binding hidden">会员首页</a> <a
-							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club}"
-							href="hotelSearch.jsp" class="ng-binding hidden">酒店预订</a> <a
+							href="" class="ng-binding hidden">酒店预订</a> <a
 							ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.partners||$root.topNavIndex == $root.siteConfig.topNavEnum.club,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.hotel}"
-							href="hotelSearch.jsp" class="ng-binding active">酒店预订</a> <a
+							href="javascript:;" class="ng-binding active">酒店预订</a> <a
 							ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club || $root.topNavIndex == $root.siteConfig.topNavEnum.partners }"
 							href="hotelOrders.jsp" class="ng-binding">会员中心</a> <a href="#"
 							target="_blank" class="ng-binding">积分商城</a> <a

@@ -55,7 +55,7 @@ ng\:form {
 				<!-- 预览模式 ED -->
 				<div class="header-center ng-scope">
 					<div class="logo">
-						<a href="index.jsp"><h1
+						<a href="webIndex"><h1
 								ng-class="{'icon-we-logo':$root.siteConfig.site_id==$root.siteEnum.WeHotel,'icon-we-ptlx':$root.siteConfig.site_id==$root.siteEnum.Plateno}"
 								class="icon-we-logo"></h1></a>
 					</div>
@@ -64,7 +64,7 @@ ng\:form {
 						ng-if="$root.siteConfig.site_id==$root.siteEnum.WeHotel">
 						<a
 							ng-class="{'active': $root.topNavIndex == $root.siteConfig.topNavEnum.home,'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club }"
-							href="hotel.jsp" class="ng-binding">酒店首页</a> <a
+							href="webIndex" class="ng-binding">酒店首页</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club }"
 							href="#" class="ng-binding hidden">会员首页</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club}"

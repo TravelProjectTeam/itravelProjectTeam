@@ -47,14 +47,14 @@ public class BackendHotelController {
 	 * 进入酒店添加/编辑页面
 	 */
 	@RequestMapping("backendProductAdd")
-	public String getProductAdd(@RequestParam(value="hotelId",required=false) String hotelId, Model model) {
+	public String getProductAdd(@RequestParam(value = "hotelId", required = false) String hotelId, Model model) {
 		model.addAttribute("hotelType", hotelService.getHotelType());
 		model.addAttribute("provinces", hotelService.getProvinces());
 		model.addAttribute("roomsType", hotelService.getRoomsType());
 		model.addAttribute("bedsType", hotelService.getBeds());
-		if(hotelId != null) {
-		model.addAttribute("hotelInfo", hotelService.getHotelDatail(Integer.valueOf(hotelId)));
-	}
+		if (hotelId != null) {
+			model.addAttribute("hotelInfo", hotelService.getHotelDatail(Integer.valueOf(hotelId)));
+		}
 		return "backend/product-add";
 	}
 
@@ -85,18 +85,19 @@ public class BackendHotelController {
 	 * @throws IllegalStateException
 	 */
 	@RequestMapping("addHotelInfo")
-	public String getAddHotelInfo( Hotel hotel,@RequestParam(value = "file", required = false) MultipartFile file,
+	public String getAddHotelInfo(Hotel hotel, @RequestParam(value = "file", required = false) MultipartFile file,
 			@RequestParam(value = "hotelPhoto", required = false) String hotelPhoto,
 			@RequestParam(value = "roomsType", required = false) String[] roomsType,
 			@RequestParam(value = "roomsPrice", required = false) String[] roomsPrice,
 			@RequestParam(value = "roomSize", required = false) String[] roomSize,
 			@RequestParam(value = "bedArea", required = false) String[] bedArea,
 			@RequestParam(value = "bedsType", required = false) String[] bedsType,
+			@RequestParam(value = "ceiling", required = false) String[] ceiling,
 			@RequestParam(value = "floor", required = false) String[] floor,
 			@RequestParam(value = "isHavingbed", required = false) String[] isHavingbed,
 			@RequestParam(value = "window", required = false) String[] window,
 			@RequestParam(value = "roomFile", required = false) MultipartFile[] roomFile) throws IOException {
-		
+
 		// 酒店上传的路径
 		String path = "E:\\Eclipse\\iTrip-Workspace\\iTrip\\iTrip-web\\src\\main\\webapp\\WEB-INF\\statics\\images";
 		String fileName = file.getOriginalFilename();
@@ -104,22 +105,22 @@ public class BackendHotelController {
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
-		//MultipartFile自带的解析方法
-		if(!file.isEmpty()) {
+		// MultipartFile自带的解析方法
+		if (!file.isEmpty()) {
 			file.transferTo(dir);
 			hotel.setPhotograph("images/" + fileName);
-		}else {
+		} else {
 			hotel.setPhotograph(hotelPhoto);
 		}
-		if(hotel.getId()==null) {
+		if (hotel.getId() == null) {
 			hotelService.addHotelInfo(hotel);
-		}else {
-			//修改酒店信息
+		} else {
+			// 修改酒店信息
 			hotelService.updateHotel(hotel);
 			return "redirect:backendProductList";
 		}
-		
-		//添加房型
+
+		// 添加房型
 		Houses houses = new Houses();
 		for (int i = 0; i < roomFile.length; i++) {
 			houses.setHotelId(hotel.getId());
@@ -127,6 +128,7 @@ public class BackendHotelController {
 			houses.setRoomPrice(Double.valueOf(roomsPrice[i]));
 			houses.setRoomSize(roomSize[i] + "㎡");
 			houses.setBedArea(bedArea[i] + "m");
+			houses.setCeiling(ceiling[i]);
 			houses.setFloor(floor[i]);
 			houses.setIsHavingbed(isHavingbed[i]);
 			houses.setWindow(window[i]);
@@ -138,10 +140,10 @@ public class BackendHotelController {
 			if (!roomDir.exists()) {
 				roomDir.mkdirs();
 			}
-			//MultipartFile自带的解析方法
-			if(!roomFile[i].isEmpty()) {
-			roomFile[i].transferTo(roomDir);
-			houses.setRoomImage("images/" + roomsFileName);
+			// MultipartFile自带的解析方法
+			if (!roomFile[i].isEmpty()) {
+				roomFile[i].transferTo(roomDir);
+				houses.setRoomImage("images/" + roomsFileName);
 			}
 			hotelService.addRoomsInfo(houses);
 		}
@@ -152,49 +154,83 @@ public class BackendHotelController {
 	 * 进入houses-add页面
 	 */
 	@RequestMapping("getAddHouses")
-	public String getAddHouses(Model model) {
+	public String getAddHouses(Model model,@RequestParam(value="houseId",required=false) String houseId) {
 		model.addAttribute("provinces", hotelService.getProvinces());
 		model.addAttribute("roomsType", hotelService.getRoomsType());
 		model.addAttribute("bedsType", hotelService.getBeds());
+		if(houseId != null && !houseId.equals("")) {
+			model.addAttribute("houseByIdInfo", hotelService.getHouseById(Integer.valueOf(houseId)));
+		}
 		return "backend/product-houses-add";
 	}
 
 	/**
 	 * 添加房型
+	 * @throws IOException 
+	 * @throws  
 	 */
 	@RequestMapping("addHouses")
-	public String addHouses(@RequestParam(value = "roomsType", required = false) String roomsType,
-			@RequestParam(value = "roomsPrice", required = false) String roomsPrice,
-			@RequestParam(value = "roomSize", required = false) String roomSize,
-			@RequestParam(value = "bedArea", required = false) String bedArea,
-			@RequestParam(value = "bedsType", required = false) String bedsType,
-			@RequestParam(value = "floor", required = false) String floor,
-			@RequestParam(value = "isHavingbed", required = false) String isHavingbed,
-			@RequestParam(value = "window", required = false) String window,
-			@RequestParam(value = "roomFile", required = false) MultipartFile roomFile) {
-
+	public String addHouses(@RequestParam(value = "hotelName",required=false) String hotelName,
+			@RequestParam(value = "roomsType", required = false) String[] roomsType,
+			@RequestParam(value = "roomsPrice", required = false) String[] roomsPrice,
+			@RequestParam(value = "roomSize", required = false) String[] roomSize,
+			@RequestParam(value = "bedArea", required = false) String[] bedArea,
+			@RequestParam(value = "bedsType", required = false) String[] bedsType,
+			@RequestParam(value = "ceiling", required = false) String[] ceiling,
+			@RequestParam(value = "floor", required = false) String[] floor,
+			@RequestParam(value = "isHavingbed", required = false) String[] isHavingbed,
+			@RequestParam(value = "window", required = false) String[] window,
+			@RequestParam(value = "roomFile", required = false) MultipartFile[] roomFile,
+			@RequestParam(value = "houseId",required = false) String houseId,
+			@RequestParam(value = "housePhoto",required = false) String housePhoto) throws IOException {
 		// 添加房型
 		Houses houses = new Houses();
-//		houses.setHotelId(hotel.getId());
-		houses.setRoomNameId(roomsType);
-		houses.setRoomPrice(Double.valueOf(roomsPrice));
-		houses.setRoomSize(roomSize + "㎡");
-		houses.setBedArea(bedArea + "m");
-		houses.setFloor(floor);
-		houses.setIsHavingbed(isHavingbed);
-		houses.setWindow(window);
-		houses.setBedsId(bedsType);
-		// 房型上传的路径
-		String roomPath = "E:\\Eclipse\\iTrip-Workspace\\iTrip\\iTrip-web\\src\\main\\webapp\\WEB-INF\\statics\\images";
-		String roomsFileName = roomFile.getOriginalFilename();
-		File roomDir = new File(roomPath, roomsFileName);
-		if (!roomDir.exists()) {
-			roomDir.mkdirs();
+		Rooms rooms = new Rooms();
+		for (int i = 0; i < roomFile.length; i++) {
+			if(hotelName != null && !hotelName.equals("")) {
+				houses.setHotelId(Integer.valueOf(hotelName));
+			}
+			houses.setRoomNameId(roomsType[i]);
+			houses.setRoomPrice(Double.valueOf(roomsPrice[i]));
+			houses.setRoomSize(roomSize[i] + "㎡");
+			houses.setBedArea(bedArea[i] + "m");
+			houses.setFloor(floor[i]);
+			houses.setIsHavingbed(isHavingbed[i]);
+			houses.setWindow(window[i]);
+			houses.setBedsId(bedsType[i]);
+			houses.setCeiling(ceiling[i]);
+			// 房型上传的路径
+			String roomPath = "E:\\Eclipse\\iTrip-Workspace\\iTrip\\iTrip-web\\src\\main\\webapp\\WEB-INF\\statics\\images";
+			String roomsFileName = roomFile[i].getOriginalFilename();
+			File roomDir = new File(roomPath, roomsFileName);
+			if (!roomDir.exists()) {
+				roomDir.mkdirs();
+			}
+			//MultipartFile自带的解析方法
+			if(!roomFile[i].isEmpty()) {
+			roomFile[i].transferTo(roomDir);
+			houses.setRoomImage("images/" + roomsFileName);
+			}else {
+				houses.setRoomImage(housePhoto);
+			}
+			if(houseId == null) {
+				hotelService.addRoomsInfo(houses);
+				//默认添加一个房型套餐
+				rooms.setHotelId(Integer.valueOf(hotelName));
+				rooms.setHouseId(houses.getId());
+				rooms.setRoomTitle("标准价");
+				rooms.setPrice(Float.valueOf(roomsPrice[i]));
+				rooms.setIsbreakfast(1);
+				rooms.setCancellationPolicy(0);
+				hotelService.addRoomTitle(rooms);
+			}else {
+				houses.setId(Integer.valueOf(houseId));
+				hotelService.updateHousesInfo(houses);
+				hotelService.updateRoomPrice(Float.valueOf(roomsPrice[i]), Integer.valueOf(houseId));
+			}
 		}
-		houses.setRoomImage("images/" + roomsFileName);
-		hotelService.addRoomsInfo(houses);
-		System.out.println("房型最新插入id" + houses.getId());
-		return "";
+		
+		return "redirect:backendProductBrand";
 	}
 
 	/**
@@ -205,13 +241,13 @@ public class BackendHotelController {
 		model.addAttribute("housesList", hotelService.getAllHouses());
 		return "backend/product-brand";
 	}
-	
+
 	/**
 	 * 根据城市id查询酒店
 	 */
 	@RequestMapping("getHotelById")
 	@ResponseBody
-	public List<Hotel> getHotelById(@RequestParam(value="countryid",required=false) String countryid){
+	public List<Hotel> getHotelById(@RequestParam(value = "countryid", required = false) String countryid) {
 		return hotelService.query(Integer.valueOf(countryid));
 	}
 
@@ -264,12 +300,12 @@ public class BackendHotelController {
 		dictionaries.setTypeName(diesName);
 		dictionaries.setValueName(dicName);
 		Integer num = hotelService.queryDicz(dictionaries);// 查询该类型最大值
-		if(num != null ) {
+		if (num != null) {
 			dictionaries.setValueId(num + 1);
-		}else {
+		} else {
 			dictionaries.setValueId(0);
 		}
-		
+
 		hotelService.addDicz(dictionaries);
 		return "redirect:dictionaries";
 	}
@@ -320,28 +356,29 @@ public class BackendHotelController {
 	public String getCharts_1() {
 		return "backend/ceil";
 	}
-	
+
 	@RequestMapping("queryCharts_1")
 	@ResponseBody
-	public String queryCharts_1(Integer year,String type) {
+	public String queryCharts_1(Integer year, String type) {
 		List<Map<String, Integer>> list = hotelService.queryCeil(year);
 		String result = "[";
 		for (int i = 0; i < list.size(); i++) {
-			result +=i==list.size()-1?list.get(i).get(type)+"]":list.get(i).get(type)+",";
+			result += i == list.size() - 1 ? list.get(i).get(type) + "]" : list.get(i).get(type) + ",";
 		}
 		return result;
 	}
 
 	/**
 	 * 酒店删除
+	 * 
 	 * @param ids
 	 * @return
 	 */
 	@RequestMapping("deleteManyHotel")
 	@ResponseBody
 	public int deleteManyHotel(@RequestParam(value = "ids", required = false) String ids) {
-		String id[]=ids.split(",");
-		List<Integer> sid=new ArrayList<>();
+		String id[] = ids.split(",");
+		List<Integer> sid = new ArrayList<>();
 		for (String integer : id) {
 			sid.add(Integer.valueOf(integer));
 		}
@@ -349,22 +386,19 @@ public class BackendHotelController {
 	}
 
 	@RequestMapping("WebDatail")
-	public String WebDatail( Model model,@RequestParam(value="id") String id,
-			@RequestParam(value="sid") String sid,
-			@RequestParam(value="rid") String rid,
-			@RequestParam(value="checkInDate") String checkInDate,
-			@RequestParam(value="checkOutDate") String checkOutDate) {
-		System.out.println("值="+id+"\t"+sid+"\t"+rid+"\t"+checkInDate+"\t"+checkOutDate);
-		String [] ss = checkInDate.split("-");
-		String month =ss[1];
+	public String WebDatail(Model model, @RequestParam(value = "id") String id, @RequestParam(value = "sid") String sid,
+			@RequestParam(value = "rid") String rid, @RequestParam(value = "checkInDate") String checkInDate,
+			@RequestParam(value = "checkOutDate") String checkOutDate) {
+		String[] ss = checkInDate.split("-");
+		String month = ss[1];
 		String day = ss[2];
-		model.addAttribute("hotel",hotelService.queryId(id));
-		model.addAttribute("houses",hotelService.querySid(sid));
-		model.addAttribute("rooms",hotelService.queryRid(rid));
-		model.addAttribute("checkInDate",checkInDate);
-		model.addAttribute("checkOutDate",checkOutDate);
-		model.addAttribute("month",month);
-		model.addAttribute("day",day);
+		model.addAttribute("hotel", hotelService.queryId(id));
+		model.addAttribute("houses", hotelService.querySid(sid));
+		model.addAttribute("rooms", hotelService.queryRid(rid));
+		model.addAttribute("checkInDate", checkInDate);
+		model.addAttribute("checkOutDate", checkOutDate);
+		model.addAttribute("month", month);
+		model.addAttribute("day", day);
 		return "/web/newOrdel";
 	}
 
@@ -381,5 +415,5 @@ public class BackendHotelController {
 
 		return "backend/charts-5";
 	}
-
+	
 }

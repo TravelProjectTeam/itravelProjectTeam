@@ -46,7 +46,7 @@ ng\:form {
 			<div class="header">
 				<div class="header-center">
 					<div class="logo">
-						<a href="index.jsp"><img alt="logo"
+						<a href="webIndex"><img alt="logo"
 							src="images/login/headerlogo.png"> </a>
 					</div>
 					<p class="pagetit ng-binding"></p>
@@ -69,7 +69,7 @@ ng\:form {
 								ng-click="loginType = 2" class="ng-binding">手机快捷登录</a></li>
 						</ul>
 						<div class="login-box active" ng-class="{active:loginType == 1 }">
-							<form class="ng-pristine ng-valid" action="index.jsp">
+							<form class="ng-pristine ng-valid" action="webIndex">
 								<div class="login-box-container">
 									<span id="error" style="color: red; padding-left: 40px;"></span>
 									<!-- ngIf: params.errorInfo!='' -->

@@ -45,7 +45,7 @@ ng\:form {
 				<div class="header">
 					<div class="header-center">
 						<div class="logo">
-							<a href="index.jsp"><img alt="logo"
+							<a href="webIndex"><img alt="logo"
 								src="images/login/headerlogo.png"> </a>
 						</div>
 						<p class="pagetit">会员注册</p>
