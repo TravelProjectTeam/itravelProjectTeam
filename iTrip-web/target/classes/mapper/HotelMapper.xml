@@ -33,18 +33,27 @@
 
 	<!-- =======================邹航开始=========================== -->
 	<!-- 根据首页值查询酒店信息 -->
-	<select id="query" resultType="Hotel" parameterType="Integer">
+	<select id="query" resultType="Hotel" parameterType="Map">
 		select
-		DISTINCT(hotelName),countryid,t.valueName
-		alias,address,photograph,hotelType,score,MIN(roomPrice) minimum,s.id
+		hotelName,countryid,t.valueName
+		alias,address,photograph,hotelType,score,MIN(price) minimum,s.id
 		from
-		hotel s,hotelbrand h,dictionaries t,citys c,houses ho where
+		hotel s,hotelbrand h,dictionaries t,citys c,houses ho,rooms r where
 		s.hotelType=t.valueId and
 		c.id=h.citysid and s.countryid=c.id and
-		t.typeName="酒店类型" and ho.hotelId=s.id and
+		t.typeName="酒店类型" and ho.hotelId=s.id and r.houseId=ho.id and
 		countryid=#{countryid}
 		GROUP
 		BY hotelName
+		LIMIT
+		#{currentPageNo},#{pageSize}
+	</select>
+
+	<!-- 根据条件查询酒店总记录数 -->
+	<select id="hotelCount" resultType="Integer">
+		select count(1) from hotel h
+		INNER JOIN citys c on h.countryid=c.id
+		where h.countryid=#{cid}
 	</select>
 
 	<!-- 根据城市名称查询城市id -->
@@ -52,18 +61,20 @@
 		select id from citys where
 		name=#{names}
 	</select>
-	<!-- 二级页面上版根据条件查询酒店信息 -->
-	<!-- price1:价格下限;price2价格上限;brand品牌Id;rating星级id;cid目的地id;keyword关键字 -->
-	<select id="queryMap" parameterType="Map" resultType="Hotel">
-		select DISTINCT(hotelName),countryid,t.valueName
-		alias,address,photograph,hotelType,score,MIN(roomPrice)
+
+	<!-- 二级页面根据条件查询酒店总记录 -->
+	<select id="hotelTotalCount" resultType="Integer">
+		select count(1) from (select
+		hotelName,countryid,ho.hotelId,t.valueName
+		alias,address,photograph,hotelType,score,min(price)
 		minimum,s.id,s.brandId
 		from
 		hotel s,hotelbrand h,dictionaries t,citys
-		c,houses ho where
+		c,houses ho,rooms r where
 		s.hotelType=t.valueId and
 		c.id=h.citysid and
-		s.countryid=c.id and t.typeName="酒店类型" and ho.hotelId=s.id
+		s.countryid=c.id and r.houseId=ho.id and t.typeName="酒店类型" and
+		ho.hotelId=s.id
 		<if test="brand!=0">
 			and h.id=#{brand} and s.brandId=#{brand}
 		</if>
@@ -81,6 +92,41 @@
 		<if test="rankts==1">
 			ORDER BY minimum
 		</if>
+		) a
+	</select>
+
+	<!-- 二级页面上版根据条件查询酒店信息 -->
+	<!-- price1:价格下限;price2价格上限;brand品牌Id;rating星级id;cid目的地id;keyword关键字 -->
+	<select id="queryMap" parameterType="Map" resultType="Hotel">
+		select hotelName,countryid,ho.hotelId,t.valueName
+		alias,address,photograph,hotelType,score,min(price)
+		minimum,s.id,s.brandId
+		from
+		hotel s,hotelbrand h,dictionaries t,citys
+		c,houses ho,rooms r where
+		s.hotelType=t.valueId and
+		c.id=h.citysid and
+		s.countryid=c.id and r.houseId=ho.id and t.typeName="酒店类型" and
+		ho.hotelId=s.id
+		<if test="brand!=0">
+			and h.id=#{brand} and s.brandId=#{brand}
+		</if>
+		<if test="rating!=0">
+			and s.hotelType=#{rating}
+		</if>
+		<if test="cid!=0">
+			and countryid=#{cid}
+		</if>
+		<if test="keyword!='' and keyword!=null">
+			and hotelName LIKE CONCAT('%',#{keyword},'%')
+		</if>
+		and roomPrice BETWEEN #{price1} and #{price2}
+		GROUP BY hotelName
+		<if test="rankts==1">
+			ORDER BY minimum
+		</if>
+		LIMIT
+		#{currentPageNo},#{pageSize}
 	</select>
 
 	<!-- 查询最低的酒店套餐价格 -->
@@ -129,8 +175,9 @@
 	<!-- 查询酒店名称下分类价格 -->
 	<select id="getHouses" resultType="Rooms">
 		select
-		r.houseId,r.roomTitle,r.isbreakfast,r.cancellationPolicy,
-		r.Price from
+		r.id,r.houseId,r.roomTitle,r.isbreakfast,r.cancellationPolicy,
+		r.Price
+		from
 		houses h,rooms r
 		where r.hotelId =
 		h.id and r.houseId =#{id}
@@ -198,25 +245,26 @@
 
 	<!-- 根据id查询房型 -->
 	<select id="getHouseById" resultType="Houses">
-		select 
+		select
 		houses.id,hotel.provinceid,hotel.countryid,hotel.hotelName,houses.roomNameId,houses.roomPrice,houses.roomSize,
 		houses.bedArea,houses.bedsId,houses.ceiling,houses.floor,houses.isHavingbed,houses.window,houses.roomImage
 		from houses,hotel where houses.hotelId = hotel.id and
 		houses.id=#{houseId}
 	</select>
-	
+
 	<!-- 修改房型信息 -->
 	<update id="updateHousesInfo" parameterType="Houses">
 		update houses set
 		roomNameId=#{roomNameId},roomPrice=#{roomPrice},roomSize=#{roomSize},roomsId=#{roomsId},bedArea=#{bedArea},ceiling=#{ceiling},floor=#{floor},isHavingbed=#{isHavingbed},window=#{window},roomImage=#{roomImage}
 		where id=#{id}
 	</update>
-	
+
 	<!-- 修改套餐价格 -->
 	<update id="updateRoomPrice" parameterType="Rooms">
-		update rooms set price=#{price} where houseId=#{houseId}
+		update rooms set
+		price=#{price} where houseId=#{houseId}
 	</update>
-	
+
 	<!-- 根据id查询字典表信息 -->
 	<select id="queryDicId" parameterType="Integer"
 		resultType="Dictionaries">
@@ -321,32 +369,144 @@
 	</delete>
 	<!-- 根据用户ID查询订单信息 -->
 	<select id="queryOrder" parameterType="Integer"
-		resultType="Order">
+		resultType="Orders">
 		select
-		o.id,orderNo,count,o.creationDate,checkInDate,checkOutDate,h.hotelName,valueName,detailsImage1,orderStatus,payAmount,o.hotelId,o.bookingDays
-		from orders o,hotel h,houses s,dictionaries d where o.hotelId=h.id and
-		o.roomId=s.id
-		and s.roomNameId=d.valueId and typeName="房型" and
+		o.id,orderNo,count,o.creationDate,checkInDate,checkOutDate,h.hotelName,
+		(SELECT valueName from dictionaries d WHERE s.roomNameId=d.valueId and
+		typeName="房型") valueName,detailsImage1,
+		(SELECT valueName from
+		dictionaries d WHERE o.orderStatus = d.valueId and typeName="支付类型")
+		payType,
+		(SELECT valueName from dictionaries d WHERE o.orderStatus =
+		d.valueId and typeName="订单状态")
+		orderStatus,payAmount,o.hotelId,o.bookingDays,
+		(SELECT valueName from
+		dictionaries d WHERE o.payStatus = d.valueId and typeName="支付状态")
+		payStatus
+		from orders o,hotel h,houses s where o.hotelId=h.id and
+		o.roomId=s.id and
 		userId=#{userId} and
-		o.creationDate &gt; date_sub(now(),interval 6
+		o.creationDate &gt;
+		date_sub(now(),interval 6
 		month)
 		ORDER
-		BY o.creationDate DESC
+		BY o.creationDate DESC LIMIT #{currentPageNo},#{pageSize}
 	</select>
+	
+	<!-- 根据用户id查询订单总记录数 -->
+	<select id="hotelOrder" resultType="Integer">
+		select count(id) from orders where userId=#{userId} and
+		creationDate &gt; date_sub(now(),interval 6
+		month)
+	</select>
+	
 	<!-- 根据ID删除订单信息 -->
 	<delete id="delOrder">
 		delete FROM orders where id=#{id}
 	</delete>
 	<!-- 根据ID修改订单状态 -->
 	<update id="updOrder">
-		UPDATE orders set orderStatus=1 where id=#{id}
+		UPDATE orders set orderStatus=3 where id=#{id}
 	</update>
-	
+
 	<!-- 用户评论 -->
 	<select id="quComments" resultType="Comments">
 		select
 		s.id,s.hotelId,userImage,commentRank,`comment`,createDate,replyName,reply,linkUserName
-		from comments s,orders o where s.orderId = o.id and s.hotelId=#{hotelId}
+		from comments s,orders o where s.orderId = o.id and
+		s.hotelId=#{hotelId}
+	</select>
+
+	<!-- 查询订单 -->
+	<select id="queryOrders" resultType="Orders"  parameterType="Map">
+		SELECT h.hotelName,(SELECT valueName FROM dictionaries d WHERE
+		typeName='房型' and d.valueId = hs.roomNameId) roomName,
+		o.* FROM orders o
+		INNER JOIN hotel h on o.hotelId=h.id
+		INNER JOIN houses hs on o.roomId
+		=hs.id where 1=1
+		<if test="creationDate != null and creationDate != '' ">
+				<![CDATA[ and o.creationDate >= #{creationDate} ]]>
+		</if>
+		<if test="endDate != null  and endDate !=''">
+				 <![CDATA[ and o.creationDate <= #{endDate} ]]>
+		</if>
+		<if test="linkUserName !='' and linkUserName != null">
+			and o.linkUserName LIKE '%${linkUserName}%'
+		</if>
 	</select>
 	
+	<!-- 查询订单总数 -->
+	<select id="ordersCount" parameterType="int"
+		resultType="Integer">
+		SELECT COUNT(1) FROM orders
+	</select>
+	
+	<!-- 根据id查订单信息 -->
+	<select id="ByIdOrders" resultType="Orders">
+		SELECT h.hotelName,(SELECT
+		valueName FROM dictionaries d WHERE typeName='房型' and d.valueId =
+		hs.roomNameId) roomName,
+		o.* FROM orders o
+		INNER JOIN hotel h on
+		o.hotelId=h.id
+		INNER JOIN houses hs on o.roomId =hs.id
+		WHERE o.id=#{id}
+	</select>
+	<select id="RoomName" resultType="Houses">
+		SELECT (SELECT valueName FROM
+		dictionaries d WHERE typeName='房型' and d.valueId = hs.roomNameId)
+		valueName,hs.id FROM hotel h
+		INNER JOIN houses hs ON h.id=hs.hotelId
+		WHERE h.id=#{hotelId}
+	</select>
+	<!-- 根据id值修改订单 -->
+	<update id="UpdateOrders" parameterType="Orders">
+		UPDATE orders set
+		orderNo=#{orderNo},hotelId=#{hotelId},roomId=#{roomId},`count`=#{count},checkInDate=#{checkInDate},
+		checkOutDate=#{checkOutDate},linkUserName=#{linkUserName},payAmount=#{payAmount},noticePhone=#{noticePhone}
+		WHERE id=#{id}
+	</update>
+
+	<select id="getMeal" resultType="Rooms">
+		SELECT roomTitle,price FROM
+		rooms WHERE houseId=#{houseId}
+	</select>
+
+	<!-- 新增订单 -->
+	<insert id="addOrdres" parameterType="Orders"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into
+		orders(userId,orderNo,hotelId,roomId,count,bookingDays,checkInDate,checkOutDate,orderStatus,payAmount,payType,noticePhone,noticeEmail,specialRequirement,linkUserName,roomsId,payStatus)
+		values(#{userId},#{orderNo},#{hotelId},#{roomId},#{count},#{bookingDays},#{checkInDate},#{checkOutDate},#{orderStatus},#{payAmount},#{payType},#{noticePhone},#{noticeEmail},#{specialRequirement},#{linkUserName},#{roomsId},#{payStatus})
+	</insert>
+
+	<!-- 订单支付页面 根据id查询订单信息 -->
+	<select id="getOrdersById" resultType="Orders">
+		select
+		o.id,o.userId,o.orderNo,o.count,o.bookingDays,o.checkInDate,o.checkOutDate,
+		(select valueName from dictionaries where typeName='订单状态' and
+		valueId=o.orderStatus) as orderStatus,
+		o.payAmount,(select valueName
+		from dictionaries where typeName='支付类型' and valueId=o.payType) as
+		payType,
+		o.noticePhone,o.linkUserName,o.creationDate,(select valueName
+		from dictionaries where typeName='支付状态' and valueId=o.payStatus) as
+		payStatus,
+		hot.hotelName,hot.address,(select valueName from
+		dictionaries where
+		typeName='酒店类型' and valueId=hot.hotelType) as
+		hotelType,hot.phone,
+		hou.roomImage,d.valueName
+		from orders o,hotel
+		hot,houses
+		hou,dictionaries d
+		where o.hotelId = hot.id
+		and o.roomId =
+		hou.id
+		and
+		hou.roomNameId = d.valueId
+		and d.typeName='房型' and o.id =
+		#{ordersId}
+	</select>
 </mapper>

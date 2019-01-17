@@ -2,7 +2,11 @@ package org.itrip.controller.backend;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +18,7 @@ import org.itrip.pojo.Dictionaries;
 import org.itrip.pojo.Hotel;
 import org.itrip.pojo.Hotelbrand;
 import org.itrip.pojo.Houses;
-import org.itrip.pojo.HousesFrom;
-import org.itrip.pojo.Order;
+import org.itrip.pojo.Orders;
 import org.itrip.pojo.Rooms;
 import org.itrip.service.HotelService;
 import org.itrip.service.UserService;
@@ -26,8 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.alibaba.fastjson.JSON;
 
 @Controller
 public class BackendHotelController {
@@ -247,8 +248,10 @@ public class BackendHotelController {
 	 */
 	@RequestMapping("getHotelById")
 	@ResponseBody
-	public List<Hotel> getHotelById(@RequestParam(value = "countryid", required = false) String countryid) {
-		return hotelService.query(Integer.valueOf(countryid));
+	public List<Hotel> getHotelById(@RequestParam(value="countryid",required=false) String countryid){
+		Map<String, Object> map=new HashMap<>();
+		map.put("countryid", countryid);
+		return hotelService.query(map);
 	}
 
 	/**
@@ -415,5 +418,87 @@ public class BackendHotelController {
 
 		return "backend/charts-5";
 	}
-	
+	//订单页面
+		@RequestMapping("getBackendPicture_list")
+		public String getPicture_list(Model model,@RequestParam(value="creationDate", required = false) String creationDate,
+				@RequestParam(value="endDate", required = false) String endDate,
+				@RequestParam(value="linkUserName", required = false) String linkUserName) {
+			List<Orders> listOrders=hotelService.queryOrders(creationDate, endDate, linkUserName);		
+			int count=hotelService.ordersCount();
+			model.addAttribute("listOrders", listOrders);
+			model.addAttribute("count", count);
+			model.addAttribute("creationDate", creationDate);
+			model.addAttribute("endDate", endDate);
+			model.addAttribute("linkUserName", linkUserName);
+			return "backend/picture-list";
+		}
+		/**
+		 * 传值进修改订单页面
+		 * @param id
+		 * @param model
+		 * @return
+		 */
+		@RequestMapping("getOrders_add")
+		public String getOrders_add(@RequestParam(value="id", required = false) String id,Model model) {
+			Orders orders=hotelService.ByIdOrders(Integer.valueOf(id));
+			Float result=orders.getPayAmount()/orders.getCount()/orders.getBookingDays();	
+			model.addAttribute("result", Float.valueOf(result));
+			model.addAttribute("MealList", hotelService.getMeal(Integer.valueOf(orders.getRoomId())));
+			model.addAttribute("hotelName",hotelService.RoomName(orders.getHotelId()));
+			model.addAttribute("orders", orders);
+			return "backend/orders-add";
+		}
+		/**
+		 * 提交修改订单
+		 * @param id
+		 * @param hotelId
+		 * @param orderNo
+		 * @param houseId
+		 * @param count
+		 * @param checkInDate
+		 * @param checkOutDate
+		 * @param linkUserName
+		 * @param payAmount
+		 * @param noticePhone
+		 * @param model
+		 * @return
+		 * @throws ParseException
+		 */
+		@RequestMapping("getUpdateOrders")
+		public String UpdateOrders(@RequestParam(value="id", required = false) String id,
+				@RequestParam(value="hotelId", required = false) String hotelId,
+				@RequestParam(value="orderNo", required = false) String orderNo,
+				@RequestParam(value="houseId", required = false) String houseId,
+				@RequestParam(value="count", required = false) String count,
+				@RequestParam(value="checkInDate", required = false) String checkInDate,
+				@RequestParam(value="checkOutDate", required = false) String checkOutDate,
+				@RequestParam(value="linkUserName", required = false) String linkUserName,
+				@RequestParam(value="payAmount", required = false) String payAmount,
+				@RequestParam(value="noticePhone", required = false) String noticePhone,Model model) throws ParseException {
+			 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			 Date checkInDates =  sdf.parse(checkInDate);
+			 Date checkOutDates =  sdf.parse(checkOutDate);
+			 
+			Orders orders=new Orders();
+			orders.setId(Integer.valueOf(id));
+			orders.setOrderNo(orderNo);
+			orders.setHotelId(Integer.valueOf(hotelId));
+			orders.setRoomId(Integer.valueOf(houseId));
+			orders.setCount(Integer.valueOf(count));
+			orders.setCheckInDate(checkInDates);
+			orders.setCheckOutDate(checkOutDates);
+			orders.setLinkUserName(linkUserName);
+			orders.setPayAmount(Float.valueOf(payAmount));
+			orders.setNoticePhone(noticePhone);
+			int result=hotelService.UpdateOrders(orders);
+			return "redirect:getBackendPicture_list";
+			
+		}
+		
+		//拦截
+		@RequestMapping("return403")
+		public String return403() {
+			
+			return "backend/403";
+		}
 }

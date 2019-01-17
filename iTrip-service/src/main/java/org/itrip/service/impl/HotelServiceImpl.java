@@ -11,7 +11,7 @@ import org.itrip.pojo.Dictionaries;
 import org.itrip.pojo.Hotel;
 import org.itrip.pojo.Hotelbrand;
 import org.itrip.pojo.Houses;
-import org.itrip.pojo.Order;
+import org.itrip.pojo.Orders;
 import org.itrip.pojo.Rooms;
 import org.itrip.pojo.User;
 import org.itrip.pojo.Provinces;
@@ -65,9 +65,23 @@ public class HotelServiceImpl implements HotelService{
 	
 	/**
 	 * 根据条件查询酒店信息
+	 * @param hotelName
+	 * @return
 	 */
-	public List<Hotel> query(Integer countryid) {
-		return hotelMapper.query(countryid);
+	public List<Hotel> query(Map<String, Object> map){
+		return hotelMapper.query(map);
+	}
+	/**
+	 * 酒店总记录数
+	 */
+	public Integer hotelCount(Integer cid) {
+		return hotelMapper.hotelCount(cid);
+	}
+	/**
+	 * 二级酒店总记录
+	 */
+	public Integer hotelTotalCount(Map<String, Object> map) {
+		return hotelMapper.hotelTotalCount(map);
 	}
 	
 	
@@ -211,8 +225,18 @@ public class HotelServiceImpl implements HotelService{
 		return hotelMapper.updOrder(id);
 	}
 	@Override
-	public List<Order> queryOrder(Integer userId) {
-		return hotelMapper.queryOrder(userId);
+	public List<Orders> queryOrder(Map<String,Object> map) {
+		return hotelMapper.queryOrder(map);
+	}
+	
+	@Override
+	/**
+	 * 根据用户Id查询订单总记录数
+	 * @param userId
+	 * @return
+	 */
+	public Integer hotelOrder(Integer userId) {
+		return hotelMapper.hotelOrder(userId);
 	}
 	
 	@Override
@@ -230,6 +254,38 @@ public class HotelServiceImpl implements HotelService{
 	@Override
 	public List<Comments> quComments(Integer hotelId) {
 		return hotelMapper.quComments(hotelId);
+	}
+	@Override
+	public List<Orders> queryOrders(String creationDate, String endDate, String linkUserName) {
+		return hotelMapper.queryOrders(creationDate, endDate, linkUserName);
+	}
+	@Override
+	public int ordersCount() {
+		return hotelMapper.ordersCount();
+	}
+	@Override
+	public Orders ByIdOrders(Integer id) {
+		return hotelMapper.ByIdOrders(id);
+	}
+	@Override
+	public List<Houses> RoomName(Integer hotelId) {
+		return hotelMapper.RoomName(hotelId);
+	}
+	@Override
+	public int UpdateOrders(Orders orders) {
+		return hotelMapper.UpdateOrders(orders);
+	}
+	@Override
+	public List<Rooms> getMeal(Integer houseId) {
+		return hotelMapper.getMeal(houseId);
+	}
+	@Override
+	public int addOrdres(Orders orders) {
+		return hotelMapper.addOrdres(orders);
+	}
+	@Override
+	public Orders getOrdersById(Integer id) {
+		return hotelMapper.getOrdersById(id);
 	}
 
 }

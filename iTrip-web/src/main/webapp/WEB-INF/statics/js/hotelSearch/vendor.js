@@ -166,14 +166,35 @@ $(function() {
 		});
 		
 	}); 
-function queryHotels(){
+/*function page(sst){
+	alert(2222);
+	$("#page").val(sst);
+	queryhotels();
+};*/
+function queryHotels(num){
 	var rankts=0;
 	var country=$("#citySelect").val();
 	var name=$("#key_input").val();
 	var arr =[price1,price2,rating,brand,country,name,rankts];
-	location.href="queryH?arr="+arr;
-	
-}
+	location.href="queryH?arr="+arr+"&currentPageNo="+num;
+};
+
+function jump_to(num){
+	   //alert(num);
+		//验证用户的输入
+		var regexp=/^[1-9]\d*$/;
+		var totalPageCount = document.getElementById("totalPageCount").value;
+		//alert(totalPageCount);
+		if(!regexp.test(num)){
+			layer.msg("请输入大于0的正整数！");
+			return false;
+		}else if((num-totalPageCount) > 0){
+			layer.msg("请输入小于总页数的页码");
+			return false;
+		}else{
+			queryHotels(num);
+		}
+	};
 
 //获取地图定位地址
 function queryss(address) {
@@ -191,7 +212,7 @@ function queryss(address) {
 			map.centerAndZoom(point,19);
 			map.addOverlay(new BMap.Marker(point));
 		} else {
-			alert("您选择地址没有解析到结果!");
+			layer.msg("您选择地址没有解析到结果!");
 		}
 	}, di);
 }

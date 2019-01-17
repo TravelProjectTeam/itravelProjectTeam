@@ -7,7 +7,7 @@
 
 <%@ page import="java.text.SimpleDateFormat"%>
 
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <head>
 <link rel="stylesheet" type="text/css" href="css/hotelDatail.css">
@@ -579,7 +579,7 @@ ng\:form {
 								<p class="score ng-binding">
 									<b class="ng-binding">4.7</b>/5分
 								</p>
-								<p id="allReview" class="ng-binding">403 条真实评论</p>
+								<p id="allReview" class="ng-binding">${count}条真实评论</p>
 							</div>
 							<!--星星循环一定得有5个li，半星Class为star_half-->
 							<div class="comment-box">
@@ -639,47 +639,42 @@ ng\:form {
 							</div>
 						</div>
 						<ul class="review-nav">
-							<li ng-click="changeCommentType(1)"
-								ng-class="{'review-select':params.commentType==1}"
-								class="ng-binding review-select">全部点评 403</li>
-							<li ng-click="changeCommentType(2)"
-								ng-class="{'review-select':params.commentType==2}"
-								class="ng-binding">好评 362</li>
-							<li ng-click="changeCommentType(3)"
-								ng-class="{'review-select':params.commentType==3}"
-								class="ng-binding">中评 35</li>
-							<li ng-click="changeCommentType(4)"
-								ng-class="{'review-select':params.commentType==4}"
-								class="ng-binding">差评 6</li>
+							<li class="ng-binding review-select">全部点评 ${count}</li>
+							<li class="ng-binding">好评 ${hao}</li>
+							<li class="ng-binding">中评 ${zhong}</li>
+							<li class="ng-binding">差评 ${cha}</li>
 						</ul>
 						<ul class="user-reviewBox">
 							<!--每个Li 都是一个循环-->
 							<c:forEach items="${comment}" var="coms">
-							<li  class="ng-scope">
-								<div class="review-userImg">
-									<div class="user-photo">
+								<li class="ng-scope">
+									<div class="review-userImg">
+										<div class="user-photo">
 
-										<span class="user-raduis icon-hotel_user-bg hotel"></span>
+											<span class="user-raduis icon-hotel_user-bg hotel"></span>
+										</div>
+										<div class="user-name user-reviewName ng-binding">${coms.linkUserName}</div>
 									</div>
-									<div class="user-name user-reviewName ng-binding">${coms.linkUserName}</div>
-								</div>
-								<div class="review-comment">
-									<div class="review-main">
-										<p class="ng-binding">${coms.comment}</p>
+									<div class="review-comment">
+										<div class="review-main">
+											<p class="ng-binding">${coms.comment}</p>
+										</div>
+										<div class="review-userStar">
+											<ul class="comment-level ng-binding">
+												<li class="star_full"></li>
+												<li class="star_full"></li>
+												<li class="star_full"></li>
+												<li class="star_full"></li>
+												<li class="star_full"></li>
+											</ul>
+											<div class="user-time ng-binding">
+												<fmt:formatDate value="${coms.createDate}"
+													pattern="yyyy年MM月" />
+											</div>
+										</div>
+										<!-- ngIf: comment.childrenEvaluations.length>0 -->
 									</div>
-									<div class="review-userStar">
-										<ul class="comment-level ng-binding">
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-											<li class="star_full"></li>
-										</ul>
-										<div class="user-time ng-binding"><fmt:formatDate value="${coms.createDate}" pattern="yyyy年MM月" /></div>
-									</div>
-									<!-- ngIf: comment.childrenEvaluations.length>0 -->
-								</div>
-							</li>
+								</li>
 							</c:forEach>
 							<!-- end ngRepeat: comment in comments -->
 						</ul>

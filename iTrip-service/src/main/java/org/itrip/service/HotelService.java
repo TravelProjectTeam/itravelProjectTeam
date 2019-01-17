@@ -11,7 +11,7 @@ import org.itrip.pojo.Dictionaries;
 import org.itrip.pojo.Hotel;
 import org.itrip.pojo.Hotelbrand;
 import org.itrip.pojo.Houses;
-import org.itrip.pojo.Order;
+import org.itrip.pojo.Orders;
 import org.itrip.pojo.Rooms;
 import org.itrip.pojo.User;
 import org.itrip.pojo.Provinces;
@@ -26,11 +26,18 @@ public interface HotelService {
 
 	/**
 	 * 根据条件查询酒店信息
-	 * 
 	 * @param hotelName
 	 * @return
 	 */
-	public List<Hotel> query(Integer countryid);
+	public List<Hotel> query(Map<String, Object> map);
+	/**
+	 * 酒店总记录数
+	 */
+	public Integer hotelCount(Integer cid);
+	/**
+	 * 二级酒店总记录
+	 */
+	public Integer hotelTotalCount(Map<String, Object> map);
 
 	/**
 	 * 12.18根据城市id，关键字查询信息
@@ -205,7 +212,14 @@ public interface HotelService {
 	 * @param userId
 	 * @return
 	 */
-	public List<Order> queryOrder(Integer userId);
+	public List<Orders> queryOrder(Map<String,Object> map);
+	
+	/**
+	 * 根据用户Id查询订单总记录数
+	 * @param userId
+	 * @return
+	 */
+	public Integer hotelOrder(Integer userId);
 	
 	/**
 	 * 根据id查询房型
@@ -219,5 +233,50 @@ public interface HotelService {
 	public int updateRoomPrice(Float price,Integer houseId );
 	
 	public List<Comments> quComments(Integer hotelId);
+	
+	/**
+	 * 查询订单
+	 * @return
+	 */
+	public List<Orders> queryOrders(String creationDate,String endDate,String linkUserName);
+	/**
+	 * 查询订单总数
+	 * @return
+	 */
+	public int ordersCount();
+	/**
+	 * 根据id查订单信息
+	 * @param id
+	 * @return
+	 */
+	public Orders ByIdOrders(Integer id);
+	/**
+	 * 根据酒店id查询该酒店所拥有的房间类型
+	 * @param hotelId
+	 * @return
+	 */
+	public List<Houses> RoomName(Integer hotelId);
+	/**
+	 * 根据id值修改订单
+	 * 
+	 * @return
+	 */
+	public int UpdateOrders(Orders orders);
+	/**
+	 * 根据房型id查价格
+	 * @param houseId
+	 * @return
+	 */
+	public List<Rooms> getMeal(Integer houseId);
+	
+	/**
+	 * 酒店预订
+	 */
+	public int addOrdres(Orders orders);
+	
+	/**
+	 * 订单支付页面 根据id查询信息
+	 */
+	public Orders getOrdersById(Integer id);
 
 }

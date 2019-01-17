@@ -24,6 +24,46 @@ ng\:form {
 .ng-hide-add-active, .ng-hide-remove {
 	display: block !important;
 }
+
+.page-bar {
+	float: right;
+	padding-top: 15px;
+}
+
+.page-num-ul li {
+	display: inline;
+}
+
+.page-go-form {
+	float: right;
+}
+
+.paginate_button {
+	border: 1px solid #cecece;
+	border-radius: 5px;
+	margin-right: 10px;
+	padding: 5px 10px;
+	text-align: center;
+}
+
+.paginate_button a {
+	color: black;
+}
+
+.active {
+	opacity: 1;
+}
+
+.page-key {
+	border-radius: 5px;
+	padding: 3px 0px;
+	width: 40px;
+	color: black;
+}
+
+.page-go-form {
+	margin-top: -5px;
+}
 </style>
 <!-- META SECTION -->
 
@@ -38,8 +78,6 @@ ng\:form {
 <!-- CSS INCLUDE -->
 <link rel="stylesheet" href="css/hotelOrders.css">
 <!-- EOF CSS INCLUDE -->
-<script type="text/javascript" src="jquery/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="js/hotelOrders.js"></script>
 </head>
 <body class="ng-scope">
 
@@ -241,14 +279,14 @@ ng\:form {
 						<ul class="nav">
 							<li><a class="myList ng-binding"><i class="icon-list"></i>我的订单</a>
 								<ul class="item-list">
-									<li><a  class="ng-binding active"
+									<li><a class="ng-binding active"
 										href="javascript:void(0);"><i>•&nbsp;</i>酒店订单</a></li>
 									<!--<li><a ng-class="{'active': activeIndex==2}" href="javascript:void(0);">其他订单</a></li>-->
 								</ul></li>
 							<li><a class="ng-binding"><i class="icon-account"></i>我的账户</a>
 								<ul class="item-list">
 									<li><a class="ng-binding" href="webBerInfo"><i>•&nbsp;</i>个人信息</a></li>
-									<li><a  class="ng-binding" href="webSecurity"><i>•&nbsp;</i>账户安全</a></li>
+									<li><a class="ng-binding" href="webSecurity"><i>•&nbsp;</i>账户安全</a></li>
 									<!--<li><a ng-class="{'active': activeIndex==7}" ng-href="{{activeIndex == 7 ? 'javascript:void(0);': '/Club/MemberSubscription'}}">我的订阅</a></li>-->
 									<!--<li><a ng-class="{'active': activeIndex==8}" href="javascript:void(0);">消息中心</a></li>-->
 									<!--<li><a ng-class="{'active': activeIndex==9}" href="{{activeIndex == 9 ? 'javascript:void(0);': '/Club/MemberCardManage'}}">银行卡管理</a></li>-->
@@ -265,15 +303,15 @@ ng\:form {
 									<!--<li><a ng-class="{'active': activeIndex==13}" href="">加入锦江礼享</a></li>-->
 									<!--<li><a ng-class="{'active': activeIndex==14}" href="">会员服务</a></li>-->
 									<!--<li><a ng-class="{'active': activeIndex==15}" href="">会员条款与细则</a></li>-->
-									<li><a  href="#"><i>•&nbsp;</i>会员等级</a></li>
+									<li><a href="#"><i>•&nbsp;</i>会员等级</a></li>
 									<!--<li><a  href="">隐私权政策</a></li>-->
-									<li><a  href="#" class="ng-binding"><i>•&nbsp;</i>会员权益</a>
+									<li><a href="#" class="ng-binding"><i>•&nbsp;</i>会员权益</a>
 										<ul class="item-list">
 											<li><a href="#">会员积分</a></li>
 											<li><a href="#">会员折扣</a></li>
 											<li><a href="#">会员礼遇</a></li>
 										</ul></li>
-									<li><a  href="#" class="ng-binding"><i>•&nbsp;</i>常见问题</a></li>
+									<li><a href="#" class="ng-binding"><i>•&nbsp;</i>常见问题</a></li>
 								</ul></li>
 
 						</ul>
@@ -286,11 +324,6 @@ ng\:form {
 							<div class="title">
 								<h4 class="ng-binding">酒店订单</h4>
 								<div class="form-inline">
-
-
-									<!--<div class="form-group">-->
-									<!--<input type="search" placeholder="酒店名称" name="search" ng-model="params.keyword"  class="form-control" autocomplete="off">-->
-									<!--</div>-->
 
 									<div class="form-group js-drop">
 										<lable class="select-icon"> <i class="caret"></i></lable>
@@ -329,7 +362,8 @@ ng\:form {
 										<div class="order-list-tit">
 											<span class="ng-binding">订单号： <a href="checkOrder.jsp"
 												target="_blank" class="ng-binding">${order.orderNo}</a></span> <span
-												class="ng-binding">预订日期：<fmt:parseDate value="${order.creationDate}" pattern="yyyy-MM-dd" var="masterDate"/><fmt:formatDate value="${masterDate}" pattern="yyyy-MM-dd" /></span>
+												class="ng-binding">预订日期：<fmt:formatDate
+													value="${order.creationDate}" pattern="yyyy-MM-dd" /></span>
 										</div>
 										<div class="order-list-main">
 											<div class="hotel-info">
@@ -340,10 +374,21 @@ ng\:form {
 													</a>
 												</div>
 												<div class="section">
-													<a href="checkOrder.jsp" target="_blank" title="${order.hotelName}" class="ng-binding">${order.hotelName}</a>
+													<input type="hidden" id="checkOutDate"
+														value="<fmt:formatDate value="${order.checkInDate}" pattern="yyyy-MM-dd" />" />
+													<a href="checkOrder.jsp" target="_blank"
+														title="${order.hotelName}" class="ng-binding">${order.hotelName}</a>
 													<p class="ng-binding">${order.valueName}</p>
-													<p class="ng-binding">入住日期:<fmt:parseDate value="${order.checkInDate}" pattern="yyyy-MM-dd" var="checkInDate"/><fmt:formatDate value="${checkInDate}" pattern="yyyy-MM-dd" /></p>
-													<p class="ng-binding">离店日期：<fmt:parseDate value="${order.checkOutDate}" pattern="yyyy-MM-dd" var="checkOutDate"/><fmt:formatDate value="${checkOutDate}" pattern="yyyy-MM-dd" /></p>
+													<p class="ng-binding">
+														入住日期:
+														<fmt:formatDate value="${order.checkInDate}"
+															pattern="yyyy-MM-dd" />
+													</p>
+													<p class="ng-binding">
+														离店日期:
+														<fmt:formatDate value="${order.checkOutDate}"
+															pattern="yyyy-MM-dd" />
+													</p>
 													<p class="ng-binding">
 														共${order.bookingDays}晚
 														<!-- ngIf: false -->
@@ -367,36 +412,38 @@ ng\:form {
 												<!--<p class="payFailure" ng-if="order.orderState == '2'">已取消</p>-->
 												<!--<p class="paySuccess" ng-if="order.orderState == '3'">待入住</p>-->
 												<!--<p class="payFailure" ng-if="order.orderState == '5'">已完成</p>-->
-												<c:if test="${order.orderStatus==0}">
-												<p class="paySuccess ng-binding">待付款</p>
-												</c:if>
-												<c:if test="${order.orderStatus==1}">
-												<p class="paySuccess ng-binding">已取消</p>
-												</c:if>
-												<c:if test="${order.orderStatus==2}">
-												<p class="paySuccess ng-binding">已付款</p>
-												</c:if>
-												<c:if test="${order.orderStatus==3}">
-												<p class="paySuccess ng-binding">已消费</p>
-												</c:if>
+												<p class="paySuccess ng-binding">${order.orderStatus}</p>
+
 											</div>
 											<div class="order-btn-box">
 												<div class="section">
 													<!-- ngIf: !order.outerOrderFlag -->
 													<!-- <a class="btn redbtn ng-binding ng-scope" ng-click="payOrder(order)" ng-if="!order.outerOrderFlag">立即支付</a> -->
-													<c:if test="${order.orderStatus==0}">
-													<a href="#" class="btn redbtn ng-binding ng-scope">立即支付</a>
-													<a onclick="upds(${order.id})" class="btn defaultbtn ng-binding ng-scope">取消订单</a>
+													<c:if test="${order.orderStatus eq '预订成功'}">
+
+														<a href="#" class="btn redbtn ng-binding ng-scope">立即支付</a>
+														<a onclick="upds(${order.id})"
+															class="btn defaultbtn ng-binding ng-scope">取消订单</a>
 													</c:if>
-													<c:if test="${order.orderStatus!=0}">
-													<a href="webHotelDatail?hotelId=${order.hotelId}"  class="btn redbtn ng-binding ng-scope">再次预定</a>
-													<a onclick="deletes(${order.id})" class="btn defaultbtn ng-binding ng-scope">删除订单</a>
+													<c:if test="${order.orderStatus eq '待入住'}">
+														<a href="webHotelDatail?hotelId=${order.hotelId}"
+															class="btn redbtn ng-binding ng-scope">再次预定</a>
+														<a onclick="upds(${order.id})"
+															class="btn defaultbtn ng-binding ng-scope">取消订单</a>
 													</c:if>
-													
-													<!-- end ngIf: !order.outerOrderFlag -->
-													<!-- ngIf: order.canCancel && order.orderState == 'BOOK_SUCCESS' && !(order.outerOrderFlag == 1 && order.payState == 'PAY_SUCCESS') -->
-													
-													<!-- end ngIf: order.canCancel && order.orderState == 'BOOK_SUCCESS' && !(order.outerOrderFlag == 1 && order.payState == 'PAY_SUCCESS') -->
+													<c:if test="${order.orderStatus eq '已入住' }">
+														<a href="webHotelDatail?hotelId=${order.hotelId}"
+															class="btn redbtn ng-binding ng-scope">再次预定</a>
+														<a onclick="deletes(${order.id})"
+															class="btn defaultbtn ng-binding ng-scope">删除订单</a>
+													</c:if>
+													<c:if test="${order.orderStatus eq '已取消' }">
+														<a href="webHotelDatail?hotelId=${order.hotelId}"
+															class="btn redbtn ng-binding ng-scope">再次预定</a>
+														<a onclick="deletes(${order.id})"
+															class="btn defaultbtn ng-binding ng-scope">删除订单</a>
+													</c:if>
+
 												</div>
 											</div>
 										</div>
@@ -408,6 +455,96 @@ ng\:form {
 						<!-- ngIf: params.noData -->
 
 						<!-- 分页组件 -->
+						<div class="page-bar">
+							<input type="hidden" id="totalPageCount"
+								value="${page.totalPageCount}" />
+							<ul class="page-num-ul clearfix">
+								<!-- <li>共${page.totalCount }条记录&nbsp;&nbsp; ${page.currentPageNo }/${page.totalPageCount }页</li>-->
+								<c:if test="${page.currentPageNo > 1}">
+									<li class="paginate_button active"><a
+										href="javascript:page(1);"
+										aria-controls="datatable-responsive" data-dt-idx="0"
+										tabindex="0">首页</a></li>
+									<li class="paginate_button"><a
+										href="javascript:page(${page.currentPageNo-1});"
+										aria-controls="datatable-responsive" data-dt-idx="1"
+										tabindex="0">上一页</a></li>
+								</c:if>
+
+
+
+
+								<%-- <c:forEach varStatus="status" begin="0" end="2">
+									<c:if
+										test="${page.currentPageNo+status.index <= page.totalPageCount}">
+										<li class="paginate_button omit"><a
+											href="javascript:page(${page.currentPageNo+status.index});"
+											aria-controls="datatable-responsive" data-dt-idx="0"
+											tabindex="0"> ${page.currentPageNo+status.index} </a></li>
+									</c:if>
+								</c:forEach> --%>
+
+
+
+								<c:choose>
+									<%-- 如果总页数不足10页，那么把所有的页数都显示出来！ --%>
+									<c:when test="${page.totalPageCount <= 10 }">
+										<c:set var="begin" value="1" />
+										<c:set var="end" value="${page.totalPageCount }" />
+									</c:when>
+									<c:otherwise>
+										<%-- 当总页数>10时，通过公式计算出begin和end --%>
+										<c:set var="begin" value="${page.totalPageCount-5 }" />
+										<c:set var="end" value="${page.totalPageCount+4 }" />
+										<%-- 头溢出 --%>
+										<c:if test="${begin < 1 }">
+											<c:set var="begin" value="1" />
+											<c:set var="end" value="10" />
+										</c:if>
+										<%-- 尾溢出 --%>
+										<c:if test="${end > page.totalPageCount }">
+											<c:set var="begin" value="${page.totalPageCount - 9 }" />
+											<c:set var="end" value="${page.totalPageCount }" />
+										</c:if>
+									</c:otherwise>
+								</c:choose>
+								<%-- 循环遍历页码列表 --%>
+								<c:forEach var="i" begin="${begin }" end="${end }">
+									<c:choose>
+										<c:when test="${i eq page.totalPageCount }">
+											<li class="paginate_button omit" name="liInfo"><a
+												href="javascript:page(${i});"
+												aria-controls="datatable-responsive" data-dt-idx="0"
+												tabindex="0"> ${i} </a></li>
+										</c:when>
+										<c:otherwise>
+											<li class="paginate_button omit" name="liInfo"><a
+												href="javascript:page(${i});"
+												aria-controls="datatable-responsive" data-dt-idx="0"
+												tabindex="0"> ${i} </a></li>
+										</c:otherwise>
+									</c:choose>
+
+								</c:forEach>
+
+								<c:if test="${page.currentPageNo < page.totalPageCount }">
+									<li class="paginate_button next"><a
+										href="javascript:page(${page.currentPageNo+1});"
+										aria-controls="datatable-responsive" data-dt-idx="1"
+										tabindex="0">下一页</a></li>
+									<li class="paginate_button"><a
+										href="javascript:page(${page.totalPageCount});"
+										aria-controls="datatable-responsive" data-dt-idx="0"
+										tabindex="0">末页</a></li>
+								</c:if>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<li class="page-go-form"><label>跳转至</label> <input
+									type="text" name="inputPage" id="inputPage" class="page-key" />页
+									<button type="button" class="page-btn"
+										onClick='page(document.getElementById("inputPage").value)'>GO</button>
+								</li>
+							</ul>
+						</div>
 						<!-- ngIf: pagination.pageCount > 1 -->
 
 					</div>
@@ -416,8 +553,8 @@ ng\:form {
 				</div>
 			</div>
 			<!-- weModal 弹窗 -->
-			<div class="modal fade ng-isolate-scope" tabindex="-1" params="alertModal"
-				callback="modalAfterCallback()">
+			<div class="modal fade ng-isolate-scope" tabindex="-1"
+				params="alertModal" callback="modalAfterCallback()">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<!-- ngIf: params.enableMiniModal&&params.closeTag -->
@@ -433,9 +570,19 @@ ng\:form {
 			</div>
 
 			<!-- CONTENT ED -->
-
 			<jsp:include page="footer.jsp" />
 		</div>
 	</div>
+	<script type="text/javascript" src="jquery/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+	<script type="text/javascript" src="js/hotelOrders.js"></script>
+	<script type="text/javascript">
+		function page(num){
+			alert(num)
+			location.href="hotelOrders?currentPageNo="+num;
+		}
+		
+	</script>
 </body>
 </html>

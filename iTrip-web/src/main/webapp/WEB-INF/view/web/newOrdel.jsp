@@ -47,7 +47,7 @@ ng\:form {
 	class="ng-scope">
 
 	<!-- <form name="orderForm" novalidate="" class="ng-pristine ng-valid ng-valid-required"> -->
-	<form action="payment.jsp" method="post">
+	<form action="payment" method="post" id="payForm">
 		<!-- ngInclude: $root.siteConfig.newOrder.template_url -->
 		<div class="container ng-scope"
 			ng-include="$root.siteConfig.newOrder.template_url">
@@ -154,22 +154,15 @@ ng\:form {
 							<div class="title">预订信息</div>
 							<div class="input-box clearfix"
 								ng-class="{'international': options.isAbroad &amp;&amp; $root.siteConfig.site_id == $root.siteEnum.WeHotel}">
-								<label>入住日期:</label> <input type="text" id="inDatepicker"
+								<label>入住日期:</label> <input type="text" id="inDatepicker" name="checkInDate"
 									disabled="disabled" class="form-control"
-									data-timer="1544112000000" value="${checkInDate}"> <label>离店日期:</label>
-								<input type="text" id="outDatepicker" disabled="disabled"
+									data-timer="1544112000000" value="${checkInDate}"> 
+								<label>离店日期:</label>
+								<input type="text" id="outDatepicker" disabled="disabled" name="checkOutDate"
 									class="form-control" data-timer="1544198400000"
 									value="${checkOutDate}">
-								<div class="kids clearfix">
-									<label>入住人数:</label>
-									<div class="fake-input disabled ng-binding">
-										1<span>成人</span>，0<span>儿童</span>
-									</div>
-								</div>
 								<label>房间数量:</label> <select
-									class="float form-control ng-pristine ng-valid"
-									ng-model="params.roomCount" ng-change="changeRoomCount()"
-									ng-disabled="options.roomCountLimit">
+									class="float form-control ng-pristine ng-valid" name="count">
 									<option value="1" selected="selected">1</option>
 									<!-- ngIf: params.showRooms -->
 									<option ng-if="params.showRooms" value="2" class="ng-scope">2</option>
@@ -183,8 +176,8 @@ ng\:form {
 								<!-- ngRepeat: rate in roomRate.rates -->
 								<div class="hotel ng-scope" ng-repeat="rate in roomRate.rates">
 									<span class="ng-binding">${month}月${day}日</span> <span class="ng-binding">1间</span>
-									<span class="ng-binding">不含早</span> <span
-										class="price ng-binding">￥${houses.roomPrice+rooms.price}</span>
+									<span class="ng-binding">不含早</span>
+									<span class="price ng-binding">￥${rooms.price}</span>
 								</div>
 								<!-- end ngRepeat: rate in roomRate.rates -->
 							</div>
@@ -197,124 +190,55 @@ ng\:form {
 								<div class="input-box-2 clearfix">
 									<label>联系人:</label>
 									<!-- ngIf: !options.isAbroad -->
-									<input type="text" id="realName" name="user"
+									<input type="text" id="realName" name="linkUserName"
 										ng-model="params.realName" autocomplete="off" required=""
 										maxlength="20" ng-if="!options.isAbroad"
 										class="ng-scope ng-pristine ng-valid ng-valid-required"
 										value="注册会员">
-									<!-- end ngIf: !options.isAbroad -->
-									<!-- ngIf: !options.isAbroad&&orderForm.user.$invalid -->
-									<!-- ngIf: !options.isAbroad&&params.realNameError -->
-
-									<!-- 海外酒店入住人begin -->
-									<!-- ngIf: options.isAbroad -->
-									<!-- ngIf: options.isAbroad -->
-									<!-- ngIf: options.isAbroad&&(orderForm.firstName.$invalid||orderForm.lastName.$invalid||params.firstNameError) -->
-									<!-- 海外酒店入住人end -->
 								</div>
 
 								<div class="input-box-2 clearfix phone">
 									<label>手机号码:</label> <input type="text" ng-model="params.phone"
-										name="phone" autocomplete="off" required="" maxlength="11"
+										name="noticePhone" autocomplete="off" required="" maxlength="11"
 										class="ng-pristine ng-valid ng-valid-required"
 										value="17773582923">
-									<!-- ngIf: orderForm.phone.$invalid -->
-									<!-- ngIf: params.phoneError -->
-								</div>
-							</div>
-							<!-- ngIf: options.isAbroad -->
-							<div class="input-box clearfix">
-								<div>
-									<span class="after-check ng-binding disabled"
-										ng-click="params.isSameContact=!params.isSameContact"
-										ng-class="{'disabled':params.mustSelf}"><input
-										name="sameContact" type="checkbox"
-										ng-checked="params.isSameContact" checked="checked">入住人和联系人相同（*
-										友情提示：会员本人入住时，享会员权益）</span>
-								</div>
-								<div class="contact clearfix ng-hide"
-									ng-show="!params.isSameContact">
-									<div class="extra clearfix">
-										<label>入住人1</label>
-										<!-- ngIf: !options.isAbroad -->
-										<input type="text" ng-model="params.guestName1"
-											id="guestName1" name="guestName1" maxlength="20"
-											ng-required="!params.isSameContact" autocomplete="off"
-											ng-if="!options.isAbroad"
-											class="ng-scope ng-pristine ng-valid ng-valid-required">
-										<!-- end ngIf: !options.isAbroad -->
-										<!-- ngIf: !options.isAbroad&&orderForm.guestName1.$invalid -->
-										<!-- ngIf: !options.isAbroad&&params.guestNameError1 -->
-
-										<!-- ngIf: options.isAbroad -->
-										<!-- ngIf: options.isAbroad -->
-										<!-- ngIf: options.isAbroad&&(orderForm.firstName1.$invalid||orderForm.lastName1.$invalid||params.firstNameError1) -->
-									</div>
-
-									<!-- ngIf: params.roomCount>=2 -->
-
-									<!-- ngIf: params.roomCount>=3 -->
 								</div>
 							</div>
 							<div class="input-box clearfix">
 								<label>特殊需求</label><br>
 								<div class="special-need">
-									<span class="after-check"><input type="checkbox"
+									<span class="after-check"><input type="checkbox" value="无烟房" name="box"
 										ng-model="params.nonSmokingRoom" class="ng-pristine ng-valid">无烟房</span>
-									<span class="after-check"><input type="checkbox"
+									<span class="after-check"><input type="checkbox" value="高层客房" name="box"
 										ng-model="params.highFloorRoom" class="ng-pristine ng-valid">高层客房</span>
-									<span class="after-check"><input type="checkbox"
+									<span class="after-check"><input type="checkbox" value="相邻房" name="box"
 										ng-model="params.adjacentRoom" class="ng-pristine ng-valid">相邻房</span>
-									<span class="after-check"><input type="checkbox"
-										ng-model="params.isNeedNote"
-										ng-click="params.isNeedNote=!params.isNeedNote"
-										class="ng-pristine ng-valid">备注</span>
 								</div>
-								<textarea id="requirement" maxlength="200"
+								<textarea id="requirement" maxlength="200" name="specialRequirement"
 									ng-model="params.remark" ng-show="params.isNeedNote"
-									class="ng-pristine ng-valid ng-hide"></textarea>
+									class=""></textarea>
 							</div>
 						</div>
 						<!-- ngIf: params.showInsurance&&params.insurancePremium>0 -->
 						<div class="section clearfix">
-							<div class="title">支付与优惠信息</div>
+							<div class="title">支付</div>
 							<div class="radio-box clearfix">
 								<label class="radio-left">支付方式</label>
 								<div class="radio-right">
 									<!-- ngRepeat: payType in params.paymentTypes -->
 									<div class="radio-row clearfix ng-scope"
 										ng-repeat="payType in params.paymentTypes">
-										<input type="radio" id="ONLINE_PREPAID"
-											ng-click="changePaymentType(payType.value)"
-											ng-checked="params.selPayType==payType.value"
+										<input type="radio" id="ONLINE_PREPAID" value="2" name="payType"> <label class="ng-binding">门店支付</label>
+									</div>
+									<div class="radio-row clearfix ng-scope"
+										ng-repeat="payType in params.paymentTypes">
+										<input type="radio" id="ONLINE_PREPAID" value="1" name="payType"
 											checked="checked"> <label class="ng-binding">支付全部房费</label>
 									</div>
-									<!-- end ngRepeat: payType in params.paymentTypes -->
 								</div>
 							</div>
 							<!-- ngIf: params.canUseCoupon -->
-							<div class="input-box clearfix ng-scope"
-								ng-if="params.canUseCoupon">
-								<div class="amount clearfix">
-									<label>优惠券</label> <select id="coupon"
-										ng-model="params.selCoupon" ng-change="changeCounpon()"
-										class="ng-pristine ng-valid">
-										<!-- ngRepeat: item in coupons -->
-										<option ng-repeat="item in coupons" value="" id=""
-											title="无可用优惠券" class="ng-binding ng-scope"
-											selected="selected">无可用优惠券</option>
-										<!-- end ngRepeat: item in coupons -->
-									</select>
-									<!--<p class="error" >*官网特价房不可使用优惠券</p>
-                        <div ng-if="params.selCoupon!=''&&params.couponMaxNum>0">
-                            <label>数量</label>
-                            <input id="couponNum" name="couponNum" type="number" ng-model="params.couponNum" max="{{params.couponMaxNum}}" min="0" ng-change="getPriceAndAmount()"/>
-                            <p class="error" ng-if="orderForm.couponNum.$invalid">优惠券可用数量{{params.couponMaxNum}}</p>
-                        </div>-->
-								</div>
-								<!--     <label>优惠码</label>
-                    <input type="text"/>-->
-							</div>
+							
 							<!-- end ngIf: params.canUseCoupon -->
 							<div class="tipbox tp3">
 								<b>取消政策：</b><span id="cancel" class="ng-binding">预付房费后，在2018年12月07日
@@ -339,88 +263,47 @@ ng\:form {
 						<div class="info">
 							<div class="section">
 								<div class="pic">
-									<img
-										ng-src="http://images.bestwehotel.com/images/8ff1a5e871891049_640_480.jpg"
+									<img ng-src="http://images.bestwehotel.com/images/8ff1a5e871891049_640_480.jpg"
 										onerror="this.parentNode.removeChild(this)"
-										src="newOrdel/8ff1a5e871891049_640_480.jpg">
+										src="${houses.roomImage}">
 								</div>
+								<input type="hidden" value="${hotel.id}" name="hotelId">
 								<p class="title ng-binding">${hotel.hotelName}</p>
 								<p class="address ng-binding">地址：${hotel.address}</p>
 							</div>
 							<div class="section">
 								<div class="label">入住房型</div>
 								<p class="ng-binding">
+									<input type="hidden" value="${houses.id}" name="roomId">
 									${houses.valueName}<span class="ng-binding">1间</span>
 								</p>
 								<div class="label">价格名称</div>
+								<input type="text" value="${rooms.id}" name="roomsId">
 								<p class="ng-binding">${rooms.roomTitle}</p>
 								<div class="label">入住日期</div>
 								<p class="ng-binding">
 									<fmt:parseDate var="s" value="${checkInDate}" pattern="yyyy-MM-dd"/>${checkInDate}至<fmt:parseDate var="e" value="${checkOutDate}" pattern="yyyy-MM-dd"/> ${checkOutDate}<span class="ng-binding">
 									
 									<fmt:formatNumber value="${(e.getTime() - s.getTime())/1000/60/60/24}" pattern="#0" var="num"/>${num}晚</span>
+									<input type="hidden" value="${num}" name="bookingDays">  
 								</p>
 								<div class="price-detail">
 									<p>
-										房费小计:<span class="ng-binding">￥${(houses.roomPrice+rooms.price)*num}</span>
+										房费小计:<span class="ng-binding">￥${rooms.price*num}</span>
 									</p>
 								</div>
 							</div>
 							<div class="section">
 								<div class="price-total">
-									总金额:<span class="ng-binding">￥<b class="ng-binding"><fmt:formatNumber type="number" value=" ${(houses.roomPrice+rooms.price)*num}" maxFractionDigits="0"/></b>.00
+									总金额:<span class="ng-binding">￥<b class="ng-binding">${rooms.price*num}</b>
+									<input type="hidden" value="${rooms.price*num}" name="payAmount">
 									</span>
 								</div>
-								<button id="btnAddOrder"
-									ng-class="{'disabled':!params.canBooking||params.totalPrice&lt;=0||params.totalAmount&lt;0||params.isBooking||!params.agreeBookNotice}"
-									ng-click="bookHotel()" class="">提交订单</button>
-								<!-- ngIf: params.totalSpotFeeRatePlus>0 -->
-								<!-- ngIf: $root.siteConfig.site_id!=3 -->
-								<div class="protocol ng-scope"
-									ng-if="$root.siteConfig.site_id!=3">
-									<input type="checkbox" id="bookNotice" ng-required="true"
-										ng-model="params.agreeBookNotice"
-										class="ng-pristine ng-valid ng-valid-required"
-										required="required" checked="checked"> <span>已阅读并同意<a
-										ng-click="readBookNotice()">《WeHotel酒店预订须知》</a></span>
-								</div>
-								<!-- end ngIf: $root.siteConfig.site_id!=3 -->
+								<button id="btnAddOrder" class="">提交订单</button>
 							</div>
 						</div>
 					</div>
 				</div>
-
-				<!-- weModal 弹窗 -->
-				<div class="modal fade ng-isolate-scope base-modal" tabindex="-1"
-					ng-class="{'in': showModal == true,'base-modal':params.enableMiniModal}"
-					we-modal="" show-modal="options.showAlert" params="alertModal"
-					callback="alertModalCallback()">
-					<div class="modal-dialog">
-						<div class="modal-content" ng-class="params.contentClass">
-							<!-- ngIf: params.enableMiniModal&&params.closeTag -->
-							<!-- ngIf: params.title -->
-							<div class="modal-body"
-								ng-class="{'scroll-container':params.scrollContainer}">
-								<div ng-bind-html="params.content | html" class="ng-binding"></div>
-							</div>
-							<!-- ngIf: params.buttons.length>0 -->
-							<div class="modal-footer ng-scope center"
-								ng-class="[params.buttonPositon]"
-								ng-if="params.buttons.length&gt;0">
-								<!-- ngRepeat: button in params.buttons -->
-								<button type="button" ng-repeat="button in params.buttons"
-									class="btn btn-primary ng-binding ng-scope bluebtn"
-									ng-class="[button.class]" ng-click="onButtonClick(button.name)">关闭</button>
-								<!-- end ngRepeat: button in params.buttons -->
-							</div>
-							<!-- end ngIf: params.buttons.length>0 -->
-						</div>
-						<!-- /.modal-content -->
-					</div>
-					<!-- /.modal-dialog -->
-				</div>
-				<!-- CONTENT ED -->
-
 				<jsp:include page="footer.jsp" />
 			</div>
 		</div>
@@ -430,311 +313,32 @@ ng\:form {
 	<script src="js/newOrdel/vendor.js"></script>
 
 	<script src="js/newOrdel/wehotel.js"></script>
-
-
-	<div id="inDatepickerBox" class="date-mainBox" style="display: none;">
-		<div class="date-box ">
-			<div class="date_main">
-				<div class="date_box_top">
-					<div class="date_minus date_backL"></div>
-					<div class="date_month"></div>
-				</div>
-				<ul class="date_week_ul">
-					<li>日</li>
-					<li>一</li>
-					<li>二</li>
-					<li>三</li>
-					<li>四</li>
-					<li>五</li>
-					<li>六</li>
-				</ul>
-				<table class="ate_box_table" cellspacing="1" cellpadding="0">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="date-box date-ml4">
-			<div class="date_main">
-				<div class="date_box_top">
-					<div class="date_month"></div>
-					<div class="date_add date_backR"></div>
-				</div>
-				<ul class="date_week_ul">
-					<li>日</li>
-					<li>一</li>
-					<li>二</li>
-					<li>三</li>
-					<li>四</li>
-					<li>五</li>
-					<li>六</li>
-				</ul>
-				<table class="ate_box_table" cellspacing="1" cellpadding="0">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div id="outDatepickerBox" class="date-mainBox" style="display: none;">
-		<div class="date-box ">
-			<div class="date_main">
-				<div class="date_box_top">
-					<div class="date_minus date_backL"></div>
-					<div class="date_month"></div>
-				</div>
-				<ul class="date_week_ul">
-					<li>日</li>
-					<li>一</li>
-					<li>二</li>
-					<li>三</li>
-					<li>四</li>
-					<li>五</li>
-					<li>六</li>
-				</ul>
-				<table class="ate_box_table" cellspacing="1" cellpadding="0">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		<div class="date-box date-ml4">
-			<div class="date_main">
-				<div class="date_box_top">
-					<div class="date_month"></div>
-					<div class="date_add date_backR"></div>
-				</div>
-				<ul class="date_week_ul">
-					<li>日</li>
-					<li>一</li>
-					<li>二</li>
-					<li>三</li>
-					<li>四</li>
-					<li>五</li>
-					<li>六</li>
-				</ul>
-				<table class="ate_box_table" cellspacing="1" cellpadding="0">
-					<tbody>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+	
+	<script type="text/javascript">
+		$(function() {
+			$("*[name='box']").change(function() {
+		               if(this.checked){
+		                  	$("#requirement").append("#"+$(this).val()+";");
+		                }else{
+		                	var str = $("#requirement").val();
+		                	var strs= new Array()
+		                	strs = str.split(";");
+		                	for (var i = 0; i < strs.length; i++) {
+		                		if(strs[i]=="#"+$(this).val())
+		                			alert(strs[i]);
+		                		strs[i].text('');
+							}
+		                	
+		                }
+			});
+			
+			//提交订单
+			$("#btnAddOrder").click(function() {
+				$("#inDatepicker").attr("disabled", false); 
+				$("#outDatepicker").attr("disabled", false); 
+				$("#payForm").submit();
+			});
+		});
+	</script>
 </body>
 </html>

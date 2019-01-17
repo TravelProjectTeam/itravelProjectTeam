@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*"
 	contentType="text/html;charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <head>
 <script type="text/javascript" src="js/payment/openPage.txt"></script>
 <style type="text/css">
@@ -83,23 +84,6 @@ ng\:form {
 					<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
 					<div class="header-action clearfix">
 						<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
-						<div class="divider2" style="margin-left: 25px;"></div>
-						<div class="header-phone-container">
-							<div class="header-phone"></div>
-							<div class="qrcode-box clearfix">
-								<div class="qrcode-cover"></div>
-								<div class="qrcode">
-									<img ng-src="/dist/images/qrcode1.jpg"
-										src="js/payment/qrcode1.jpg"> <a class="ng-binding">锦江旅行APP</a>
-								</div>
-								<div class="divider3"></div>
-								<div class="qrcode">
-									<img ng-src="/dist/images/qrcode2.jpg"
-										src="js/payment/qrcode2.jpg"> <a class="ng-binding">锦江旅行公众号</a>
-								</div>
-							</div>
-						</div>
-						<div class="divider2"></div>
 						<div class="header-login">
 							<!-- ngIf: !$root.isLogined -->
 							<!-- ngIf: !$root.isLogined -->
@@ -145,6 +129,7 @@ ng\:form {
 			</div>
 
 			<!-- CONTENT OP -->
+			<form action="pay" id="payOrder">
 			<div class="container clearfix">
 				<div class="pay-header clearfix">
 					<label>订单支付</label>
@@ -152,95 +137,46 @@ ng\:form {
 						<span class="doing">填写订单</span> <i class="doing">&gt;</i> <span
 							class="doing">订单支付</span> <i class="doing">&gt;</i> <span>预订成功</span>
 					</div>
+					<input type="hidden" name="orderId" value="${ordersInfo.id}">
 				</div>
 				<div class="pay-content clearfix">
 					<div class="pic">
 						<img ng-src="js/payment/4f4ac10fac9d553e_640_480.jpg"
 							onerror="this.parentNode.removeChild(this)"
-							src="js/payment/4f4ac10fac9d553e_640_480.jpg">
+							src="${ordersInfo.roomImage}">
 					</div>
 					<div class="details">
-						<p class="name ng-binding">锦江之星上海陆家嘴酒店</p>
+					<input type="hidden" value="${ordersInfo.orderNo}" name="orderNo">
+					<input type="hidden" value="${ordersInfo.hotelName}" name="hotelName">
+						<p class="name ng-binding">${ordersInfo.hotelName}</p>
 						<div class="detail-text">
-							<span class="ng-binding">商务房A</span>
-							<!--<span>{{orderInfo.breakfastDesc}}</span>-->
-							<span class="ng-binding">入住：2018-12-07</span> <span
-								class="ng-binding">退房：2018-12-08</span>
-							<!-- ngIf: orderInfo.lstJzOrderGift && orderInfo.lstJzOrderGift.length>0 -->
+						<input type="hidden" value="${ordersInfo.valueName}" name="valueName">
+							<span class="ng-binding">${ordersInfo.valueName}</span>
+							<input type="text" value="<fmt:formatDate value="${ordersInfo.checkInDate}" pattern="yyyy-MM-dd"/>" name="checkInDate">
+							<input type="hidden" value="<fmt:formatDate value="${ordersInfo.checkOutDate}" pattern="yyyy-MM-dd"/>" name="checkOutDate">
+							<span class="ng-binding">入住：<fmt:formatDate value="${ordersInfo.checkInDate}" pattern="yyyy-MM-dd"/></span> <span
+								class="ng-binding">退房：<fmt:formatDate value="${ordersInfo.checkOutDate}" pattern="yyyy-MM-dd"/></span>
 							<div class="notice">
-								<i></i>您需要在30分钟内完成支付，否则订单将会被取消！
+								<i><img src="images/u=1401042970,4277631339&fm=26&gp=0.jpg"></i>您需要在30分钟内完成支付，否则订单将会被取消！
 							</div>
 						</div>
 
 					</div>
 					<div class="payment-price">
+					<input type="text" value="${ordersInfo.payAmount}" name="payAmount">
 						<p>
-							应付总额：<span class="orange">￥<span class="number ng-binding">199</span></span>
+							应付总额：<span class="orange"><span class="number ng-binding">￥${ordersInfo.payAmount}</span></span>
 						</p>
 						<!-- ngIf: orderInfo.ticketRate>0 -->
 					</div>
-					<div class="benefit" ng-show="params.rights.length&gt;0">
-						<div class="tip_head">温馨提示</div>
-						<div class="tip_content_box">
-							<div class="tip_box">
-								<a class="member_icon" title="会员礼遇"></a> <span
-									class="tip_label_text ng-binding">您是我们的We普卡会员，可享受的会员权益：</span>
-							</div>
-							<div class="equity clearfix">
-								<ul>
-									<!-- ngRepeat: right in params.rights -->
-									<li ng-repeat="right in params.rights"
-										class="ng-binding ng-scope">锦江之星住宿房费95折</li>
-									<!-- end ngRepeat: right in params.rights -->
-									<li ng-repeat="right in params.rights"
-										class="ng-binding ng-scope">锦江之星餐饮88折优惠（海鲜酒水特价菜除外）</li>
-									<!-- end ngRepeat: right in params.rights -->
-								</ul>
-							</div>
-						</div>
-					</div>
 				</div>
 				<div class="pay-footer">
-					<button>立即支付</button>
-					<a id="toPay" href="" target="_blank" style="display: none;">
-						<button id="pay_url"></button>
+				<a id="toPay" href="pay" target="_blank" >
+					<button id="toPay" onclick="topay()">立即支付</button>
 					</a>
 				</div>
-
-				<!-- ngIf: params.showWindow -->
 			</div>
-			<!-- weModal 弹窗 -->
-			<div class="modal fade ng-isolate-scope base-modal" tabindex="-1"
-				ng-class="{'in': showModal == true,'base-modal':params.enableMiniModal}"
-				we-modal="" show-modal="options.showAlert" params="alertModal"
-				callback="alertModalCallback()">
-				<div class="modal-dialog">
-					<div class="modal-content" ng-class="params.contentClass">
-						<!-- ngIf: params.enableMiniModal&&params.closeTag -->
-						<!-- ngIf: params.title -->
-						<div class="modal-body"
-							ng-class="{'scroll-container':params.scrollContainer}">
-							<div ng-bind-html="params.content | html" class="ng-binding"></div>
-						</div>
-						<!-- ngIf: params.buttons.length>0 -->
-						<div class="modal-footer ng-scope center"
-							ng-class="[params.buttonPositon]"
-							ng-if="params.buttons.length&gt;0">
-							<!-- ngRepeat: button in params.buttons -->
-							<button type="button" ng-repeat="button in params.buttons"
-								class="btn btn-primary ng-binding ng-scope bluebtn"
-								ng-class="[button.class]" ng-click="onButtonClick(button.name)">关闭</button>
-							<!-- end ngRepeat: button in params.buttons -->
-						</div>
-						<!-- end ngIf: params.buttons.length>0 -->
-					</div>
-					<!-- /.modal-content -->
-				</div>
-				<!-- /.modal-dialog -->
-			</div>
-			<!-- CONTENT ED -->
-
-			<!-- ngInclude: $root.siteConfig.footer_url -->
+			</form>
 			<jsp:include page="footer.jsp" />
 		</div>
 	</div>
@@ -250,7 +186,11 @@ ng\:form {
 	<script src="js/payment/vendor.js"></script>
 
 	<script src="js/payment/wehotel.js"></script>
-
+	<script type="text/javascript">
+		function topay() {
+			$("payOrder").sumbit();
+		}
+	</script>
 
 
 </body>

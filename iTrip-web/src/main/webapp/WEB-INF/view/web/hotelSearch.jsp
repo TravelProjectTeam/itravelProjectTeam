@@ -242,7 +242,11 @@
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -269,7 +273,11 @@ transform
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -304,7 +312,11 @@ transform
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -331,7 +343,11 @@ transform
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -353,6 +369,7 @@ keyframes amap-indrm-loader { 0%{
 	-webkit-transform: rotate(0);
 	transform: rotate(0)
 }
+
 100%{
 -moz-transform
 
@@ -367,7 +384,11 @@ keyframes amap-indrm-loader { 0%{
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -394,7 +415,11 @@ keyframes amap-indrm-loader { 0%{
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -421,7 +446,11 @@ keyframes amap-indrm-loader { 0%{
 
 
 
+
+
 :rotate(360deg)
+
+
 
 
 
@@ -448,6 +477,8 @@ transform
 
 
 
+
+
 :rotate(360deg)
 
 
@@ -461,10 +492,50 @@ transform
 
 
 
+
+
 }
+}
+.page-bar {
+	float: right;
+	padding-top: 15px;
+}
+
+.page-num-ul li {
+	display: inline;
+}
+
+.page-go-form {
+	float: right;
+}
+
+.paginate_button {
+	border: 1px solid #cecece;
+	border-radius: 5px;
+	margin-right: 10px;
+	padding: 5px 10px;
+	text-align: center;
+}
+
+.paginate_button a {
+	color: black;
+}
+
+.active {
+	opacity: 1;
+}
+
+.page-key {
+	border-radius: 5px;
+	padding: 3px 0px;
+	width: 40px;
+	color: black;
+}
+
+.page-go-form {
+	margin-top: -5px;
 }
 </style>
-<script type="text/javascript" src="images/hotelSearch/openPage.txt"></script>
 <style type="text/css">
 @charset "UTF-8";
 
@@ -502,7 +573,12 @@ ng\:form {
 <link rel="stylesheet" href="css/citySelect.css	">
 <!-- EOF CSS INCLUDE -->
 <script type="text/javascript" src="jquery/jquery-1.8.3.min.js"></script>
-<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ikPVLLkgWCboYmkQBEZXaZlb9pLzmuzG"></script>
+<script type="text/javascript" src="jquery/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
+	<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+
+<script type="text/javascript"	src="http://api.map.baidu.com/api?v=2.0&ak=ikPVLLkgWCboYmkQBEZXaZlb9pLzmuzG"></script>
+<script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
 <!-- <script src="js/hotelSearch/wehotel.js"></script>
  -->
 <!-- <script src="js/hotelSearch/siteConfig.js"></script>
@@ -510,9 +586,7 @@ ng\:form {
 <script type="text/javascript" src="js/hotelSearch/tongji.js"></script> -->
 <script src="js/hotelSearch/vendor.js"></script>
 </head>
-<body ng-controller="hotelSearchController" ng-init="init()"
-	ng-class="{'plateno':$root.siteConfig.site_id==$root.siteEnum.Plateno}"
-	class="ng-scope">
+<body class="ng-scope">
 
 	<!-- ngInclude: $root.siteConfig.hotelSearch.template_url -->
 	<div class="container ng-scope"
@@ -577,7 +651,6 @@ ng\:form {
 					<div id="in_city" style="display: none"></div>
 					<label class="ng-binding">日期</label> <input type="text"
 						placeholder="入住离店日期" class="date" id="inOutDatePicker"
-						data-timein="1544140800000" data-timeout="1544227200000"
 						value="2018-12-07 至 2018-12-08"> <label class="ng-binding">关键词</label>
 					<input type="text" name="keyword" placeholder="酒店名" id="key_input"
 						value="${keyword}" class="ng-pristine ng-valid">
@@ -671,7 +744,8 @@ ng\:form {
 						<c:if test="${hotelList!=null}">
 							<c:forEach items="${hotelList}" var="hotelList">
 								<div class="block ng-scope" ng-repeat="item in hotelList"
-									id="hotel_JJ60133" onmouseover="queryss('${hotelList.address}')">
+									id="hotel_JJ60133"
+									onmouseover="queryss('${hotelList.address}')">
 									<div class="pic">
 										<!-- ngIf: item.preSale -->
 										<a href="webHotelDatail?hotelId=${hotelList.id}"
@@ -691,7 +765,8 @@ ng\:form {
 												target="_blank"> ${hotelList.hotelName} </a>
 											<!-- ngIf: false -->
 										</p>
-										<input type="hidden" name="addresse" value="${hotelList.address}"/>
+										<input type="hidden" name="addresse"
+											value="${hotelList.address}" />
 										<p class="address ng-binding">
 											地址：<span class="ng-binding">${hotelList.address}</span>
 										</p>
@@ -738,64 +813,47 @@ ng\:form {
 								</div>
 							</c:forEach>
 						</c:if>
+						<input type="hidden" id="page" value="1" />
+						<!-- 分页组件 -->
+						<div class="page-bar">
+							<input type="hidden" id="totalPageCount"
+								value="${page.totalPageCount}" />
+							<ul class="page-num-ul clearfix">
+								<!-- <li>共${page.totalCount }条记录&nbsp;&nbsp; ${page.currentPageNo }/${page.totalPageCount }页</li>-->
+								<c:if test="${page.currentPageNo > 1}">
+									<li class="paginate_button"><a
+										href="javascript:queryHotels(${page.currentPageNo-1});"
+										aria-controls="datatable-responsive" data-dt-idx="1"
+										tabindex="0">上一页</a></li>
+								</c:if>
+								
+								<li class="paginate_button active"><a
+									href="javascript:queryHotels(1);"
+									aria-controls="datatable-responsive" data-dt-idx="0"
+									tabindex="0">首页</a></li>
+									
+								<!-- <li class="paginate_button omit"><a href="#"
+									aria-controls="datatable-responsive" data-dt-idx="0"
+									tabindex="0">...</a></li> -->
+								<li class="paginate_button"><a
+									href="javascript:queryHotels(${page.totalPageCount});"
+									aria-controls="datatable-responsive" data-dt-idx="0"
+									tabindex="0">末页</a></li>
+								<c:if test="${page.currentPageNo < page.totalPageCount }">
+									<li class="paginate_button next"><a
+										href="javascript:queryHotels(${page.currentPageNo+1});"
+										aria-controls="datatable-responsive" data-dt-idx="1"
+										tabindex="0">下一页</a></li>
+								</c:if>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-						<!-- 
-						ngIf: pagination.pageCount > 1
-						<div class="pager ng-isolate-scope" hotel-pagination=""
-							pagination="pagination" callback="queryHotels(false)"
-							ng-if="pagination.pageCount &gt; 1">
-
-							ngIf: pagination.pageIndex > 1
-							ngRepeat: item in pagination.pages
-							<div ng-repeat="item in pagination.pages"
-								ng-class="{'page': item.index != 'omit', 'omit': item.index == 'omit', 'active': item.index == $parent.pagination.pageIndex }"
-								ng-click="goPage(item.index)"
-								class="ng-binding ng-scope page active">1</div>
-							end ngRepeat: item in pagination.pages
-							<div ng-repeat="item in pagination.pages"
-								ng-class="{'page': item.index != 'omit', 'omit': item.index == 'omit', 'active': item.index == $parent.pagination.pageIndex }"
-								ng-click="goPage(item.index)" class="ng-binding ng-scope page">2</div>
-							end ngRepeat: item in pagination.pages
-							<div ng-repeat="item in pagination.pages"
-								ng-class="{'page': item.index != 'omit', 'omit': item.index == 'omit', 'active': item.index == $parent.pagination.pageIndex }"
-								ng-click="goPage(item.index)" class="ng-binding ng-scope omit">...</div>
-							end ngRepeat: item in pagination.pages
-							<div ng-repeat="item in pagination.pages"
-								ng-class="{'page': item.index != 'omit', 'omit': item.index == 'omit', 'active': item.index == $parent.pagination.pageIndex }"
-								ng-click="goPage(item.index)" class="ng-binding ng-scope page">21</div>
-							end ngRepeat: item in pagination.pages
-							ngIf: pagination.pageIndex < pagination.pageCount
-							<div class="next ng-scope"
-								ng-if="pagination.pageIndex &lt; pagination.pageCount"
-								ng-click="goPage('next')">
-								<icon class="triangle-right"></icon>
-							</div>
-							end ngIf: pagination.pageIndex < pagination.pageCount
-							<div class="skip">
-								到<input type="text" ng-model="pagination.jumpPageIndex"
-									class="ng-pristine ng-valid" value="1">页
-							</div>
-							<button ng-click="goPage(pagination.jumpPageIndex)">确&nbsp;&nbsp;定</button>
-
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<li class="page-go-form"><label>跳转至</label> <input
+									type="text" name="inputPage" id="inputPage" class="page-key" />页
+									<button type="button" class="page-btn"
+										onClick='jump_to(document.getElementById("inputPage").value)'>GO</button>
+								</li>
+							</ul>
 						</div>
- -->
-
 
 						<!-- end ngIf: pagination.pageCount > 1 -->
 					</div>
@@ -803,15 +861,12 @@ ng\:form {
 						<div class="hotel-map amap-container" id="hotel-map"
 							style="position: relative; background: rgb(252, 249, 242) none repeat scroll 0% 0%;">
 							<div id="r-result">
-
-							<div id="result"></div>
-						</div>
+								<div id="result"></div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-
 			<div class="cover" ng-class="{'show': options.showConver}"
 				ng-click="toggleBigMap()"></div>
 			<div class="window" ng-class="{'show': options.showBigMap}">
@@ -849,64 +904,64 @@ ng\:form {
 	<script charset="utf-8" src="images/hotelSearch/main"></script>
 	<script src="js/cityTemplate.js"></script>
 	<script type="text/javascript">
-	$.fn.smartFloat = function() {
+		$.fn.smartFloat = function() {
 
-	    var position = function(element) {
+			var position = function(element) {
 
-	        var top = element.position().top, pos = element.css("position");
+				var top = element.position().top, pos = element.css("position");
 
-	        $(window).scroll(function() {
+				$(window).scroll(function() {
 
-	            var scrolls = $(this).scrollTop();
+					var scrolls = $(this).scrollTop();
 
-	            if (scrolls > top) {
+					if (scrolls > top) {
 
-	                if (window.XMLHttpRequest) {
+						if (window.XMLHttpRequest) {
 
-	                    element.css({
+							element.css({
 
-	                        position: "fixed",
+								position : "fixed",
 
-	                        top: 0,
-	                    width:"300px",
-	                    height:"400px"
-	                    });    
+								top : 0,
+								width : "300px",
+								height : "400px"
+							});
 
-	                } else {
+						} else {
 
-	                    element.css({
+							element.css({
 
-	                        top: scrolls
+								top : scrolls
 
-	                    });    
+							});
 
-	                }
+						}
 
-	            }else {
+					} else {
 
-	                element.css({
+						element.css({
 
-	                    position: "absolute",
+							position : "absolute",
 
-	                    top: top
+							top : top
 
-	                });    
+						});
 
-	            }
+					}
 
-	        });
+				});
 
-	    };
+			};
 
-	    return $(this).each(function() {
+			return $(this).each(function() {
 
-	        position($(this));                         
+				position($(this));
 
-	    });
+			});
 
-	};
-	//$("#hotel-map").css("width":"200px","height":"400px");
-	$("#hotel-map").smartFloat();
+		};
+		//$("#hotel-map").css("width":"200px","height":"400px");
+		$("#hotel-map").smartFloat();
 
 		// 百度地图API功能，根据城市与酒店位置定位
 		var addresse = $("input[name=addresse]");
@@ -933,7 +988,7 @@ ng\:form {
 			myGeo.getPoint(add, function(point) {
 				if (point) {
 					var address = new BMap.Point(point.lng, point.lat);
-					map.centerAndZoom(address,11);
+					map.centerAndZoom(address, 11);
 					addMarker(address, new BMap.Label(index + ":" + add, {
 						offset : new BMap.Size(20, -10)
 					}));
@@ -945,7 +1000,173 @@ ng\:form {
 			var marker = new BMap.Marker(point);
 			map.addOverlay(marker);
 			//marker.setLabel(label);
-		}
+		};
+
+		//日期控件start
+		$("#inOutDatePicker")
+				.click(
+						function() {
+
+							var config = {
+								modules : {
+									'price-calendar' : {
+										fullpath : 'js/price-calendar.js',
+										type : 'js',
+										requires : [ 'price-calendar-css' ]
+									},
+									'price-calendar-css' : {
+										fullpath : 'css/price-calendar.css',
+										type : 'css'
+									}
+								}
+							};
+
+							YUI(config)
+									.use(
+											'price-calendar',
+											'jsonp',
+											function(Y) {
+												var sub = Y.Lang.sub;
+												var url = 'http://fgm.cc/learn/calendar/price-calendar/getData.asp?minDate={mindate}&maxDate={maxdate}&callback={callback}';
+
+												//价格日历实例    
+												var oCal = new Y.PriceCalendar();
+
+												//点击确定按钮
+												oCal
+														.on(
+																'confirm',
+																function() {
+																	alert('入住时间：'
+																			+ this
+																					.get('depDate')
+																			+ '\n离店时间：'
+																			+ this
+																					.get('endDate'));
+																});
+
+												//点击取消按钮
+												oCal.on('cancel', function() {
+													this.set('depDate', '')
+															.set('endDate', '')
+															.render();
+												});
+
+												Y
+														.one('#J_Example')
+														.delegate(
+																'click',
+																function(e) {
+																	var that = this, oTarget = e.currentTarget;
+																	switch (true) {
+																	//设置日历显示个数
+																	case oTarget
+																			.hasClass('J_Count'):
+																		this
+																				.set(
+																						'count',
+																						oTarget
+																								.getAttribute('data-value'))
+																				.render();
+																		break;
+																	//时间范围限定
+																	case oTarget
+																			.hasClass('J_Limit'):
+																		this
+																				.set(
+																						'data',
+																						null)
+																				.set(
+																						'depDate',
+																						'')
+																				.set(
+																						'endDate',
+																						'')
+																				.set(
+																						'minDate',
+																						'')
+																				.set(
+																						'afterDays',
+																						oTarget
+																								.getAttribute('data-limit'));
+																		if (!oTarget
+																				.hasAttribute('data-date')) {
+																			this
+																					.set(
+																							'date',
+																							new Date())
+																		} else {
+																			var oDate = oTarget
+																					.getAttribute('data-date');
+																			this
+																					.set(
+																							'minDate',
+																							oDate);
+																			this
+																					.set(
+																							'date',
+																							oDate);
+																		}
+																		oTarget
+																				.ancestor()
+																				.one(
+																						'.J_RoomStatus') ? oTarget
+																				.ancestor()
+																				.one(
+																						'.J_RoomStatus')
+																				.setContent(
+																						'\u663e\u793a\u623f\u6001')
+																				.removeClass(
+																						'J_Show')
+																				: oTarget
+																						.ancestor()
+																						.append(
+																								'<button class="J_RoomStatus">\u663e\u793a\u623f\u6001</button>');
+																		break;
+																	//异步拉取酒店数据
+																	case oTarget
+																			.hasClass('J_RoomStatus'):
+																		oTarget
+																				.toggleClass('J_Show');
+																		if (oTarget
+																				.hasClass('J_Show'))
+																			Y
+																					.jsonp(
+																							sub(
+																									url,
+																									{
+																										mindate : this
+																												.get('minDate'),
+																										maxdate : this
+																												.get('maxDate')
+																									}),
+																							{
+																								on : {
+																									success : function(
+																											data) {
+																										that
+																												.set(
+																														'data',
+																														data);
+																										oTarget
+																												.setContent('\u9690\u85cf\u623f\u6001')
+																									}
+																								}
+																							});
+																		else {
+																			this
+																					.set(
+																							'data',
+																							null);
+																			oTarget
+																					.setContent('\u663e\u793a\u623f\u6001');
+																		}
+																		break;
+																	}
+																}, 'button',
+																oCal);
+											});
+						});
 	</script>
 </body>
 </html>

@@ -11,7 +11,7 @@ import org.itrip.pojo.Dictionaries;
 import org.itrip.pojo.Hotel;
 import org.itrip.pojo.Hotelbrand;
 import org.itrip.pojo.Houses;
-import org.itrip.pojo.Order;
+import org.itrip.pojo.Orders;
 import org.itrip.pojo.Rooms;
 import org.itrip.pojo.User;
 import org.itrip.pojo.Provinces;
@@ -24,7 +24,18 @@ public interface HotelMapper {
 	 * @param hotelName
 	 * @return
 	 */
-	public List<Hotel> query(@Param("countryid") Integer countryid);
+	public List<Hotel> query(Map<String, Object> map);
+	/**
+	 * 根据条件查询酒店总记录
+	 */
+	public Integer hotelCount(@Param("cid") Integer cid);
+
+	/**
+	 * 二级页面根据条件查询酒店总记录
+	 */
+	public Integer hotelTotalCount(Map<String, Object> map);
+	
+	
 	/**
 	 * 查询全部品牌信息
 	 * @return
@@ -236,7 +247,15 @@ public interface HotelMapper {
 	 * @param userId
 	 * @return
 	 */
-	public List<Order> queryOrder(@Param("userId") Integer userId);
+	public List<Orders> queryOrder(Map<String,Object> map);
+	
+	/**
+	 * 根据用户Id查询订单总记录数
+	 * @param userId
+	 * @return
+	 */
+	public Integer hotelOrder(Integer userId);
+
 	
 	/**
 	 * 修改房型信息
@@ -255,5 +274,49 @@ public interface HotelMapper {
 	 */
 	public List<Comments> quComments(@Param("hotelId") Integer hotelId);
 
+	/**
+	 * 查询订单
+	 * @return
+	 */
+	public List<Orders> queryOrders(@Param("creationDate")String creationDate,@Param("endDate")String endDate,@Param("linkUserName")String linkUserName);
+	/**
+	 * 查询订单总数
+	 * @return
+	 */
+	public int ordersCount();
+	/**
+	 * 根据id查订单信息
+	 * @param id
+	 * @return
+	 */
+	public Orders ByIdOrders(@Param("id") Integer id);
+	/**
+	 * 根据酒店id查询该酒店所拥有的房间类型
+	 * @param hotelId
+	 * @return
+	 */
+	public List<Houses> RoomName(@Param("hotelId")Integer hotelId);
+	/**
+	 * 根据id值修改订单
+	 * 
+	 * @return
+	 */
+	public int UpdateOrders(Orders orders);
+	/**
+	 * 根据房型id查价格
+	 * @param houseId
+	 * @return
+	 */
+	public List<Rooms> getMeal(@Param("houseId")Integer houseId);
+	
+	/**
+	 * 酒店预订
+	 */
+	public int addOrdres(Orders orders);
+	
+	/**
+	 * 订单支付页面 根据id查询信息
+	 */
+	public Orders getOrdersById(Integer id);
 
 }

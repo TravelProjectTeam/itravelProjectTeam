@@ -112,7 +112,7 @@ public class Pay {
 		/**
 		 * 商户收款UID对应《沙箱帐号》页面的商户UID
 		 */
-		public String sys_service_provider_id = "2088102175020213";
+		public String sys_service_provider_id = "2088102177112367";
 	}
 	
 }

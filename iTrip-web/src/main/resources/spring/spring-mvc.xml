@@ -112,5 +112,15 @@
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
+	<mvc:interceptors>
+	<!-- 配置子拦截器 -->
+		<mvc:interceptor>
+		<!-- 配置拦截所有请求 -->
+			<mvc:mapping path="/backend**"/>
+		<!-- 	配置不拦截指定资源请求 -->
+			<mvc:exclude-mapping path="/backendLogin"/>
+			<bean id="handleInterceptor" class="org.itrip.utils.IterceptorUtil"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors> 
 	<!-- springmvc 消息转换器配置结束 -->
 </beans>
