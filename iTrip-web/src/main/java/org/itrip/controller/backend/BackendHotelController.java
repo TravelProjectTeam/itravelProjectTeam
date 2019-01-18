@@ -97,6 +97,7 @@ public class BackendHotelController {
 			@RequestParam(value = "floor", required = false) String[] floor,
 			@RequestParam(value = "isHavingbed", required = false) String[] isHavingbed,
 			@RequestParam(value = "window", required = false) String[] window,
+			@RequestParam(value = "inventory",required = false) String[] inventory,
 			@RequestParam(value = "roomFile", required = false) MultipartFile[] roomFile) throws IOException {
 
 		// 酒店上传的路径
@@ -123,6 +124,7 @@ public class BackendHotelController {
 
 		// 添加房型
 		Houses houses = new Houses();
+		Rooms rooms = new Rooms();
 		for (int i = 0; i < roomFile.length; i++) {
 			houses.setHotelId(hotel.getId());
 			houses.setRoomNameId(roomsType[i]);
@@ -134,6 +136,7 @@ public class BackendHotelController {
 			houses.setIsHavingbed(isHavingbed[i]);
 			houses.setWindow(window[i]);
 			houses.setBedsId(bedsType[i]);
+			houses.setInventory(inventory[i]);
 			// 房型上传的路径
 			String roomPath = "E:\\Eclipse\\iTrip-Workspace\\iTrip\\iTrip-web\\src\\main\\webapp\\WEB-INF\\statics\\images";
 			String roomsFileName = roomFile[i].getOriginalFilename();
@@ -147,6 +150,15 @@ public class BackendHotelController {
 				houses.setRoomImage("images/" + roomsFileName);
 			}
 			hotelService.addRoomsInfo(houses);
+			
+			//默认添加一个房型套餐
+			//rooms.setHotelId(Integer.valueOf(hotelName));
+			rooms.setHouseId(houses.getId());
+			rooms.setRoomTitle("标准价");
+			rooms.setPrice(Float.valueOf(roomsPrice[i]));
+			rooms.setIsbreakfast(1);
+			rooms.setCancellationPolicy(0);
+			hotelService.addRoomTitle(rooms);
 		}
 		return "redirect:backendProductList";
 	}
@@ -181,6 +193,7 @@ public class BackendHotelController {
 			@RequestParam(value = "floor", required = false) String[] floor,
 			@RequestParam(value = "isHavingbed", required = false) String[] isHavingbed,
 			@RequestParam(value = "window", required = false) String[] window,
+			@RequestParam(value = "inventory",required = false) String[] inventory,
 			@RequestParam(value = "roomFile", required = false) MultipartFile[] roomFile,
 			@RequestParam(value = "houseId",required = false) String houseId,
 			@RequestParam(value = "housePhoto",required = false) String housePhoto) throws IOException {
@@ -200,6 +213,7 @@ public class BackendHotelController {
 			houses.setWindow(window[i]);
 			houses.setBedsId(bedsType[i]);
 			houses.setCeiling(ceiling[i]);
+			houses.setInventory(inventory[i]);
 			// 房型上传的路径
 			String roomPath = "E:\\Eclipse\\iTrip-Workspace\\iTrip\\iTrip-web\\src\\main\\webapp\\WEB-INF\\statics\\images";
 			String roomsFileName = roomFile[i].getOriginalFilename();
@@ -214,7 +228,12 @@ public class BackendHotelController {
 			}else {
 				houses.setRoomImage(housePhoto);
 			}
-			if(houseId == null) {
+			System.out.println("房型id="+houseId);
+			if(houseId != null && !houseId.equals("") ) {
+				houses.setId(Integer.valueOf(houseId));
+				hotelService.updateHousesInfo(houses);
+				hotelService.updateRoomPrice(Float.valueOf(roomsPrice[i]), Integer.valueOf(houseId));
+			}else {
 				hotelService.addRoomsInfo(houses);
 				//默认添加一个房型套餐
 				rooms.setHotelId(Integer.valueOf(hotelName));
@@ -224,10 +243,6 @@ public class BackendHotelController {
 				rooms.setIsbreakfast(1);
 				rooms.setCancellationPolicy(0);
 				hotelService.addRoomTitle(rooms);
-			}else {
-				houses.setId(Integer.valueOf(houseId));
-				hotelService.updateHousesInfo(houses);
-				hotelService.updateRoomPrice(Float.valueOf(roomsPrice[i]), Integer.valueOf(houseId));
 			}
 		}
 		
@@ -249,9 +264,7 @@ public class BackendHotelController {
 	@RequestMapping("getHotelById")
 	@ResponseBody
 	public List<Hotel> getHotelById(@RequestParam(value="countryid",required=false) String countryid){
-		Map<String, Object> map=new HashMap<>();
-		map.put("countryid", countryid);
-		return hotelService.query(map);
+		return hotelService.getHotelById(Integer.valueOf(countryid));
 	}
 
 	/**
@@ -355,10 +368,13 @@ public class BackendHotelController {
 	}
 
 	// 报表统计-折线图
-	@RequestMapping("getCharts_1")
-	public String getCharts_1() {
-		return "backend/ceil";
-	}
+		@RequestMapping("getCharts_1")
+		public String getCharts_1(Model model) {
+			List<Orders> list=hotelService.queryDate();
+			model.addAttribute("list",list);
+			return "backend/ceil";
+		}
+
 
 	@RequestMapping("queryCharts_1")
 	@ResponseBody
@@ -391,17 +407,23 @@ public class BackendHotelController {
 	@RequestMapping("WebDatail")
 	public String WebDatail(Model model, @RequestParam(value = "id") String id, @RequestParam(value = "sid") String sid,
 			@RequestParam(value = "rid") String rid, @RequestParam(value = "checkInDate") String checkInDate,
-			@RequestParam(value = "checkOutDate") String checkOutDate) {
+			@RequestParam(value = "checkOutDate") String checkOutDate) throws ParseException {
 		String[] ss = checkInDate.split("-");
 		String month = ss[1];
 		String day = ss[2];
 		model.addAttribute("hotel", hotelService.queryId(id));
 		model.addAttribute("houses", hotelService.querySid(sid));
 		model.addAttribute("rooms", hotelService.queryRid(rid));
+		model.addAttribute("houseNum", hotelService.orderHousesNum(checkInDate, checkOutDate,Integer.valueOf(sid)));
 		model.addAttribute("checkInDate", checkInDate);
 		model.addAttribute("checkOutDate", checkOutDate);
 		model.addAttribute("month", month);
 		model.addAttribute("day", day);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	    long m = (sdf.parse(checkOutDate).getTime() - sdf.parse(checkInDate).getTime()+1000000)/(60*60*24*1000);;
+		model.addAttribute("m", m);
+
 		return "/web/newOrdel";
 	}
 
@@ -500,5 +522,31 @@ public class BackendHotelController {
 		public String return403() {
 			
 			return "backend/403";
+		}
+		
+		/**
+		 * 房型套餐list
+		 */
+		@RequestMapping("productPrice")
+		public String productPrice(Model model) {
+			model.addAttribute("roomsList", hotelService.getRooms());
+			return "backend/product-price";
+		}
+		
+		/**
+		 * 房型删除
+		 * 
+		 * @return
+		 */
+		@RequestMapping("deleteManyHouses")
+		@ResponseBody
+		public int deleteManyHouses(@RequestParam(value = "ids", required = false) String ids) {
+			String id[] = ids.split(",");
+			List<Integer> sid = new ArrayList<>();
+			for (String integer : id) {
+				sid.add(Integer.valueOf(integer));
+			}
+			
+			return hotelService.deleteManyHouses(sid);
 		}
 }

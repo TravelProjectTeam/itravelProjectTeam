@@ -24,6 +24,7 @@ public class Houses {
 	private String roomImage;//房型图片
 	private String bedsId;//床型id
 	private String ceiling;//该房型人数上限
+	private String inventory;//库存
 	
 	//增加字段
 	private String hotelName;//酒店名称
@@ -35,4 +36,6 @@ public class Houses {
 	private String provinceid;//所属省份
 	private String countryid;//所属城市
 	private List<Rooms> roomsList;
+	
+	private Integer houseNum;
 }

@@ -106,13 +106,13 @@ ng\:form {
 							ng-class="{'active': $root.topNavIndex == $root.siteConfig.topNavEnum.home,'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club }"
 							href="webIndex" class="ng-binding hidden">酒店首页</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club }"
-							href="#" class="ng-binding">会员首页</a> <a
+							href="hotelOrders" class="ng-binding">会员首页</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club}"
 							href=webIndex class="ng-binding">酒店预订</a> <a
 							ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.partners||$root.topNavIndex == $root.siteConfig.topNavEnum.club,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.hotel}"
 							href="webIndex" class="ng-binding hidden">酒店预订</a> <a
 							ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club || $root.topNavIndex == $root.siteConfig.topNavEnum.partners }"
-							href="#" class="ng-binding hidden">会员中心</a> <a href=""
+							href="hotelOrders" class="ng-binding hidden">会员中心</a> <a href=""
 							target="_blank" class="ng-binding">积分商城</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club&amp;&amp; $root.topNavIndex != $root.siteConfig.topNavEnum.partners  ,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.partners}"
 							href="#" class="ng-binding">合作伙伴</a> <a
@@ -123,27 +123,6 @@ ng\:form {
 					<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
 					<div class="header-action clearfix">
 						<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
-						<div class="divider2" style="margin-left: 25px;"></div>
-						<div class="header-phone-container">
-							<div class="header-phone"></div>
-							<div class="qrcode-box clearfix">
-								<div class="qrcode-cover"></div>
-								<div class="qrcode">
-									<img ng-src="/dist/images/qrcode1.jpg"
-										src="js/hoteOrders/qrcode1.jpg"> <a class="ng-binding">锦江旅行APP</a>
-								</div>
-								<div class="divider3"></div>
-								<div class="qrcode">
-									<img ng-src="/dist/images/qrcode2.jpg"
-										src="js/hoteOrders/qrcode2.jpg"> <a class="ng-binding">锦江旅行公众号</a>
-								</div>
-							</div>
-						</div>
-						<div class="divider2"></div>
-						<div class="header-login">
-							<!-- ngIf: !$root.isLogined -->
-							<!-- ngIf: !$root.isLogined -->
-						</div>
 						<!-- ngIf: $root.isLogined -->
 						<div class="header-logined ng-scope" ng-if="$root.isLogined">
 							<a class="logined ng-binding">注册会员
@@ -325,6 +304,11 @@ ng\:form {
 								<h4 class="ng-binding">酒店订单</h4>
 								<div class="form-inline">
 
+
+									<!--<div class="form-group">-->
+									<!--<input type="search" placeholder="酒店名称" name="search" ng-model="params.keyword"  class="form-control" autocomplete="off">-->
+									<!--</div>-->
+
 									<div class="form-group js-drop">
 										<lable class="select-icon"> <i class="caret"></i></lable>
 										<input type="text" value="近6个月订单" class="form-control"
@@ -417,11 +401,9 @@ ng\:form {
 											</div>
 											<div class="order-btn-box">
 												<div class="section">
-													<!-- ngIf: !order.outerOrderFlag -->
-													<!-- <a class="btn redbtn ng-binding ng-scope" ng-click="payOrder(order)" ng-if="!order.outerOrderFlag">立即支付</a> -->
 													<c:if test="${order.orderStatus eq '预订成功'}">
 
-														<a href="#" class="btn redbtn ng-binding ng-scope">立即支付</a>
+														<a href="pay" class="btn redbtn ng-binding ng-scope">立即支付</a>
 														<a onclick="upds(${order.id})"
 															class="btn defaultbtn ng-binding ng-scope">取消订单</a>
 													</c:if>
@@ -470,10 +452,10 @@ ng\:form {
 										aria-controls="datatable-responsive" data-dt-idx="1"
 										tabindex="0">上一页</a></li>
 								</c:if>
-
-
-
-
+								
+								
+								
+				
 								<%-- <c:forEach varStatus="status" begin="0" end="2">
 									<c:if
 										test="${page.currentPageNo+status.index <= page.totalPageCount}">
@@ -483,50 +465,53 @@ ng\:form {
 											tabindex="0"> ${page.currentPageNo+status.index} </a></li>
 									</c:if>
 								</c:forEach> --%>
-
-
-
+								
+								
+								
 								<c:choose>
-									<%-- 如果总页数不足10页，那么把所有的页数都显示出来！ --%>
-									<c:when test="${page.totalPageCount <= 10 }">
-										<c:set var="begin" value="1" />
-										<c:set var="end" value="${page.totalPageCount }" />
-									</c:when>
-									<c:otherwise>
-										<%-- 当总页数>10时，通过公式计算出begin和end --%>
-										<c:set var="begin" value="${page.totalPageCount-5 }" />
-										<c:set var="end" value="${page.totalPageCount+4 }" />
-										<%-- 头溢出 --%>
-										<c:if test="${begin < 1 }">
-											<c:set var="begin" value="1" />
-											<c:set var="end" value="10" />
-										</c:if>
-										<%-- 尾溢出 --%>
-										<c:if test="${end > page.totalPageCount }">
-											<c:set var="begin" value="${page.totalPageCount - 9 }" />
-											<c:set var="end" value="${page.totalPageCount }" />
-										</c:if>
-									</c:otherwise>
-								</c:choose>
-								<%-- 循环遍历页码列表 --%>
-								<c:forEach var="i" begin="${begin }" end="${end }">
-									<c:choose>
-										<c:when test="${i eq page.totalPageCount }">
-											<li class="paginate_button omit" name="liInfo"><a
-												href="javascript:page(${i});"
-												aria-controls="datatable-responsive" data-dt-idx="0"
-												tabindex="0"> ${i} </a></li>
-										</c:when>
-										<c:otherwise>
-											<li class="paginate_button omit" name="liInfo"><a
-												href="javascript:page(${i});"
-												aria-controls="datatable-responsive" data-dt-idx="0"
-												tabindex="0"> ${i} </a></li>
-										</c:otherwise>
-									</c:choose>
-
-								</c:forEach>
-
+    <%-- 如果总页数不足10页，那么把所有的页数都显示出来！ --%>
+    <c:when test="${page.totalPageCount <= 10 }">
+        <c:set var="begin" value="1" />
+        <c:set var="end" value="${page.totalPageCount }" />
+    </c:when>
+    <c:otherwise>
+        <%-- 当总页数>10时，通过公式计算出begin和end --%>
+        <c:set var="begin" value="${page.totalPageCount-5 }" />
+        <c:set var="end" value="${page.totalPageCount+4 }" />    
+        <%-- 头溢出 --%>
+        <c:if test="${begin < 1 }">
+            <c:set var="begin" value="1" />
+            <c:set var="end" value="10" />
+        </c:if>    
+        <%-- 尾溢出 --%>
+        <c:if test="${end > page.totalPageCount }">
+            <c:set var="begin" value="${page.totalPageCount - 9 }" />
+            <c:set var="end" value="${page.totalPageCount }" />
+        </c:if>    
+    </c:otherwise>
+</c:choose>
+<%-- 循环遍历页码列表 --%>
+<c:forEach var="i" begin="${begin }" end="${end }">
+    <c:choose>
+        <c:when test="${i eq page.totalPageCount }">
+           <li class="paginate_button omit" name="liInfo">
+           <a href="javascript:page(${i});"
+           aria-controls="datatable-responsive" data-dt-idx="0"
+			tabindex="0"> ${i} </a>
+			</li>
+        </c:when>
+        <c:otherwise>
+            <li class="paginate_button omit" name="liInfo">
+           <a href="javascript:page(${i});"
+           aria-controls="datatable-responsive" data-dt-idx="0"
+			tabindex="0"> ${i} </a>
+			</li>    
+        </c:otherwise>
+    </c:choose>
+    
+</c:forEach>
+								
+								
 								<c:if test="${page.currentPageNo < page.totalPageCount }">
 									<li class="paginate_button next"><a
 										href="javascript:page(${page.currentPageNo+1});"
@@ -579,7 +564,6 @@ ng\:form {
 	<script type="text/javascript" src="js/hotelOrders.js"></script>
 	<script type="text/javascript">
 		function page(num){
-			alert(num)
 			location.href="hotelOrders?currentPageNo="+num;
 		}
 		

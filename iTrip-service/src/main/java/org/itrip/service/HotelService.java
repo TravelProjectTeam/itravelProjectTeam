@@ -31,6 +31,12 @@ public interface HotelService {
 	 */
 	public List<Hotel> query(Map<String, Object> map);
 	/**
+	 * 2019-09-17根据年份分组
+	 * @return
+	 */
+	public List<Orders> queryDate(); 
+
+	/**
 	 * 酒店总记录数
 	 */
 	public Integer hotelCount(Integer cid);
@@ -278,5 +284,29 @@ public interface HotelService {
 	 * 订单支付页面 根据id查询信息
 	 */
 	public Orders getOrdersById(Integer id);
+	
+	/**
+	 * 支付成功后 修改订单状态
+	 */
+	public int updateOderStatus(Integer orderId);
+	
+	/**
+	 * 根据城市id查询酒店信息
+	 */
+	public List<Hotel> getHotelById(Integer provinceid);
+	/**
+	 * 查询订单中该房型被预订的数量
+	 */
+	public Integer orderHousesNum(String checkInDate,String checkOutDate,Integer roomId);
+	
+	/**
+	 * 套餐价格查询
+	 */
+	public List<Rooms> getRooms();
+	
+	/**
+	 * 批量删除房型
+	 */
+	public int deleteManyHouses(List<Integer> id);
 
 }

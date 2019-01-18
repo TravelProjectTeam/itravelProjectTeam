@@ -556,6 +556,32 @@ ng\:form {
 .ng-hide-add-active, .ng-hide-remove {
 	display: block !important;
 }
+
+.btn-blue{
+	width:60px;
+	background-color:#63B8FF;
+	color: #F0FFFF;
+	text-align: center;
+	
+}
+.btn-default{
+	width:60px;
+	height:25px;
+	color: #63B8FF;
+	text-align: center;
+	background-color: #F8F8FF;
+}
+.btn-default:hover{
+	background-color: #6495ED;
+	color: #F0FFFF;
+}
+
+.btn-blue:hover{
+	background-color: #6495ED;
+	color: #F0FFFF;
+}
+
+
 </style>
 <!-- META SECTION -->
 
@@ -594,46 +620,49 @@ ng\:form {
 		<div class="wehotel hotelsearch ng-scope">
 			<!-- ngInclude: $root.siteConfig.header_url -->
 			<div class="header ng-scope" ng-include="$root.siteConfig.header_url">
-				<!-- header begin -->
-				<!-- 预览模式 OP -->
-				<!-- ngIf: $root.siteConfig.isPreview -->
-				<!-- 预览模式 ED -->
 				<div class="header-center ng-scope">
-					<div class="logo">
-						<a href="http://www.jinjiang.com/"></a>
+					<div class="logo" style="padding-top: 0px;">
+						<a href="webIndex"><img alt="logo"
+							src="images/login/headerlogo.png"></a>
 					</div>
 					<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.WeHotel -->
-					<div class="navigation ng-scope"
-						ng-if="$root.siteConfig.site_id==$root.siteEnum.WeHotel">
-						<a
-							ng-class="{'active': $root.topNavIndex == $root.siteConfig.topNavEnum.home,'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club }"
-							href="webIndex" class="ng-binding">酒店首页</a> <a
-							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club }"
-							href="hotelOrders.jsp" class="ng-binding hidden">会员首页</a> <a
-							href="" class="ng-binding hidden">酒店预订</a> <a
-							ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.partners||$root.topNavIndex == $root.siteConfig.topNavEnum.club,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.hotel}"
-							href="javascript:;" class="ng-binding active">酒店预订</a> <a
-							ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club || $root.topNavIndex == $root.siteConfig.topNavEnum.partners }"
-							href="hotelOrders.jsp" class="ng-binding">会员中心</a> <a href="#"
-							target="_blank" class="ng-binding">积分商城</a> <a
-							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club&amp;&amp; $root.topNavIndex != $root.siteConfig.topNavEnum.partners  ,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.partners}"
-							href="#" class="ng-binding hidden">合作伙伴</a> <a
-							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club &amp;&amp; $root.topNavIndex != $root.siteConfig.topNavEnum.partners }"
-							href="#" class="ng-binding hidden">关于会员</a>
+					<div class="navigation ng-scope" style="padding-top: 0px;">
+						<a href="webIndex" class="ng-binding active">酒店首页</a> <a
+							href="hotelSearch.jsp">酒店预订</a> <a href="hotelOrders"
+							class="ng-binding">会员中心</a>
 					</div>
-					<!-- end ngIf: $root.siteConfig.site_id==$root.siteEnum.WeHotel -->
-					<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
 					<div class="header-action clearfix">
-
-						<div class="header-login">
-							<!-- ngIf: !$root.isLogined -->
-							<a class="btn bluebtn ng-scope" href="login.jsp">登录</a> <a
-								class="btn whitebtn ng-scope" href="register.jsp"
-								ng-if="!$root.isLogined">注册</a>
-
+						<div class="fl custom-service">
+							客服热线：<b>400-820-9999</b>
 						</div>
-						<!-- ngIf: $root.isLogined -->
-
+						<c:choose>
+							<c:when test="${sessionScope.userSession==null}">
+								<div class="header-login">
+									<a class="btn bluebtn ng-scope" href="#" style="width: 80px;">登录</a>
+									<a class="btn whitebtn ng-scope" href="#" style="width: 80px;">注册</a>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<div class="header-logined">
+									<a class="logined">我的会员
+										<div class="arrow arrow-down"></div>
+									</a>
+									<ul id="logined_box" class="logined_box">
+										<li class="unit_box"><label>会员层级:</label> <span>We普卡</span>
+										</li>
+										<li class="unit_box"><label>卡号:</label> <span>${sessionScope.userSession.phone}</span>
+										</li>
+										<li class="member_dealing_unit"><a href="hotelOrders.jsp">我的订单</a>
+										</li>
+										<li class="member_dealing_unit"><a href="#">我的账户</a></li>
+										<li class="member_dealing_unit"><a
+											class="logout ng-binding" id="logout">【退出】</a></li>
+										<li class="enter_club"><a href="hotelOrders.jsp">进入会员中心
+												&gt; &gt;</a></li>
+									</ul>
+								</div>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 				<!-- header end -->
@@ -649,9 +678,12 @@ ng\:form {
 						class="ng-pristine ng-valid" value="${namet}">
 					<!-- 城市 -->
 					<div id="in_city" style="display: none"></div>
+					<input type="hidden" id="inDatePicker" name="inDatePicker" value="${inDatePicker}">
+					<input type="hidden" id="outDatePicker" name="outDatePicker" value="${outDatePicker}">
+					
 					<label class="ng-binding">日期</label> <input type="text"
 						placeholder="入住离店日期" class="date" id="inOutDatePicker"
-						value="2018-12-07 至 2018-12-08"> <label class="ng-binding">关键词</label>
+						value="${inDatePicker} 至 ${outDatePicker}"> <label class="ng-binding">关键词</label>
 					<input type="text" name="keyword" placeholder="酒店名" id="key_input"
 						value="${keyword}" class="ng-pristine ng-valid">
 					<button onclick="queryHotels()" class="ng-binding">搜索</button>
@@ -730,7 +762,6 @@ ng\:form {
 							<div class="title ng-binding">排序&nbsp;:</div>
 							<div class="tab chosen">默认排序</div>
 							<div class="tab ng-binding" onclick="javascript(0);">由近到远</div>
-							<!-- <input class="tab ng-binding" style="background-color:#94c9ff;margin:auto 0px;padding:0px;" type="text" value="价格"/> -->
 							<div class="tab ng-binding">
 								价格
 								<div class="price-arrow">
@@ -744,11 +775,11 @@ ng\:form {
 						<c:if test="${hotelList!=null}">
 							<c:forEach items="${hotelList}" var="hotelList">
 								<div class="block ng-scope" ng-repeat="item in hotelList"
-									id="hotel_JJ60133"
+									id="hotel_JJ60133" name = "hotel_JJ60133"
 									onmouseover="queryss('${hotelList.address}')">
 									<div class="pic">
 										<!-- ngIf: item.preSale -->
-										<a href="webHotelDatail?hotelId=${hotelList.id}"
+										<a href="webHotelDatail?hotelId=${hotelList.id}&inDatePicker=${inDatePicker}&outDatePicker=${outDatePicker}"
 											target="_blank"> <!-- "http://hotel.bestwehotel.com/HotelDetail?hotelId=JJ60133&amp;checkInDate=2018-12-07&amp;checkOutDate=2018-12-08&amp;extend=1,1,0,0,0,0" -->
 											<img
 											ng-src="http://images.bestwehotel.com/images/4bcff28a3f88d111_400_300.jpg"
@@ -761,7 +792,7 @@ ng\:form {
 										<p class="name">
 											<!--<span class="name-text">{{item.hotelName}}</span>-->
 											<a class="name-text ng-binding"
-												href="webHotelDatail?hotelId=${hotelList.id}"
+												href="webHotelDatail?hotelId=${hotelList.id}&inDatePicker=${inDatePicker}&outDatePicker=${outDatePicker}"
 												target="_blank"> ${hotelList.hotelName} </a>
 											<!-- ngIf: false -->
 										</p>
@@ -805,7 +836,7 @@ ng\:form {
 												￥<span class="ng-binding">${hotelList.minimum}</span>起
 											</div>
 											<!--<button ng-click="goHotelDetail(item)">{{'HOTELSEARCH_MORE_ROOM_TYPE' | T}}</button>-->
-											<a href="webHotelDatail?hotelId=${hotelList.id}"
+											<a href="webHotelDatail?hotelId=${hotelList.id}&inDatePicker=${inDatePicker}&outDatePicker=${outDatePicker}"
 												target="_blank" class="ng-binding">查看详情</a>
 											<!-- http://hotel.bestwehotel.com/HotelDetail?hotelId=JJ60133&amp;checkInDate=2018-12-07&amp;checkOutDate=2018-12-08&amp;extend=1,1,0,0,0, -->
 										</div>
@@ -821,29 +852,70 @@ ng\:form {
 							<ul class="page-num-ul clearfix">
 								<!-- <li>共${page.totalCount }条记录&nbsp;&nbsp; ${page.currentPageNo }/${page.totalPageCount }页</li>-->
 								<c:if test="${page.currentPageNo > 1}">
+								<li class="paginate_button active"><a
+									href="javascript:queryHotels(1);"
+									aria-controls="datatable-responsive" data-dt-idx="0"
+									tabindex="0">首页</a></li>
 									<li class="paginate_button"><a
 										href="javascript:queryHotels(${page.currentPageNo-1});"
 										aria-controls="datatable-responsive" data-dt-idx="1"
 										tabindex="0">上一页</a></li>
 								</c:if>
 								
-								<li class="paginate_button active"><a
-									href="javascript:queryHotels(1);"
-									aria-controls="datatable-responsive" data-dt-idx="0"
-									tabindex="0">首页</a></li>
-									
 								<!-- <li class="paginate_button omit"><a href="#"
 									aria-controls="datatable-responsive" data-dt-idx="0"
 									tabindex="0">...</a></li> -->
-								<li class="paginate_button"><a
-									href="javascript:queryHotels(${page.totalPageCount});"
-									aria-controls="datatable-responsive" data-dt-idx="0"
-									tabindex="0">末页</a></li>
+									
+									<c:choose>
+									<%-- 如果总页数不足10页，那么把所有的页数都显示出来！ --%>
+									<c:when test="${page.totalPageCount <= 10 }">
+										<c:set var="begin" value="1" />
+										<c:set var="end" value="${page.totalPageCount }" />
+									</c:when>
+									<c:otherwise>
+										<%-- 当总页数>10时，通过公式计算出begin和end --%>
+										<c:set var="begin" value="${page.totalPageCount-5 }" />
+										<c:set var="end" value="${page.totalPageCount+4 }" />
+										<%-- 头溢出 --%>
+										<c:if test="${begin < 1 }">
+											<c:set var="begin" value="1" />
+											<c:set var="end" value="10" />
+										</c:if>
+										<%-- 尾溢出 --%>
+										<c:if test="${end > page.totalPageCount }">
+											<c:set var="begin" value="${page.totalPageCount - 9 }" />
+											<c:set var="end" value="${page.totalPageCount }" />
+										</c:if>
+									</c:otherwise>
+								</c:choose>
+								<%-- 循环遍历页码列表 --%>
+								<c:forEach var="i" begin="${begin }" end="${end }">
+									<c:choose>
+										<c:when test="${i eq page.totalPageCount }">
+											<li class="paginate_button omit" name="liInfo"><a
+												href="javascript:queryHotels(${i});"
+												aria-controls="datatable-responsive" data-dt-idx="0"
+												tabindex="0"> ${i} </a></li>
+										</c:when>
+										<c:otherwise>
+											<li class="paginate_button omit" name="liInfo"><a
+												href="javascript:queryHotels(${i});"
+												aria-controls="datatable-responsive" data-dt-idx="0"
+												tabindex="0"> ${i} </a></li>
+										</c:otherwise>
+									</c:choose>
+
+								</c:forEach>
+								
 								<c:if test="${page.currentPageNo < page.totalPageCount }">
 									<li class="paginate_button next"><a
 										href="javascript:queryHotels(${page.currentPageNo+1});"
 										aria-controls="datatable-responsive" data-dt-idx="1"
 										tabindex="0">下一页</a></li>
+										<li class="paginate_button"><a
+									href="javascript:queryHotels(${page.totalPageCount});"
+									aria-controls="datatable-responsive" data-dt-idx="0"
+									tabindex="0">末页</a></li>
 								</c:if>
 
 								&nbsp;&nbsp;&nbsp;&nbsp;
@@ -889,8 +961,6 @@ ng\:form {
 						<div role="tabpanel" class="tab-pane">
 							<!-- ngRepeat: area in popupZones -->
 							<ul class="clearfix ng-scope" ng-repeat="area in popupZones">
-								<!--<li class="tit">{{area.key}}</li>-->
-								<!-- ngRepeat: item in area.subZones -->
 							</ul>
 							<!-- end ngRepeat: area in popupZones -->
 						</div>
@@ -905,60 +975,35 @@ ng\:form {
 	<script src="js/cityTemplate.js"></script>
 	<script type="text/javascript">
 		$.fn.smartFloat = function() {
-
 			var position = function(element) {
-
 				var top = element.position().top, pos = element.css("position");
-
 				$(window).scroll(function() {
-
 					var scrolls = $(this).scrollTop();
-
 					if (scrolls > top) {
-
 						if (window.XMLHttpRequest) {
-
 							element.css({
-
 								position : "fixed",
-
 								top : 0,
 								width : "300px",
 								height : "400px"
 							});
-
 						} else {
-
 							element.css({
-
 								top : scrolls
-
 							});
-
 						}
-
 					} else {
-
 						element.css({
-
 							position : "absolute",
-
 							top : top
-
 						});
-
 					}
-
 				});
-
 			};
 
 			return $(this).each(function() {
-
 				position($(this));
-
 			});
-
 		};
 		//$("#hotel-map").css("width":"200px","height":"400px");
 		$("#hotel-map").smartFloat();
@@ -1001,172 +1046,6 @@ ng\:form {
 			map.addOverlay(marker);
 			//marker.setLabel(label);
 		};
-
-		//日期控件start
-		$("#inOutDatePicker")
-				.click(
-						function() {
-
-							var config = {
-								modules : {
-									'price-calendar' : {
-										fullpath : 'js/price-calendar.js',
-										type : 'js',
-										requires : [ 'price-calendar-css' ]
-									},
-									'price-calendar-css' : {
-										fullpath : 'css/price-calendar.css',
-										type : 'css'
-									}
-								}
-							};
-
-							YUI(config)
-									.use(
-											'price-calendar',
-											'jsonp',
-											function(Y) {
-												var sub = Y.Lang.sub;
-												var url = 'http://fgm.cc/learn/calendar/price-calendar/getData.asp?minDate={mindate}&maxDate={maxdate}&callback={callback}';
-
-												//价格日历实例    
-												var oCal = new Y.PriceCalendar();
-
-												//点击确定按钮
-												oCal
-														.on(
-																'confirm',
-																function() {
-																	alert('入住时间：'
-																			+ this
-																					.get('depDate')
-																			+ '\n离店时间：'
-																			+ this
-																					.get('endDate'));
-																});
-
-												//点击取消按钮
-												oCal.on('cancel', function() {
-													this.set('depDate', '')
-															.set('endDate', '')
-															.render();
-												});
-
-												Y
-														.one('#J_Example')
-														.delegate(
-																'click',
-																function(e) {
-																	var that = this, oTarget = e.currentTarget;
-																	switch (true) {
-																	//设置日历显示个数
-																	case oTarget
-																			.hasClass('J_Count'):
-																		this
-																				.set(
-																						'count',
-																						oTarget
-																								.getAttribute('data-value'))
-																				.render();
-																		break;
-																	//时间范围限定
-																	case oTarget
-																			.hasClass('J_Limit'):
-																		this
-																				.set(
-																						'data',
-																						null)
-																				.set(
-																						'depDate',
-																						'')
-																				.set(
-																						'endDate',
-																						'')
-																				.set(
-																						'minDate',
-																						'')
-																				.set(
-																						'afterDays',
-																						oTarget
-																								.getAttribute('data-limit'));
-																		if (!oTarget
-																				.hasAttribute('data-date')) {
-																			this
-																					.set(
-																							'date',
-																							new Date())
-																		} else {
-																			var oDate = oTarget
-																					.getAttribute('data-date');
-																			this
-																					.set(
-																							'minDate',
-																							oDate);
-																			this
-																					.set(
-																							'date',
-																							oDate);
-																		}
-																		oTarget
-																				.ancestor()
-																				.one(
-																						'.J_RoomStatus') ? oTarget
-																				.ancestor()
-																				.one(
-																						'.J_RoomStatus')
-																				.setContent(
-																						'\u663e\u793a\u623f\u6001')
-																				.removeClass(
-																						'J_Show')
-																				: oTarget
-																						.ancestor()
-																						.append(
-																								'<button class="J_RoomStatus">\u663e\u793a\u623f\u6001</button>');
-																		break;
-																	//异步拉取酒店数据
-																	case oTarget
-																			.hasClass('J_RoomStatus'):
-																		oTarget
-																				.toggleClass('J_Show');
-																		if (oTarget
-																				.hasClass('J_Show'))
-																			Y
-																					.jsonp(
-																							sub(
-																									url,
-																									{
-																										mindate : this
-																												.get('minDate'),
-																										maxdate : this
-																												.get('maxDate')
-																									}),
-																							{
-																								on : {
-																									success : function(
-																											data) {
-																										that
-																												.set(
-																														'data',
-																														data);
-																										oTarget
-																												.setContent('\u9690\u85cf\u623f\u6001')
-																									}
-																								}
-																							});
-																		else {
-																			this
-																					.set(
-																							'data',
-																							null);
-																			oTarget
-																					.setContent('\u663e\u793a\u623f\u6001');
-																		}
-																		break;
-																	}
-																}, 'button',
-																oCal);
-											});
-						});
 	</script>
 </body>
 </html>

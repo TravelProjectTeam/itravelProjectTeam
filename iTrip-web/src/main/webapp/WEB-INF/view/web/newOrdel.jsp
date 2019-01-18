@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*"
 	contentType="text/html;charset=UTF-8"%>
 	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <head>
 <script type="text/javascript" src="jquery/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="newOrdel/openPage.txt"></script>
@@ -41,6 +42,8 @@ ng\:form {
 <link rel="stylesheet" href="css/newOrdel.css">
 <!-- EOF CSS INCLUDE -->
 <script type="text/javascript" src="js/newOrdel/tongji.js"></script>
+<script type="text/javascript" src="js/newOrdel/newOrdel.js"></script>
+
 </head>
 <body ng-controller="newOrderController" ng-init="init()"
 	ng-class="{'plateno':$root.siteConfig.site_id==$root.siteEnum.Plateno}"
@@ -53,99 +56,44 @@ ng\:form {
 			ng-include="$root.siteConfig.newOrder.template_url">
 			<div class="wehotel neworder ng-scope">
 				<!-- ngInclude: $root.siteConfig.header_url -->
-				<div class="header ng-scope"
-					ng-include="$root.siteConfig.header_url">
-					<!-- header begin -->
-					<!-- 预览模式 OP -->
-					<!-- ngIf: $root.siteConfig.isPreview -->
-					<!-- 预览模式 ED -->
-					<div class="header-center ng-scope">
-						<div class="logo">
-							<a href="webIndex"></a>
-						</div>
-						<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.WeHotel -->
-						<div class="navigation ng-scope"
-							ng-if="$root.siteConfig.site_id==$root.siteEnum.WeHotel">
-							<a
-								ng-class="{'active': $root.topNavIndex == $root.siteConfig.topNavEnum.home,'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club }"
-								href="hotelIndex" class="ng-binding">酒店首页</a> <a
-								ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club }"
-								href="webIndex" class="ng-binding hidden">会员首页</a> <a
-								ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club}"
-								href="hotelSearch.jsp" class="ng-binding hidden">酒店预订</a> <a
-								ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.partners||$root.topNavIndex == $root.siteConfig.topNavEnum.club,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.hotel}"
-								href="hotelSearch.jsp" class="ng-binding">酒店预订</a> <a
-								ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club || $root.topNavIndex == $root.siteConfig.topNavEnum.partners }"
-								href="#" class="ng-binding">会员中心</a> <a href="" target="_blank"
-								class="ng-binding">积分商城</a> <a
-								ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club&amp;&amp; $root.topNavIndex != $root.siteConfig.topNavEnum.partners  ,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.partners}"
-								href="#" class="ng-binding hidden">合作伙伴</a> <a
-								ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club &amp;&amp; $root.topNavIndex != $root.siteConfig.topNavEnum.partners }"
-								href="#" class="ng-binding hidden">关于会员</a>
-						</div>
-						<!-- end ngIf: $root.siteConfig.site_id==$root.siteEnum.WeHotel -->
-						<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
-						<div class="header-action clearfix">
-							<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
-							<div class="divider2" style="margin-left: 25px;"></div>
-							<div class="header-phone-container">
-								<div class="header-phone"></div>
-								<div class="qrcode-box clearfix">
-									<div class="qrcode-cover"></div>
-									<div class="qrcode">
-										<img ng-src="/dist/images/qrcode1.jpg"
-											src="newOrdel/qrcode1.jpg"> <a class="ng-binding">锦江旅行APP</a>
-									</div>
-									<div class="divider3"></div>
-									<div class="qrcode">
-										<img ng-src="/dist/images/qrcode2.jpg"
-											src="newOrdel/qrcode2.jpg"> <a class="ng-binding">锦江旅行公众号</a>
-									</div>
-								</div>
-							</div>
-							<div class="divider2"></div>
-							<div class="header-login">
-								<!-- ngIf: !$root.isLogined -->
-								<!-- ngIf: !$root.isLogined -->
-							</div>
-							<!-- ngIf: $root.isLogined -->
-							<div class="header-logined ng-scope" ng-if="$root.isLogined">
-								<a class="logined ng-binding">注册会员
-									<div class="arrow"></div>
-								</a>
-								<ul id="logined_box" class="logined_box">
-									<li class="unit_box"><label class="horizantal ng-binding">会员层级:</label>
-										<div class="horizantal ng-binding" id="memberLevel">We普卡</div>
-									</li>
-									<li class="unit_box"><label
-										class="horizantal blocks1 ng-binding">卡号:</label>
-										<div class="number horizantal ng-binding" id="memberCardNo">31127947837</div>
-									</li>
-									<li class="unit_box"><label class="horizantal ng-binding">积分:</label>
-										<div class="number horizantal ellipsis ng-binding"
-											id="memberScore">0</div> <a
-										class="exchange_btn horizantal ng-binding" title="兑换" href=""
-										target="_blank">【兑换】</a></li>
-									<li class="member_dealing_unit"><a href=""
-										class="ng-binding">我的优惠券</a></li>
-									<li class="member_dealing_unit"><a href="hotelOrders.jsp"
-										class="ng-binding">我的订单</a></li>
-									<li class="member_dealing_unit"><a href="hotelOrders.jsp"
-										class="ng-binding">我的账户</a></li>
-									<li class="member_dealing_unit">
-										<!-- <a class="logout ng-binding" id="logout" ng-click="$root.logout()">【退出】</a> -->
-										<a href="login.jsp" class="logout ng-binding" id="logout">【退出】</a>
-									</li>
-									<li class="enter_club_center_btn yahei" id="EnterClub"><a
-										href="" class="ng-binding">进入会员中心 &gt; &gt;</a></li>
-								</ul>
-							</div>
-							<!-- end ngIf: $root.isLogined -->
-
-						</div>
+			<div class="header ng-scope" ng-include="$root.siteConfig.header_url">
+				<div class="header-center ng-scope">
+					<div class="logo" style="padding-top: 0px;">
+						<a href="webIndex"><img alt="logo"
+							src="images/login/headerlogo.png"></a>
 					</div>
-					<!-- header end -->
+					<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.WeHotel -->
+					<div class="navigation ng-scope" style="padding-top: 0px;">
+						<a href="webIndex" class="ng-binding active">酒店首页</a> <a
+							href="hotelSearch.jsp">酒店预订</a> <a href="hotelOrders.jsp"
+							class="ng-binding">会员中心</a>
+					</div>
+					<div class="header-action clearfix">
+						<div class="fl custom-service">
+							客服热线：<b>400-820-9999</b>
+						</div>
+								<div class="header-logined">
+									<a class="logined">我的会员
+										<div class="arrow arrow-down"></div>
+									</a>
+									<ul id="logined_box" class="logined_box">
+										<li class="unit_box"><label>会员层级:</label> <span>We普卡</span>
+										</li>
+										<li class="unit_box"><label>卡号:</label> <span>${sessionScope.userSession.phone}</span>
+										</li>
+										<li class="member_dealing_unit"><a href="hotelOrders.jsp">我的订单</a>
+										</li>
+										<li class="member_dealing_unit"><a href="#">我的账户</a></li>
+										<li class="member_dealing_unit"><a
+											class="logout ng-binding" id="logout">【退出】</a></li>
+										<li class="enter_club"><a href="hotelOrders.jsp">进入会员中心
+												&gt; &gt;</a></li>
+									</ul>
+								</div>
+					</div>
 				</div>
+				<!-- header end -->
+			</div>
 
 				<!-- CONTENT OP -->
 				<div class="container clearfix">
@@ -160,25 +108,32 @@ ng\:form {
 								<label>离店日期:</label>
 								<input type="text" id="outDatepicker" disabled="disabled" name="checkOutDate"
 									class="form-control" data-timer="1544198400000"
-									value="${checkOutDate}">
+									value="${checkOutDate}" >
 								<label>房间数量:</label> <select
-									class="float form-control ng-pristine ng-valid" name="count">
-									<option value="1" selected="selected">1</option>
-									<!-- ngIf: params.showRooms -->
+									class="float form-control ng-pristine ng-valid" name="count" id="select1">
+									<c:forEach varStatus="status" begin="1" end="${houses.inventory - houseNum}"> 
+									<option value="${status.count}">${status.count}</option>
+									</c:forEach>
+									<!-- ngIf: params.showRooms 
 									<option ng-if="params.showRooms" value="2" class="ng-scope">2</option>
-									<!-- end ngIf: params.showRooms -->
-									<!-- ngIf: params.showRooms -->
-									<option ng-if="params.showRooms" value="3" class="ng-scope">3</option>
+									<option ng-if="params.showRooms" value="3" class="ng-scope">3</option>-->
 									<!-- end ngIf: params.showRooms -->
 								</select>
 							</div>
 							<div class="hotel-box clearfix">
 								<!-- ngRepeat: rate in roomRate.rates -->
-								<div class="hotel ng-scope" ng-repeat="rate in roomRate.rates">
-									<span class="ng-binding">${month}月${day}日</span> <span class="ng-binding">1间</span>
-									<span class="ng-binding">不含早</span>
-									<span class="price ng-binding">￥${rooms.price}</span>
-								</div>
+								<c:forEach varStatus="status" begin="1" end="${m}">
+									<div class="hotel ng-scope" ng-repeat="rate in roomRate.rates">
+										<span class="ng-binding">${month}月${day+status.index-1}日</span> <span id="binding" class="ng-binding" name="binding">1间</span>
+										<span class="ng-binding">
+											<c:if test="${rooms.isbreakfast ==1}">不含早餐</c:if>
+											<c:if test="${rooms.isbreakfast ==2}">含单早</c:if>
+											<c:if test="${rooms.isbreakfast ==3}">含双早</c:if>
+										</span>
+										<input type="hidden" value="${rooms.price}" id="price1">
+										<span id="price" class="price ng-binding" name="price">￥${rooms.price}</span>
+									</div>
+								</c:forEach>
 								<!-- end ngRepeat: rate in roomRate.rates -->
 							</div>
 							<!-- ngIf: roomRate.promotionTag==1 -->
@@ -228,7 +183,7 @@ ng\:form {
 									<!-- ngRepeat: payType in params.paymentTypes -->
 									<div class="radio-row clearfix ng-scope"
 										ng-repeat="payType in params.paymentTypes">
-										<input type="radio" id="ONLINE_PREPAID" value="2" name="payType"> <label class="ng-binding">门店支付</label>
+										<input type="radio" id="ONLINE_PREPAID" value="0" name="payType"> <label class="ng-binding">门店支付</label>
 									</div>
 									<div class="radio-row clearfix ng-scope"
 										ng-repeat="payType in params.paymentTypes">
@@ -275,27 +230,27 @@ ng\:form {
 								<div class="label">入住房型</div>
 								<p class="ng-binding">
 									<input type="hidden" value="${houses.id}" name="roomId">
-									${houses.valueName}<span class="ng-binding">1间</span>
+									${houses.valueName}<span class="ng-binding" id="binding2">1间</span>
 								</p>
 								<div class="label">价格名称</div>
-								<input type="text" value="${rooms.id}" name="roomsId">
+								<input type="hidden" value="${rooms.id}" name="roomsId">
 								<p class="ng-binding">${rooms.roomTitle}</p>
 								<div class="label">入住日期</div>
 								<p class="ng-binding">
-									<fmt:parseDate var="s" value="${checkInDate}" pattern="yyyy-MM-dd"/>${checkInDate}至<fmt:parseDate var="e" value="${checkOutDate}" pattern="yyyy-MM-dd"/> ${checkOutDate}<span class="ng-binding">
+									<fmt:parseDate var="s" value="${checkInDate}" pattern="yyyy-MM-dd"/>${checkInDate}至<fmt:parseDate var="e" value="${checkOutDate}" pattern="yyyy-MM-dd"/> ${checkOutDate}<span id="day" class="ng-binding">
 									
 									<fmt:formatNumber value="${(e.getTime() - s.getTime())/1000/60/60/24}" pattern="#0" var="num"/>${num}晚</span>
-									<input type="hidden" value="${num}" name="bookingDays">  
+									<input type="hidden" id="bookingDays" value="${num}" name="bookingDays">  
 								</p>
 								<div class="price-detail">
 									<p>
-										房费小计:<span class="ng-binding">￥${rooms.price*num}</span>
+										房费小计:<span id="xiaoji" class="ng-binding">￥${rooms.price*num}</span>
 									</p>
 								</div>
 							</div>
 							<div class="section">
 								<div class="price-total">
-									总金额:<span class="ng-binding">￥<b class="ng-binding">${rooms.price*num}</b>
+									总金额:<span class="ng-binding">￥<b id="sumPrice" class="ng-binding">${rooms.price*num}</b>
 									<input type="hidden" value="${rooms.price*num}" name="payAmount">
 									</span>
 								</div>

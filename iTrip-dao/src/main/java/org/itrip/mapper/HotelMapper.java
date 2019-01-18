@@ -26,6 +26,12 @@ public interface HotelMapper {
 	 */
 	public List<Hotel> query(Map<String, Object> map);
 	/**
+	 * 2019-09-17根据年份分组
+	 * @return
+	 */
+	public List<Orders> queryDate(); 
+
+	/**
 	 * 根据条件查询酒店总记录
 	 */
 	public Integer hotelCount(@Param("cid") Integer cid);
@@ -318,5 +324,28 @@ public interface HotelMapper {
 	 * 订单支付页面 根据id查询信息
 	 */
 	public Orders getOrdersById(Integer id);
+	
+	/**
+	 * 支付成功后 修改订单状态
+	 */
+	public int updateOderStatus(@Param("orderId")Integer orderId);
+	
+	/**
+	 * 根据城市id查询酒店信息
+	 */
+	public List<Hotel> getHotelById(Integer provinceid);
+	
+	/**
+	 * 查询订单中该房型被预订的数量
+	 */
+	public Integer orderHousesNum(@Param("checkInDate")String checkInDate,@Param("checkOutDate")String checkOutDate,@Param("roomId")Integer roomId);
+	/**
+	 * 套餐价格查询
+	 */
+	public List<Rooms> getRooms();
+	/**
+	 * 批量删除房型
+	 */
+	public int deleteManyHouses(@Param("id")List<Integer> id);
 
 }

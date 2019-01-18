@@ -20,7 +20,10 @@
 	<div id="main" style="text-align: center;">
 		<div id="container" style="text-align: center;"></div>
 		年份： <select id="year">
-			<option value="2018">2018</option>
+			<c:forEach items="${list}" var="liss">
+				<option value="${liss.year}">${liss.year}</option>
+			</c:forEach>
+
 		</select> 数据类型：<select id="dataType">
 			<option value="sale">销售额</option>
 			<option value="orders">订单数</option>

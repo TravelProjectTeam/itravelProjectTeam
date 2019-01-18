@@ -1,6 +1,7 @@
 <%@ page language="java" import="java.util.*"
 	contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!-- saved from url=(0066)http://hotel.bestwehotel.com/Order/Success/?orderCode=102132081400 -->
 <html ng-app="wehotelApp" class="ng-scope">
 <head>
@@ -358,95 +359,37 @@ ng\:form {
 	<div class="container ng-scope"
 		ng-include="$root.siteConfig.success.template_url">
 		<div class="wehotel success ng-scope">
-			<!-- ngInclude: $root.siteConfig.header_url -->
-			<div class="header ng-scope" ng-include="$root.siteConfig.header_url">
-				<!-- header begin -->
-				<!-- 预览模式 OP -->
-				<!-- ngIf: $root.siteConfig.isPreview -->
-				<!-- 预览模式 ED -->
+		<div class="header ng-scope" ng-include="$root.siteConfig.header_url">
 				<div class="header-center ng-scope">
-					<div class="logo">
-						<a href="http://www.jinjiang.com/"><h1
-								ng-class="{&#39;icon-we-logo&#39;:$root.siteConfig.site_id==$root.siteEnum.WeHotel,&#39;icon-we-ptlx&#39;:$root.siteConfig.site_id==$root.siteEnum.Plateno}"
-								class="icon-we-logo"></h1></a>
+					<div class="logo" >
+						<a href="webIndex"><img alt="logo"
+							src="images/login/headerlogo.png"></a>
 					</div>
-					<!--锦江导航-->
 					<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.WeHotel -->
-					<div class="navigation ng-scope"
-						ng-if="$root.siteConfig.site_id==$root.siteEnum.WeHotel">
-						<a
-							ng-class="{&#39;active&#39;: $root.topNavIndex == $root.siteConfig.topNavEnum.home,&#39;hidden&#39;:$root.topNavIndex == $root.siteConfig.topNavEnum.club }"
-							href="http://hotel.bestwehotel.com/" class="ng-binding">酒店首页</a>
-						<span class="clubs hidden"
-							ng-class="{&#39;hidden&#39;:$root.topNavIndex != $root.siteConfig.topNavEnum.club }">
-							<a
-							href="http://hotel.bestwehotel.com/Club/AboutClub/HandBook.html"
-							class="ng-binding">会员俱乐部</a> <span class="about_clubs"> <!-- ngIf: !$root.isLogined || $root.primeMeb -->
-								<!-- ngIf: $root.isLogined && !$root.primeMeb --> <a
-								ng-if="$root.isLogined &amp;&amp; !$root.primeMeb"
-								href="http://hotel.bestwehotel.com/Club/AboutClub/JoinPrimeClub.html"
-								class="ng-binding ng-scope">尊享会</a> <!-- end ngIf: $root.isLogined && !$root.primeMeb -->
-								<a
-								href="http://hotel.bestwehotel.com/Club/AboutClub/GiftClub.html"
-								class="ng-binding">礼享会</a>
-						</span>
-						</span> <a
-							ng-class="{&#39;hidden&#39;:$root.topNavIndex != $root.siteConfig.topNavEnum.club}"
-							href="http://hotel.bestwehotel.com/" class="ng-binding hidden">酒店预订</a>
-						<a
-							ng-class="{&#39;hidden&#39;:$root.topNavIndex == $root.siteConfig.topNavEnum.partners||$root.topNavIndex == $root.siteConfig.topNavEnum.club,&#39;active&#39;:$root.topNavIndex == $root.siteConfig.topNavEnum.hotel}"
-							href="http://hotel.bestwehotel.com/HotelSearch"
-							class="ng-binding">酒店预订</a> <a
-							ng-class="{&#39;hidden&#39;:$root.topNavIndex == $root.siteConfig.topNavEnum.club || $root.topNavIndex == $root.siteConfig.topNavEnum.partners }"
-							href="http://hotel.bestwehotel.com/Club/AboutClub/HandBook.html"
-							class="ng-binding">会员俱乐部</a> <a
-							href="http://mall.bestwehotel.com/" target="_blank"
-							class="ng-binding">积分商城</a> <a
-							ng-class="{&#39;hidden&#39;:$root.topNavIndex != $root.siteConfig.topNavEnum.club&amp;&amp; $root.topNavIndex != $root.siteConfig.topNavEnum.partners  ,&#39;active&#39;:$root.topNavIndex == $root.siteConfig.topNavEnum.partners}"
-							href="http://hotel.bestwehotel.com/Partners/#/"
-							class="ng-binding hidden">合作伙伴</a> <a
-							ng-class="{&#39;hidden&#39;:$root.topNavIndex != $root.siteConfig.topNavEnum.partners }"
-							href="http://hotel.bestwehotel.com/Club/AboutClub/HandBook.html"
-							class="ng-binding hidden">关于会员</a>
+					<div class="navigation ng-scope" >
+						<a href="webIndex" class="ng-binding active">酒店首页</a> <a
+							href="hotelSearch.jsp">酒店预订</a> <a href="hotelOrders"
+							class="ng-binding">会员中心</a>
 					</div>
 					<div class="header-action clearfix">
-						<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
-						<div class="header-login">
-							<!-- ngIf: !$root.isLogined -->
-							<!-- ngIf: !$root.isLogined -->
-						</div>
-						<!-- ngIf: $root.isLogined -->
-						<div class="header-logined ng-scope" ng-if="$root.isLogined">
-							<a class="logined ng-binding">注册会员
-								<div class="arrow"></div>
-							</a>
-							<ul id="logined_box" class="logined_box">
-								<!-- ngIf: $root.user.primeMeb -->
-								<li class="unit_box"><label class="horizantal ng-binding">会员层级:</label>
-									<div class="horizantal ng-binding">We普卡</div></li>
-								<li class="unit_box"><label
-									class="horizantal blocks1 ng-binding">卡号:</label>
-									<div class="number horizantal ng-binding" id="memberCardNo">31127947837</div>
-								</li>
-								<li class="member_dealing_unit"><a
-									href="http://hotel.bestwehotel.com/Club/MemberCoupon/"
-									class="ng-binding">我的优惠券</a></li>
-								<li class="member_dealing_unit"><a
-									href="http://hotel.bestwehotel.com/Order/HotelOrders"
-									class="ng-binding">我的订单</a></li>
-								<li class="member_dealing_unit"><a
-									href="http://hotel.bestwehotel.com/Club/MemberInfo/"
-									class="ng-binding">我的账户</a></li>
-								<li class="member_dealing_unit"><a
-									class="logout ng-binding" id="logout" ng-click="$root.logout()">【退出】</a>
-								</li>
-								<li class="enter_club_center_btn yahei" id="EnterClub"><a
-									href="http://hotel.bestwehotel.com/Club/AboutClub/HandBook.html"
-									class="ng-binding">进入会员俱乐部 &gt; &gt;</a></li>
-							</ul>
-						</div>
-						<!-- end ngIf: $root.isLogined -->
-
+								<div class="header-logined">
+									<a class="logined">我的会员
+										<div class="arrow arrow-down"></div>
+									</a>
+									<ul id="logined_box" class="logined_box">
+										<li class="unit_box"><label>会员层级:</label> <span>We普卡</span>
+										</li>
+										<li class="unit_box"><label>卡号:</label> <span>${sessionScope.userSession.phone}</span>
+										</li>
+										<li class="member_dealing_unit"><a href="hotelOrders.jsp">我的订单</a>
+										</li>
+										<li class="member_dealing_unit"><a href="#">我的账户</a></li>
+										<li class="member_dealing_unit"><a
+											class="logout ng-binding" id="logout">【退出】</a></li>
+										<li class="enter_club"><a href="hotelOrders.jsp">进入会员中心
+												&gt; &gt;</a></li>
+									</ul>
+								</div>
 					</div>
 				</div>
 				<!-- header end -->
@@ -479,12 +422,20 @@ ng\:form {
 									value="${ordersInfo.checkOutDate}" pattern="yyyy-MM-dd" /></span>
 						</p>
 						<p>
-							<label>保留时间：</label><span class="ng-binding"><fmt:formatDate
-									value="${ordersInfo.checkInDate}" pattern="yyyy-MM-dd" /> 19:00</span>
+							<label>保留时间：</label><span class="ng-binding">
+									<c:choose>
+										<c:when test="${ordersInfo.payStatus == '已付款'}">
+											您已付款，该房将整晚保留
+										</c:when>
+										<c:otherwise>
+										<fmt:formatDate value="${ordersInfo.checkInDate}" pattern="yyyy-MM-dd" />
+										 19:00
+										</c:otherwise>
+									</c:choose>
+									 </span>
 						</p>
 						<p>
-							<label>预订房型：</label><span class="ng-binding">${ordersInfo.roomName}
-								不含早</span>
+							<label>预订房型：</label><span class="ng-binding">${ordersInfo.valueName}</span>
 						</p>
 						<p>
 							<label>费用总计：</label><span class="total-price ng-binding">￥${ordersInfo.payAmount}</span>
@@ -492,14 +443,13 @@ ng\:form {
 					</div>
 					<div class="buttons">
 						<a href="lookOrder?orderId=${ordersInfo.id}"><button  class="">查看订单</button></a>
-						<button class="continue" ng-click="continueBookHotel()">继续预订</button>
+						<button class="continue" ng-click="continueBookHotel()"><a href="webHotelDatail?hotelId=${ordersInfo.hotelId}">继续预订</a></button>
 					</div>
 				</div>
 				<div class="right">
 					<div class="section">
 						<div class="map amap-container" id="mini_map_box"
 							style="background: rgb(252, 249, 242);">
-							<div class="big-map" ng-click="toggleBigMap()">查看大图</div>
 							<object
 								style="display: block; position: absolute; top: 0; left: 0; height: 100%; width: 100%; overflow: hidden; pointer-events: none; z-index: -1;"
 								type="text/html"

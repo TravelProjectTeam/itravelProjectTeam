@@ -166,7 +166,7 @@
 	<!-- 查询酒店房型 -->
 	<select id="getHotelRoom" resultMap="HousesResultMap">
 		select s.id,d.valueName
-		valueName,s.roomSize,s.BedArea,s.floor,s.isHavingbed,s.window,s.roomImage,s.ceiling
+		valueName,s.roomSize,s.BedArea,s.floor,s.isHavingbed,s.window,s.roomImage,s.ceiling,s.inventory
 		from houses s
 		,dictionaries d where s.roomNameId= d.valueId
 		and
@@ -246,7 +246,7 @@
 	<!-- 根据id查询房型 -->
 	<select id="getHouseById" resultType="Houses">
 		select
-		houses.id,hotel.provinceid,hotel.countryid,hotel.hotelName,houses.roomNameId,houses.roomPrice,houses.roomSize,
+		houses.id,hotel.provinceid,hotel.countryid,hotel.hotelName,houses.roomNameId,houses.roomPrice,houses.roomSize,houses.inventory,
 		houses.bedArea,houses.bedsId,houses.ceiling,houses.floor,houses.isHavingbed,houses.window,houses.roomImage
 		from houses,hotel where houses.hotelId = hotel.id and
 		houses.id=#{houseId}
@@ -390,16 +390,18 @@
 		date_sub(now(),interval 6
 		month)
 		ORDER
-		BY o.creationDate DESC LIMIT #{currentPageNo},#{pageSize}
+		BY o.creationDate DESC LIMIT
+		#{currentPageNo},#{pageSize}
 	</select>
-	
+
 	<!-- 根据用户id查询订单总记录数 -->
 	<select id="hotelOrder" resultType="Integer">
-		select count(id) from orders where userId=#{userId} and
+		select count(id) from orders
+		where userId=#{userId} and
 		creationDate &gt; date_sub(now(),interval 6
 		month)
 	</select>
-	
+
 	<!-- 根据ID删除订单信息 -->
 	<delete id="delOrder">
 		delete FROM orders where id=#{id}
@@ -418,10 +420,11 @@
 	</select>
 
 	<!-- 查询订单 -->
-	<select id="queryOrders" resultType="Orders"  parameterType="Map">
+	<select id="queryOrders" resultType="Orders" parameterType="Map">
 		SELECT h.hotelName,(SELECT valueName FROM dictionaries d WHERE
 		typeName='房型' and d.valueId = hs.roomNameId) roomName,
-		o.* FROM orders o
+		o.* FROM orders
+		o
 		INNER JOIN hotel h on o.hotelId=h.id
 		INNER JOIN houses hs on o.roomId
 		=hs.id where 1=1
@@ -435,13 +438,13 @@
 			and o.linkUserName LIKE '%${linkUserName}%'
 		</if>
 	</select>
-	
+
 	<!-- 查询订单总数 -->
 	<select id="ordersCount" parameterType="int"
 		resultType="Integer">
 		SELECT COUNT(1) FROM orders
 	</select>
-	
+
 	<!-- 根据id查订单信息 -->
 	<select id="ByIdOrders" resultType="Orders">
 		SELECT h.hotelName,(SELECT
@@ -509,4 +512,46 @@
 		and d.typeName='房型' and o.id =
 		#{ordersId}
 	</select>
+
+	<!-- 支付成功后修改订单状态 -->
+	<update id="updateOderStatus" parameterType="Orders">
+		update orders set
+		payStatus=1,orderStatus=1,payType=1 where id=#{orderId}
+	</update>
+
+	<!-- 根据城市id查询酒店信息 -->
+	<select id="getHotelById" resultType="Hotel">
+		select * from hotel where
+		provinceid=#{provinceid}
+	</select>
+	<select id="queryDate" resultType="Orders">
+		select DATE_FORMAT(
+		checkInDate, '%Y') as year from orders GROUP BY DATE_FORMAT(
+		checkInDate, '%Y')
+	</select>
+	
+	<select id="orderHousesNum" resultType="Integer">
+		select SUM(count) from
+		orders where roomId = #{roomId} and orderStatus &lt;&gt; 3
+		and (date(checkInDate) &gt;= #{checkInDate} and date(checkOutDate)&lt;=
+		#{checkOutDate})
+		or (date(checkInDate) &gt; #{checkInDate} and date(checkOutDate)&lt;
+		#{checkOutDate})
+		or (date(checkInDate) &gt; #{checkInDate} and date(checkOutDate)&lt;
+		#{checkOutDate})
+	</select>
+	<!-- 套餐查询 -->
+	<select id="getRooms" resultType="Rooms">
+		select * from rooms
+	</select>
+	
+	<!-- 删除房型 -->
+	<delete id="deleteManyHouses">
+		delete  from houses where id in
+		<foreach collection="id" item="id" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+		
+	</delete>
 </mapper>

@@ -29,6 +29,7 @@ public class Orders {
 	private String modifiedBy;//修改人
 	private String payStatus;//支付状态
 	
+	private String year;//年份
 	private String month;//月份
 	private String sale;//总价
 	private String orders;//订单数

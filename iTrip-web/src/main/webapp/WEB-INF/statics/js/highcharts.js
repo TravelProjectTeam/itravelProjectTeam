@@ -30,7 +30,7 @@ $(function() {
 	});
 	
 	//年份
-	$("year").change(function(){
+	$("#year").change(function(){
 		var year = $("#year").val();
 		var type = $("#dataType").val();
 		title = year+"年锦江国际业务统计报表";

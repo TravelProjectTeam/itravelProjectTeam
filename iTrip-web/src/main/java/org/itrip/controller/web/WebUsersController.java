@@ -77,13 +77,14 @@ public class WebUsersController {
 	@ResponseBody
 	public String Login(@RequestParam(value = "u", required = false) String phone,
 			@RequestParam(value = "p", required = false) String pwd,
-			@RequestParam(value = "v", required = false) String verifyCode, HttpServletRequest request) {
+			@RequestParam(value = "v", required = false) String verifyCode, HttpServletRequest request,HttpSession session) {
 		pwd = MD5Util.convertMD5(pwd);
 		User user = userService.login(phone, pwd);
 		String code = (String) request.getSession().getAttribute("verifyCodeValue");
 		if (verifyCode.equalsIgnoreCase(code)) {//比较验证码是否相同
 			if (user != null) {
-				request.getSession().setAttribute("userSession", user);
+				session.setAttribute("userSession", user);
+				session.setMaxInactiveInterval(120*60);
 				return user.toString();
 			}
 			return null;

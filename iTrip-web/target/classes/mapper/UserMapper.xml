@@ -22,31 +22,41 @@
 
 	<!-- 数据库字段 -->
 	<sql id="Base_Column_List">
-		id,name,phone, username, pwd,sex,birthday,email,address,status,joinDate
+		id,name,phone, username,
+		pwd,sex,birthday,email,address,status,joinDate
 	</sql>
 	<!-- ====================邹航开始======================== -->
 	<select id="queryPhone" resultType="Integer">
-		select COUNT(phone) from user where phone=#{phone}
+		select COUNT(phone) from user
+		where phone=#{phone}
 	</select>
 	<insert id="add" parameterType="User">
-		insert into user(id,phone,pwd,status) value(null,#{phone},#{pwd},#{status});
+		insert into
+		user(id,phone,pwd,status) value(null,#{phone},#{pwd},#{status});
 	</insert>
 	<select id="query" resultMap="DaseResultMap2"
 		parameterType="Integer">
-		select countryid,hotelName,(select valueName from dictionaries t where
-		s.hotelType=t.valueId and t.typeName="酒店类型") alias,address
+		select countryid,hotelName,(select valueName from
+		dictionaries t where
+		s.hotelType=t.valueId and t.typeName="酒店类型")
+		alias,address
 		from hotel s where countryid=#{countryid}
 	</select>
-	
-	<insert id="addBackendUser" parameterType="User" >
-    insert into user(id,username,sex,phone,email,address,status) values(null,#{userName},#{sex},#{phone},#{email},#{address},#{status})
-  </insert>
-	
+
+	<insert id="addBackendUser" parameterType="User">
+		insert into
+		user(id,username,sex,phone,email,address,status,pwd,birthday)
+		values(null,#{userName},#{sex},#{phone},#{email},#{address},#{status},#{pwd},#{birthday})
+	</insert>
+
+
 	<!-- ====================邹航结束======================== -->
 
 	<!-- 前台登录 -->
 	<select id="login" resultType="User">
-		select <include refid="Base_Column_List" /> from user where phone=#{phone} and pwd=#{pwd}
+		select
+		<include refid="Base_Column_List" />
+		from user where phone=#{phone} and pwd=#{pwd}
 	</select>
 	<!-- 查询所有的管理员 -->
 	<select id="getAllAdmin" resultType="User">
@@ -56,49 +66,54 @@
 	</select>
 	<!-- 查询管理员的数量 -->
 	<select id="getAdminCount" resultType="int">
-		select count(1) from user where status=0
+		select count(1) from user
+		where status=0
 	</select>
 	<!-- 后台登录，并验证登录用户是否为管理员 -->
 	<select id="getIsAdmin" resultType="User">
-		select <include refid="Base_Column_List" /> from user where phone=#{phone} and pwd=#{pwd}
+		select
+		<include refid="Base_Column_List" />
+		from user where phone=#{phone} and pwd=#{pwd}
 	</select>
 	<!-- 查询后台非管理员的用户 -->
 	<select id="getAllUser" resultType="User">
-		select <include refid="Base_Column_List"/> from user where status &lt;&gt; 0
-		
-		<!-- <if test="startTime != null and startTime != ''">
-			and joinDate  &lt;= #{startTime} 
-		</if>
-		<if test="endTime != null and endTime != ''">
-			and joinDate &gt;= #{endTime}
-		</if>
-		<if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
-			and joinDate between #{startTime} and #{endTime}
-		</if>
-		<if test="condition != null and condition != ''">
-			and 
-		</if> -->
+		select
+		<include refid="Base_Column_List" />
+		from user where status &lt;&gt; 0
+
+		<!-- <if test="startTime != null and startTime != ''"> and joinDate &lt;= 
+			#{startTime} </if> <if test="endTime != null and endTime != ''"> and joinDate 
+			&gt;= #{endTime} </if> <if test="startTime != null and startTime != '' and 
+			endTime != null and endTime != ''"> and joinDate between #{startTime} and 
+			#{endTime} </if> <if test="condition != null and condition != ''"> and </if> -->
 	</select>
-	
+
 	<!-- 查询后台非管理用户的数量 -->
 	<select id="getNotAdminCount" resultType="int">
-		select count(1) from user where status &lt;&gt; 0
+		select count(1) from
+		user where status &lt;&gt; 0
 	</select>
-	
+
 	<!-- 根据id查询用户 -->
 	<select id="getById" resultType="User">
-		select <include refid="Base_Column_List"/> from user where id = #{id}
+		select
+		<include refid="Base_Column_List" />
+		from user where id = #{id}
 	</select>
 	<!-- 修改用户 -->
 	<update id="updateUser" parameterType="User">
-		update user set username=#{userName},sex=#{sex},phone=#{phone},email=#{email},address=#{address},status=#{status} where id = #{id}
+		update user set
+		username=#{userName},sex=#{sex},phone=#{phone},email=#{email},address=#{address},status=#{status},pwd=#{pwd},birthday=#{birthday}
+		where id = #{id}
 	</update>
+
 	<!-- 批量删除用户 -->
 	<delete id="deleteManyUser">
 		delete from user where id in
- 		<foreach collection="ids" item="ids" open="(" separator="," close=")">
- 		#{ids}
- 	</foreach>
+		<foreach collection="ids" item="ids" open="(" separator=","
+			close=")">
+			#{ids}
+		</foreach>
 
 	</delete>
 </mapper>

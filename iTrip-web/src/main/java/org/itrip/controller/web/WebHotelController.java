@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.itrip.pojo.Comments;
 import org.itrip.pojo.Dictionaries;
@@ -25,7 +26,6 @@ import org.itrip.utils.Page;
 import org.itrip.utils.Pay;
 import org.itrip.utils.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -44,7 +44,10 @@ public class WebHotelController {
 	private Integer id;
 
 	@RequestMapping("queryHotel")
-	public String queryHotel(@RequestParam(value = "citysName", required = false) String citysName,HttpServletRequest request) throws IOException{
+	public String queryHotel(@RequestParam(value = "citysName", required = false) String citysName,
+			@RequestParam(value = "inDatePicker", required = false) String inDatePicker,
+			@RequestParam(value = "outDatePicker", required = false) String outDatePicker,
+			HttpServletRequest request,HttpSession session) throws IOException{
 		System.out.println("citysName"+citysName);
 		int cityId = hotelService.queryName(citysName);//城市id
 		int count=hotelService.hotelCount(cityId);//总记录数
@@ -67,6 +70,11 @@ public class WebHotelController {
 		request.setAttribute("hotelList",hotelList);//根据城市信息查询
 		request.setAttribute("page", page);
 		request.setAttribute("hotelsize",hotelList.size());
+		request.setAttribute("inDatePicker", inDatePicker);
+		request.setAttribute("outDatePicker", outDatePicker);
+		session.setAttribute("inDatePicker", inDatePicker);
+		session.setAttribute("outDatePicker", outDatePicker);
+
 		
 		List<Dictionaries> list = hotelService.queryDictionaries("酒店类型");//查询全部房型信息
 		List<Hotelbrand> llts = hotelService.queryBrand(cityId);//全部品牌信息
@@ -88,7 +96,7 @@ public class WebHotelController {
 	public String queryH(@RequestParam(value = "currentPageNo", required = false) String currentPageNo,HttpServletRequest request) {
 		System.out.println("当前页"+currentPageNo);
 		String[] name = request.getParameter("arr").split(",");
-		String[] tname = { "price1", "price2", "rating", "brand", "country", "keyword", "rankts" };
+		String[] tname = { "price1", "price2", "rating", "brand", "country", "keyword", "rankts","inDatePicker","outDatePicker"};
 		Map<String, Object> map = new HashMap<>();
 		String namet = "";// 目的地
 		String keyword = "";// 关键字
@@ -97,9 +105,21 @@ public class WebHotelController {
 		String brand = "";
 		String rating = "";
 		String rank = "";
+		String inDatePicker="";
+		String outDatePicker="";
 		for (int i = 0; i < name.length; i++) {
 
 			map.put(tname[i], name[i]);
+			
+			if (tname[i] == "inDatePicker") {
+				inDatePicker = name[i];
+				request.setAttribute("inDatePicker", inDatePicker);
+			}
+			if (tname[i] == "outDatePicker") {
+				outDatePicker = name[i];
+				request.setAttribute("outDatePicker", outDatePicker);
+			}
+
 			if (tname[i] == "rating") {
 				rating = name[i];
 				request.setAttribute("rating", rating);
@@ -166,12 +186,14 @@ public class WebHotelController {
 	// 跳转hotelDatail.jsp页面
 		@RequestMapping("webHotelDatail")
 		public String getHotelDatail(@RequestParam(value = "hotelId", required = false) Integer hotelId, Model model,
-				String specifiedDay) {
+				String specifiedDay,@RequestParam(value="inDatePicker",required = false) String inDatePicker,
+				@RequestParam(value="outDatePicker",required = false) String outDatePicker) {
 			
 			Hotel hotel = hotelService.getHotelDatail(hotelId);
 			List<Houses> housesList = hotelService.getHotelRoom(hotelId);
 			for (Houses houses : housesList) {
 				houses.setRoomsList(hotelService.getHouses(houses.getId()));
+				houses.setHouseNum(hotelService.orderHousesNum(inDatePicker, outDatePicker, houses.getId()));
 			}
 			Integer hao = 0;
 			Integer zhong = 0;
@@ -193,6 +215,7 @@ public class WebHotelController {
 			model.addAttribute("cha",cha);
 			model.addAttribute("comment",comments);
 			model.addAttribute("count", comments.size());
+			
 			return "web/hotelDatail";
 		}
 
@@ -440,7 +463,9 @@ public class WebHotelController {
 		if(signVerified) {
 			//此处写支付成功的业务代码
 			//返回订单详情页面
-			return "redirect:lookOrder?orderId="+id;
+			System.out.println("支付成功");
+			hotelService.updateOderStatus(id);
+			return "redirect:bookSucees?orderId="+id;
 		}else {
 			System.out.println("支付, 验签失败...");
 		}
@@ -478,15 +503,28 @@ public class WebHotelController {
 					
 				//注意：
 				//退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
+				
+				System.out.println("交易结束");
 			}else if (trade_status.equals("TRADE_SUCCESS")){ //支付成功
 				//判断该笔订单是否在商户网站中已经做过处理
 				//如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
 				//如果有做过处理，不执行商户的业务程序
 				//注意：在此处写付款成功业务代码，如修改数据库中该订单的状态等
+				System.out.println("支付成功");
+				hotelService.updateOderStatus(id);
 			}
-			return "redirect:lookOrder?orderId="+id;
+			return "redirect:bookSucees?orderId="+id;
 		}else {//验证失败
 			return "fail";
 		}
+	}
+	
+	/**
+	 * 支付成功后跳转至预订成功显示页面
+	 */
+	@RequestMapping("bookSucees")
+	public String bookSucees(@RequestParam(value="orderId",required=false) String orderId,Model model) {
+		model.addAttribute("ordersInfo", hotelService.getOrdersById(Integer.valueOf(orderId)));
+		return "web/bookSucees";
 	}
 }

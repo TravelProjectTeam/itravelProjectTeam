@@ -39,7 +39,7 @@
 
     <!--铂涛导航-->
     <!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno --><div class="navigation ng-scope" ng-if="$root.siteConfig.site_id==$root.siteEnum.Plateno">
-        <a ng-class="{&#39;hidden&#39;: $root.topNavIndex == $root.siteConfig.topNavEnum.home }" href="https://www.plateno.com/" class="ng-binding">首页</a>
+        <a ng-class="{&#39;hidden&#39;: $root.topNavIndex == $root.siteConfig.topNavEnum.home }" href="webIndex" class="ng-binding">首页</a>
         <a ng-class="{&#39;hidden&#39;:$root.topNavIndex == $root.siteConfig.topNavEnum.club || $root.topNavIndex == $root.siteConfig.topNavEnum.hotel|| $root.topNavIndex == $root.siteConfig.topNavEnum.shop  ,&#39;active&#39;:$root.topNavIndex == $root.siteConfig.topNavEnum.hotel}" href="https://www.plateno.com/HotelSearch" class="ng-binding hidden">酒店预订</a>
         <a href="http://biz.bestwehotel.com/" target="_blank" class="ng-binding">企业差旅</a>
         <a href="https://www.plateno.com/activity/shopguide.html" class="ng-binding">积分商城</a>
@@ -56,26 +56,11 @@
     </div><!-- end ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
     <div class="header-action clearfix">
         <!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno --><a class="en-cut ng-scope" ng-if="$root.siteConfig.site_id==$root.siteEnum.Plateno" href="https://en.plateno.com/" target="_blank">ENG</a><!-- end ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
-        <div class="divider2" style="margin-left:25px;"></div>
-        <div class="header-phone-container">
-            <div class="header-phone">
-            </div>
-            <div class="qrcode-box clearfix">
-                <div class="qrcode-cover"></div><div class="qrcode">
-                    <img ng-src="/dist/images/qrcode_wechat_plateno.png" src="./铂涛集团官网-铂涛旅行官网-官方直订：7天酒店、IU、派酒店、麗枫、喆啡、希岸等品牌酒店_files/qrcode_wechat_plateno.png">
-                    <a class="ng-binding">铂涛旅行APP</a>
-                </div><div class="divider3"></div><div class="qrcode">
-                    <img ng-src="/dist/images/qrcode_app_plateno.png" src="./铂涛集团官网-铂涛旅行官网-官方直订：7天酒店、IU、派酒店、麗枫、喆啡、希岸等品牌酒店_files/qrcode_app_plateno.png">
-                    <a class="ng-binding">铂涛旅行官方微信</a>
-                </div>
-            </div>
-        </div>
-        <div class="divider2"></div>
         <div class="header-login">
             <!-- ngIf: !$root.isLogined --><!-- ngIf: !$root.isLogined -->
         </div>
         <!-- ngIf: $root.isLogined --><div class="header-logined ng-scope" ng-if="$root.isLogined">
-            <a class="logined ng-binding">注册会员 <div class="arrow"></div> </a>
+            <a class="logined ng-binding">我的会员 <div class="arrow"></div> </a>
             <ul id="logined_box" class="logined_box">
                 <!-- ngIf: $root.user.primeMeb -->
                 <li class="unit_box">
@@ -84,15 +69,7 @@
                 </li>
                 <li class="unit_box">
                     <label class="horizantal blocks1 ng-binding">卡号:</label>
-                    <div class="number horizantal ng-binding" id="memberCardNo">31127947837</div>
-                </li>
-                <!--<li class="unit_box">-->
-                    <!--<label class="horizantal">{{'TOP_NAV_MEMBER_SCORE' | T}}:</label>-->
-                    <!--<div class="number horizantal ellipsis" id="memberScore">{{$root.user.score}}</div>-->
-                    <!--<a class="exchange_btn horizantal" title="{{'TOP_NAV_EXCHANGE' | T}}" href="{{$root.siteConfig.links.mall_url}}" target="_blank">【{{'TOP_NAV_EXCHANGE' | T}}】</a>-->
-                <!--</li>-->
-                <li class="member_dealing_unit">
-                    <a href="https://www.plateno.com/Club/MemberCoupon/" class="ng-binding">我的优惠券</a>
+                    <div class="number horizantal ng-binding" id="memberCardNo">${sessionScope.userSession.phone}</div>
                 </li>
                 <li class="member_dealing_unit">
                     <a href="https://www.plateno.com/Order/HotelOrders" class="ng-binding">我的订单</a>
@@ -101,10 +78,7 @@
                     <a href="https://www.plateno.com/Club/MemberInfo/" class="ng-binding">我的账户</a>
                 </li>
                 <li class="member_dealing_unit">
-                    <a class="logout ng-binding" id="logout" ng-click="$root.logout()">【退出】</a>
-                </li>
-                <li class="enter_club_center_btn yahei" id="EnterClub">
-                    <a href="https://www.plateno.com/Club/AboutClub/HandBook.html" class="ng-binding">进入会员俱乐部 &gt; &gt;</a>
+                    <a class="logout ng-binding" id="logout" ng-click="logout">【退出】</a>
                 </li>
             </ul>
         </div><!-- end ngIf: $root.isLogined -->

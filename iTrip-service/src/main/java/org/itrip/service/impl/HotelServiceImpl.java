@@ -3,6 +3,7 @@ package org.itrip.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.itrip.mapper.HotelMapper;
 import org.itrip.pojo.Beds;
 import org.itrip.pojo.Citys;
@@ -32,6 +33,13 @@ public class HotelServiceImpl implements HotelService{
 	public Integer queryName(String names) {
 		
 		return hotelMapper.queryName(names);
+	}
+	/**
+	 * 2019-09-17根据年份分组
+	 * @return
+	 */
+	public List<Orders> queryDate(){
+		return hotelMapper.queryDate();
 	}
 	/**
 	 * 根据id查询城市名称
@@ -286,6 +294,34 @@ public class HotelServiceImpl implements HotelService{
 	@Override
 	public Orders getOrdersById(Integer id) {
 		return hotelMapper.getOrdersById(id);
+	}
+	
+	@Override
+	/**
+	 * 支付成功后 修改订单状态
+	 */
+	public int updateOderStatus(Integer orderId) {
+		return hotelMapper.updateOderStatus(orderId);
+	}
+	
+	@Override
+	/**
+	 * 根据城市id查询酒店信息
+	 */
+	public List<Hotel> getHotelById(Integer provinceid){
+		return hotelMapper.getHotelById(provinceid);
+	}
+	@Override
+	public Integer orderHousesNum(String checkInDate, String checkOutDate, Integer roomId) {
+		return hotelMapper.orderHousesNum(checkInDate, checkOutDate, roomId);
+	}
+	@Override
+	public List<Rooms> getRooms() {
+		return hotelMapper.getRooms();
+	}
+	@Override
+	public int deleteManyHouses(List<Integer> id) {
+		return hotelMapper.deleteManyHouses(id);
 	}
 
 }

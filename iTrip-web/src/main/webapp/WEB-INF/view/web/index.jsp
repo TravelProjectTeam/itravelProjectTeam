@@ -30,7 +30,7 @@
 				<div class="subnav">
 					<div class="header-nav">
 						<div class="header-nav-item">
-							<a href="#" target="_blank">关于锦江国际</a>
+							<a href="">关于锦江国际</a>
 						</div>
 						<div class="header-nav-item">
 							<a href="hotelOrders" target="_blank">会员中心</a>
@@ -39,13 +39,13 @@
 							<a href="hotelIndex" target="_blank">酒店</a>
 						</div>
 						<div class="header-nav-item">
-							<a href="#" target="_blank">旅游</a>
+							<a href="" >旅游</a>
 						</div>
 						<div class="header-nav-item">
-							<a href="#" target="_blank">汽车</a>
+							<a href="" >汽车</a>
 						</div>
 						<div class="header-nav-item">
-							<a href="#" target="_blank">物流</a>
+							<a href="" >物流</a>
 						</div>
 					</div>
 					<div class="header-action">
@@ -68,14 +68,14 @@
 								<li class="unit_box"><label>卡号:</label> <span>${sessionScope.userSession.phone}</span>
 								</li>
 								<li class="unit_box"><label>积分:</label> <span>0</span> <a
-									title="兑换" href="http://mall.bestwehotel.com/" target="_blank">【兑换】</a>
+									title="兑换" href="" target="">【兑换】</a>
 								</li>
-								<li class="member_dealing_unit"><a href="hotelOrders.jsp">我的订单</a>
+								<li class="member_dealing_unit"><a href="hotelOrders">我的订单</a>
 								</li>
-								<li class="member_dealing_unit"><a href="#">我的账户</a></li>
+								<li class="member_dealing_unit"><a href="webBerInfo">我的账户</a></li>
 								<li class="member_dealing_unit"><a
-									class="logout ng-binding" id="logout">【退出】</a></li>
-								<li class="enter_club"><a href="hotelOrders.jsp">进入会员中心
+									class="logout ng-binding" id="logout" href="outLogin">【退出】</a></li>
+								<li class="enter_club"><a href="hotelOrders">进入会员中心
 										&gt; &gt;</a></li>
 							</ul>
 						</div>
@@ -107,17 +107,17 @@
 					<div class="block">
 						<label>入住日期</label> <input id="inDatePicker" type="text"
 							autocomplete="off" readonly="readonly" data-timer="1544156651499"
-							value="2018-12-07">
+							value="2018-12-07" name="inDatePicker">
 					</div>
 					<div class="block">
 						<label>离店日期</label> <input id="outDatePicker" type="text"
 							autocomplete="off" readonly="readonly" data-timer="1544243051499"
-							value="2018-12-08">
+							value="2018-12-08"  name="outDatePicker">
 					</div>
-					<div class="block keyword">
+				<!-- 	<div class="block keyword">
 						<label>关键词</label> <input id="key_input" type="text"
 							autocomplete="off" placeholder="酒店名/地标/商圈">
-					</div>
+					</div> -->
 					<div class="btn-search">
 					<input type="submit" value="搜索" style="background-image: url(images/index/icon-search.png);">
 						
@@ -143,7 +143,7 @@
 							value="2018-12-08">
 					</div>
 					<div class="btn-search">
-						<a class="btn btn-blue" target="_blank"
+						<a class="btn btn-blue" target=""
 							href="http://travel.jinjiang.com/search?minDepartDate=2018-12-07&amp;maxDepartDate=2018-12-08&amp;departurePlace=%E4%B8%8A%E6%B5%B7&amp;keyword="
 							id="searchTravel"><i class="icon icon-search"></i>搜索</a>
 					</div>
@@ -154,14 +154,14 @@
 					<ul class="list">
 						<li class="out"
 							style="position: absolute; top: 0px; left: 0px; z-index: 1;"><a
-							href="#"
+							href=""
 							style="background-image: url(images/index/1f88bf6e-a21b-4691-aa4b-e2c5415cb0f3.jpg)"
-							target="_blank"></a></li>
+							target=""></a></li>
 						<li class="in"
 							style="position: absolute; top: 0px; left: 0px; z-index: 2;"><a
-							href="#"
+							href=""
 							style="background-image: url(images/index/91a3ec93-f901-4da6-9896-89df140dedef.jpg)"
-							target="_blank"></a></li>
+							target=""></a></li>
 					</ul>
 				</div>
 				<ul class="pagination">
@@ -176,7 +176,7 @@
 			style="background-image: url(images/index/home-brand-bg.jpg);">
 			<div class="center-container">
 				<ul class="news">
-					<li><a href="#" target="_blank"> <span class="img-box"><img
+					<li><a href="" > <span class="img-box"><img
 								src="images/index/b16952dc-d155-4823-8b22-5a43b5af3034.jpg"
 								alt="周到服务 尊荣静享"></span>
 							<div class="intro">
@@ -184,7 +184,7 @@
 								<p title="助力成功行程 尽在锦江酒店">助力成功行程 尽在锦江酒店</p>
 							</div>
 					</a></li>
-					<li><a href="#" target="_blank"> <span class="img-box"><img
+					<li><a href="" > <span class="img-box"><img
 								src="images/index/8a3c5d33-b6d6-4157-8962-368ad3d29853.jpg"
 								alt="希岸，一个时尚轻奢跨界酒店"></span>
 							<div class="intro">
@@ -192,7 +192,7 @@
 								<p title="希岸，只关心每一个出行的你">希岸，只关心每一个出行的你</p>
 							</div>
 					</a></li>
-					<li><a href="#" target="_blank"> <span class="img-box"><img
+					<li><a href="" > <span class="img-box"><img
 								src="images/index/486aafd6-6e41-4347-9c2f-ca2951563a40.jpg"
 								alt="邂逅白玉兰,开启精致生活"></span>
 							<div class="intro">
@@ -200,7 +200,7 @@
 								<p title="为您的出行增添惊喜！">为您的出行增添惊喜！</p>
 							</div>
 					</a></li>
-					<li><a href="#" target="_blank"> <span class="img-box"><img
+					<li><a href="" > <span class="img-box"><img
 								src="images/index/1d9914f9-8d90-4606-96ea-db733993163f.jpg"
 								alt="7天优品 为你开启温暖"></span>
 							<div class="intro">
@@ -208,7 +208,7 @@
 								<p title="自在的优享新世界">自在的优享新世界</p>
 							</div>
 					</a></li>
-					<li><a href="#" target="_blank"> <span class="img-box"><img
+					<li><a href="" > <span class="img-box"><img
 								src="images/index/efe98c43-bd75-41a1-8277-29c4b1bdbde8.jpg"
 								alt="留恋·每一刻"></span>
 							<div class="intro">

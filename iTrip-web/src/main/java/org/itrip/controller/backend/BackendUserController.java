@@ -37,6 +37,7 @@ public class BackendUserController {
 		User user = userService.getIsAdmin(phone, pwd);
 		if (user != null) {
 			session.setAttribute("backUserSession", user);
+			session.setMaxInactiveInterval(120*60);
 			return user;
 		}
 		return null;
@@ -66,7 +67,7 @@ public class BackendUserController {
 	/**
 	 * 查询所有非管理员的用户
 	 */
-	@RequestMapping("memberList")
+	@RequestMapping("backendMemberList")
 	public String getMemberList(Model model) {
 		model.addAttribute("count", userService.getNotAdminCount());
 		model.addAttribute("userList", userService.getAllUser());
@@ -100,7 +101,9 @@ public class BackendUserController {
 			@RequestParam(value = "email", required = false) String email,
 			@RequestParam(value = "address", required = false) String address,
 			@RequestParam(value = "status", required = false) String status,
-			@RequestParam(value = "id", required = false) Integer id) {
+			@RequestParam(value = "id", required = false) Integer id,
+			@RequestParam(value = "birthday", required = false) String birthday,
+			@RequestParam(value = "userpwd", required = false) String userpwd) {
 		User user = new User();
 		user.setUserName(username);
 		user.setStatus(status);
@@ -108,16 +111,25 @@ public class BackendUserController {
 		user.setPhone(phone);
 		user.setEmail(email);
 		user.setAddress(address);
+		user.setBirthday(java.sql.Date.valueOf(birthday));
 		String date = "";
 		if (id != null) {
+			User users= userService.getById(id);
+			if(!userpwd.equals(users.getPwd())) {
+				user.setPwd(MD5Util.convertMD5(userpwd));
+			}else {
+				user.setPwd(users.getPwd());
+			}
 			user.setId(id);
 			userService.updateUser(user);
 			date =  "修改成功";
 		} else {
+			user.setPwd(MD5Util.convertMD5(userpwd));
 			userService.addBackendUser(user);
 			date = "添加成功";
 			
 		}
+		System.out.println("*************"+date);
 		return date;
 	}
 
@@ -153,7 +165,7 @@ public class BackendUserController {
 	}
 
 	// 访问welcome.jsp
-	@RequestMapping("welcome")
+	@RequestMapping("backendwelcome")
 	public String getWelcom() {
 
 		return "backend/welcome";

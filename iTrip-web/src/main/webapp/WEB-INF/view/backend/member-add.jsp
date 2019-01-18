@@ -46,19 +46,37 @@
 					class="c-red">*</span>用户名：</label>
 				<div class="formControls col-xs-8 col-sm-9">
 					<input type="text" class="input-text" value="${userInfo.userName}"
-						placeholder="" id="username" name="">
+						placeholder=""  name="username">
 				</div>
 			</div>
+			<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="password" class="input-text" placeholder="" name="userpwd" id="userpwd" value="${userInfo.pwd}">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="password" class="input-text" placeholder="" name="ruserpwd" id="ruserpwd" value="${userInfo.pwd}">
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>出生日期：</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="date" class="input-text" placeholder=""  id="birthday" value="${userInfo.birthday}">
+			</div>
+		</div>
 			<div class="row cl">
 				<label class="form-label col-xs-4 col-sm-3"><span
 					class="c-red">*</span>性别：</label>
 				<div class="formControls col-xs-8 col-sm-9 skin-minimal">
 					<div class="radio-box">
-						<input name="sex" type="radio" id="sex-1" value="0" checked <c:if test="${userInfo.sex == 1}">checked</c:if>>
+						<input name="sex" type="radio" id="sex-1" value="0" checked <c:if test="${userInfo.sex == 0}">checked</c:if>>
 						<label for="sex-1">男</label>
 					</div>
 					<div class="radio-box">
-						<input type="radio" id="sex-2" name="sex" value="1" <c:if test="${userInfo.sex == 0}">checked</c:if>> <label
+						<input type="radio" id="sex-2" name="sex" value="1" <c:if test="${userInfo.sex == 1}">checked</c:if>> <label
 							for="sex-2">女</label>
 					</div>
 					<div class="radio-box">
@@ -86,7 +104,7 @@
 					class="c-red">*</span>手机：</label>
 				<div class="formControls col-xs-8 col-sm-9">
 					<input type="text" class="input-text" value="${userInfo.phone}" placeholder=""
-						id="mobile" name=>
+						 name="mobile">
 				</div>
 			</div>
 			<div class="row cl">
@@ -121,21 +139,16 @@
 	</article>
 
 	<!--_footer 作为公共模版分离出去-->
-	<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script>
-	<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
-	<script type="text/javascript" src="h-ui/js/H-ui.min.js"></script>
-	<script type="text/javascript" src="h-ui.admin/js/H-ui.admin.js"></script>
-	<!--/_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="lib/layer/2.4/layer.js"></script>
+<script type="text/javascript" src="h-ui/js/H-ui.min.js"></script> 
+<script type="text/javascript" src="h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
 
-	<!--请在下方写此页面业务相关的脚本-->
-	<script type="text/javascript"
-		src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
-	<script type="text/javascript"
-		src="lib/jquery.validation/1.14.0/jquery.validate.js"></script>
-	<script type="text/javascript"
-		src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
-	<script type="text/javascript"
-		src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<!--请在下方写此页面业务相关的脚本--> 
+<script type="text/javascript" src="lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/jquery.validate.js"></script>  
+<script type="text/javascript" src="lib/jquery.validation/1.14.0/validate-methods.js"></script>
+ <script type="text/javascript" src="lib/jquery.validation/1.14.0/messages_zh.js"></script>
 	<script type="text/javascript">
 		$(function() {
 			$('.skin-minimal input').iCheck({
@@ -151,32 +164,49 @@
 						minlength : 2,
 						maxlength : 16
 					},
+					userpwd:{
+						required : true,
+		                minlength : 6,
+		                maxlength : 32   
+		            },
+		           ruserpwd:{
+		                required:true,
+		                minlength:6,
+		                maxlength:32,
+		                equalTo: "#userpwd"
+		            },
 					sex : {
 						required : true,
 					},
 					mobile : {
 						required : true,
-						isMobile : true,
+						isMobile : true
 					},
 					email : {
 						required : true,
-						email : true,
-					},
-					uploadfile : {
+						email : true
+					}
+					/*uploadfile : {
 						required : true,
-					},
-				},
+					},*/
+				}, messages:{
+			              ruserpwd:{
+			            required: "这是必填字段",
+			            minlength: "密码长度不能小于 6 个字母",
+			            equalTo: "两次密码输入不一致",
+			            regex:"密码必须包含大小写字母和数字的组合，不能使用特殊字符，长度在8-10之间"
+			              }
+			  }, 
 				onkeyup : false,
 				focusCleanup : true,
 				success : "valid",
 				submitHandler : function(form) {
 					$("#form-member-add").ajaxSubmit({
 						type: 'post',
-						url: "backendAdd" ,
+						url: "backendAdd",
 						dataType:"text",
-						data:{id:$("#id").val(),username:$("#username").val(),
-							sex:$("#sex").val(),mobile:$("#mobile").val(),
-							email:$("#email").val(),address:$("#address").val(),
+						data:{id:$("#id").val(),birthday:$("#birthday").val(),
+							address:$("#address").val(),
 							status:$("#status").val()},
 						success: function(date){
 							layer.msg(date,{icon:1,time:1000});

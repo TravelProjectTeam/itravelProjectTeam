@@ -47,6 +47,31 @@ ng\:form {
 .tupian img:hover {
 	transform: scale(1.4);
 }
+
+.btn-blue {
+	width: 60px;
+	background-color: #63B8FF;
+	color: #F0FFFF;
+	text-align: center;
+}
+
+.btn-default {
+	width: 60px;
+	height: 25px;
+	color: #63B8FF;
+	text-align: center;
+	background-color: #F8F8FF;
+}
+
+.btn-default:hover {
+	background-color: #6495ED;
+	color: #F0FFFF;
+}
+
+.btn-blue:hover {
+	background-color: #6495ED;
+	color: #F0FFFF;
+}
 </style>
 <!-- META SECTION -->
 
@@ -99,20 +124,19 @@ ng\:form {
 					<div class="navigation ng-scope" style="padding-top: 0px;">
 						<a
 							ng-class="{'active': $root.topNavIndex == $root.siteConfig.topNavEnum.home,'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club }"
-							href="webIndex" class="ng-binding">酒店首页</a> <a
+							href="hotelIndex" class="ng-binding">酒店首页</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club }"
-							href="hotelOrders.jsp" class="ng-binding hidden">会员首页</a> <a
-							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club}"
-							href="hotelSearch.jsp" class="ng-binding hidden">酒店预订</a> <a
+							href="hotelOrders" class="ng-binding hidden">会员首页</a> <a href=""
+							class="ng-binding hidden">酒店预订</a> <a
 							ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.partners||$root.topNavIndex == $root.siteConfig.topNavEnum.club,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.hotel}"
-							href="hotelSearch.jsp" class="ng-binding active">酒店预订</a> <a
+							href="javascript:;" class="ng-binding active">酒店预订</a> <a
 							ng-class="{'hidden':$root.topNavIndex == $root.siteConfig.topNavEnum.club || $root.topNavIndex == $root.siteConfig.topNavEnum.partners }"
-							href="hotelOrders.jsp" class="ng-binding">会员中心</a> <a href="#"
-							target="_blank" class="ng-binding">积分商城</a> <a
+							href="hotelOrders" class="ng-binding">会员中心</a> <a href="#"
+							target="" class="ng-binding">积分商城</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club&amp;&amp; $root.topNavIndex != $root.siteConfig.topNavEnum.partners  ,'active':$root.topNavIndex == $root.siteConfig.topNavEnum.partners}"
-							href="#" class="ng-binding hidden">合作伙伴</a> <a
+							href="" class="ng-binding hidden">合作伙伴</a> <a
 							ng-class="{'hidden':$root.topNavIndex != $root.siteConfig.topNavEnum.club &amp;&amp; $root.topNavIndex != $root.siteConfig.topNavEnum.partners }"
-							href="#" class="ng-binding hidden">关于会员</a>
+							href="" class="ng-binding hidden">关于会员</a>
 					</div>
 					<!-- end ngIf: $root.siteConfig.site_id==$root.siteEnum.WeHotel -->
 					<!-- ngIf: $root.siteConfig.site_id==$root.siteEnum.Plateno -->
@@ -124,9 +148,9 @@ ng\:form {
 							</div>
 							<c:choose>
 								<c:when test="${sessionScope.userSession==null}">
-									<div class="header-login">
-										<a class="btn bluebtn ng-scope" href="#" style="width: 80px;">登录</a>
-										<a class="btn whitebtn ng-scope" href="#" style="width: 80px;">注册</a>
+									<div class="header-login" style="padding-top: 7px;">
+										<a id="btnLogin" class="btn-blue" href="webLogin">登录</a><a
+											id="btnReg" class="btn-default" href="webRegister">注册</a>
 									</div>
 								</c:when>
 								<c:otherwise>
@@ -139,12 +163,14 @@ ng\:form {
 											</li>
 											<li class="unit_box"><label>卡号:</label> <span>${sessionScope.userSession.phone}</span>
 											</li>
+											<li class="unit_box"><label>积分:</label> <span>0</span> <a
+												title="兑换" href="" target="">【兑换】</a></li>
+											<li class="member_dealing_unit"><a href="hotelOrders">我的订单</a>
+											</li>
+											<li class="member_dealing_unit"><a href="webBerInfo">我的账户</a></li>
 											<li class="member_dealing_unit"><a
-												href="hotelOrders.jsp">我的订单</a></li>
-											<li class="member_dealing_unit"><a href="#">我的账户</a></li>
-											<li class="member_dealing_unit"><a
-												class="logout ng-binding" id="logout">【退出】</a></li>
-											<li class="enter_club"><a href="hotelOrders.jsp">进入会员中心
+												class="logout ng-binding" id="logout" href="outLogin">【退出】</a></li>
+											<li class="enter_club"><a href="hotelOrders">进入会员中心
 													&gt; &gt;</a></li>
 										</ul>
 									</div>
@@ -349,13 +375,14 @@ ng\:form {
 						<div class="room-date-item">
 							<label class="ng-binding">入住日期</label> <input type="text"
 								placeholder="入住日期" class="input-date" id="checkInDate"
-								value="<%=now%>" data-timer="1544112000000">
+								value="${sessionScope.inDatePicker}" data-timer="1544112000000">
 						</div>
 						<div class="room-date-item">
 							<label class="ng-binding">离店日期</label> <input type="text"
 								placeholder="离店日期" class="input-date" id="checkOutDate"
-								value="<%=nextDates%>">
+								value="${sessionScope.outDatePicker}">
 						</div>
+
 					</div>
 					<div class="room-title">
 						<span class="room-title-first ng-binding">房型</span><span
@@ -428,70 +455,80 @@ ng\:form {
 													<div class="room-detail">
 														<table width="100%" cellspacing="0" cellpadding="0">
 															<c:forEach items="${houses.roomsList}" var="rooms">
-																<c:if test="${houses.id == rooms.houseId}">
-																	<tbody>
-																		<!--价格列表-->
-																		<!-- ngRepeat: rate in room.rate -->
-																		<!-- ngIf: room.showAllPlan || $index < 5 -->
-																		<tr ng-repeat="rate in room.rate"
-																			ng-if="room.showAllPlan || $index &lt; 5"
-																			class="ng-scope">
-																			<td width="230px;">
-																				<p class="ng-binding">
-																					${rooms.roomTitle} <i class="icon-gift ng-hide"
-																						ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
-																						<a class="gift-detail"> <span
-																							class="section ng-binding">会员本人入住酒店，可赠送礼包
-																						</span> <span class="section ng-binding"></span>
-																					</a>
-																					</i>
-																				</p>
-																			</td>
-																			<td>
-																				<p class="ng-binding">
-																					<c:if test="${rooms.isbreakfast ==1}">不含早餐</c:if>
-																					<c:if test="${rooms.isbreakfast ==2}">含单早</c:if>
-																					<c:if test="${rooms.isbreakfast ==3}">含双早</c:if>
-																				</p>
-																			</td>
-																			<td class="policy">
-																				<p class="ng-binding" style="padding-top: 8px;">
-																					<c:if test="${rooms.cancellationPolicy ==0}">限时取消</c:if>
-																					<c:if test="${rooms.cancellationPolicy ==1}">免费取消</c:if>
-																					<c:if test="${rooms.cancellationPolicy ==2}">不可取消</c:if>
-																				</p> <span class="show ng-binding" style="width: 300px">
-																					<c:if test="${rooms.cancellationPolicy ==0}">预付房费后，在当天入住 18:00前可免费取消订单/申请退款，之后不可取消订单/退款。</c:if>
+																<tbody>
+																	<!--价格列表-->
+																	<!-- ngRepeat: rate in room.rate -->
+																	<!-- ngIf: room.showAllPlan || $index < 5 -->
+																	<tr ng-repeat="rate in room.rate"
+																		ng-if="room.showAllPlan || $index &lt; 5"
+																		class="ng-scope">
+																		<td width="230px;">
+																			<p class="ng-binding">
+																				${rooms.roomTitle} <i class="icon-gift ng-hide"
+																					ng-show="rate.promotionTag&amp;&amp;rate.promotions.length&gt;0">
+																					<a class="gift-detail"> <span
+																						class="section ng-binding">会员本人入住酒店，可赠送礼包 </span>
+																						<span class="section ng-binding"></span>
+																				</a>
+																				</i>
+																			</p>
+																		</td>
+																		<td>
+																			<p class="ng-binding">
+																				<c:if test="${rooms.isbreakfast ==1}">不含早餐</c:if>
+																				<c:if test="${rooms.isbreakfast ==2}">含单早</c:if>
+																				<c:if test="${rooms.isbreakfast ==3}">含双早</c:if>
+																			</p>
+																		</td>
+																		<td class="policy">
+																			<p class="ng-binding" style="padding-top: 8px;">
+																				<c:if test="${rooms.cancellationPolicy ==0}">限时取消</c:if>
+																				<c:if test="${rooms.cancellationPolicy ==1}">免费取消</c:if>
+																				<c:if test="${rooms.cancellationPolicy ==2}">不可取消</c:if>
+																			</p> <span class="show ng-binding" style="width: 300px">
+																				<c:if test="${rooms.cancellationPolicy ==0}">预付房费后，在当天入住 18:00前可免费取消订单/申请退款，之后不可取消订单/退款。</c:if>
 
-																					<c:if test="${rooms.cancellationPolicy ==1}">预付房费后，在当天入住
+																				<c:if test="${rooms.cancellationPolicy ==1}">预付房费后，在当天入住
 																		12:00前可免费取消订单/申请退款，逾期取消或变更，将收取首晚房费。</c:if> <c:if
-																						test="${rooms.cancellationPolicy ==2}">特价房，不可取消。</c:if>
-																			</span>
-																			</td>
-																			<td>
-																				<p class="ng-binding">
-																					<i class="person-icon"></i>x${houses.ceiling}
-																				</p>
-																			</td>
-																			<td>
-																				<p class="price">
-																					<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
-																					￥<span class="ng-binding">${rooms.price}</span><i
-																						class="ng-binding"></i>
-																				</p>
-																			</td>
-																			<td>
-																				<div class="room-link">
-																					<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
-																					<input class="btn redbtn ng-binding" type="button"
-																						value="立即预定"
-																						onclick='datail(${hotel.id},${houses.id},${rooms.id})' />
-																					<!--_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
-																				</div>
-																			</td>
-																		</tr>
+																					test="${rooms.cancellationPolicy ==2}">特价房，不可取消。</c:if>
+																		</span>
+																		</td>
+																		<td>
+																			<p class="ng-binding">
+																				<i class="person-icon"></i>x${houses.ceiling}
+																			</p>
+																		</td>
+																		<td>
+																			<p class="price">
+																				<!-- ngIf: hotelInfo.isPrivilegeMemberHotel == 1 -->
+																				￥<span class="ng-binding">${rooms.price}</span><i
+																					class="ng-binding"></i>
+																			</p>
+																		</td>
+																		<td>
+																		<c:choose>
+																				<c:when
+																					test="${houses.houseNum >= houses.inventory}">
+																					<div class="room-link">
+																						<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
+																						<input class="btn redbtn ng-binding" type="button"
+																							value="满房" disabled="disabled" style="background-color: #DDDDDD" />
+																						<!--_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
+																					</div>
+																				</c:when>
+																				<c:otherwise>
+																					<div class="room-link">
+																						<!--<a class="surplus" ng-if="rate.totalInventory > 0 && rate.totalInventory < 5"><i class="icon-danger"></i>仅余{{rate.totalInventory}}间</a>-->
+																						<input class="btn redbtn ng-binding" type="button"
+																							value="立即预定"
+																							onclick='datail(${hotel.id},${houses.id},${rooms.id})' />
+																						<!--_ORDER_BUTTON_TEXT') : 'HOTELDETAIL_ORDER_BUTTON_FULL_TEXT') | T}}</a>-->
+																					</div>
+																				</c:otherwise>
+																			</c:choose></td>
+																	</tr>
 
-																	</tbody>
-																</c:if>
+																</tbody>
 															</c:forEach>
 														</table>
 													</div> <!--点击展开更多房型--> <!-- ngIf: room.rate.length > 5 -->
@@ -805,7 +842,7 @@ ng\:form {
 			$(this).parent().parent().css("opacity","1");
 			$(this).parent().parent().siblings().css("opacity","0.5");
 		});
-	});
+	})
 	</script>
 
 </body>

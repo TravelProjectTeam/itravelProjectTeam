@@ -23,7 +23,7 @@
  
     <div class="box">
         <h1>403 您进入了无人区，请查看您是否已登陆...</h1>
-        <span id="counter"></span>秒后 <a href="http://www.baidu.com">返回登陆页面</a>
+        <span id="counter"></span>秒后 <a href="backendLogin">返回登陆页面</a>
     </div>
  
     <script>

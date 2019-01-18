@@ -175,7 +175,9 @@ function queryHotels(num){
 	var rankts=0;
 	var country=$("#citySelect").val();
 	var name=$("#key_input").val();
-	var arr =[price1,price2,rating,brand,country,name,rankts];
+	var inDatePicker=$("#inDatePicker").val();
+	var outDatePicker=$("#outDatePicker").val();
+	var arr =[price1,price2,rating,brand,country,name,rankts,inDatePicker,outDatePicker];
 	location.href="queryH?arr="+arr+"&currentPageNo="+num;
 };
 
@@ -215,4 +217,4 @@ function queryss(address) {
 			layer.msg("您选择地址没有解析到结果!");
 		}
 	}, di);
-}
+};

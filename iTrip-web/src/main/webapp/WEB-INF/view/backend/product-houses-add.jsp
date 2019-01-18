@@ -187,6 +187,14 @@
 						</span>
 					</div>
 				</div>
+					<div class="row cl">
+					<label class="form-label col-xs-4 col-sm-2"><span
+						class="c-red">*</span>房间库存：</label>
+					<div class="formControls col-xs-8 col-sm-9">
+						<input type="text" class="input-text" value="${houseByIdInfo.inventory}"
+							id="" name="inventory" style="width: 25%">间
+					</div>
+				</div>
 				<div class="row cl">
 					<label class="form-label col-xs-4 col-sm-2">房型图片：</label>
 					<div class="formControls col-xs-8 col-sm-9">
@@ -210,13 +218,13 @@
 					<c:when test="${houseByIdInfo.id == null}">
 						<span id="contion" class="btn btn-secondary radius">继续添加房型信息</span>
 						<button onClick="article_save_submit();"
-							class="btn btn-primary radius" type="submit">
+							class="btn btn-primary radius" type="button">
 							<i class="Hui-iconfont">&#xe632;</i> 发布房型信息
 						</button>
 					</c:when>
 					<c:otherwise>
 						<button onClick="article_save_submit();"
-							class="btn btn-primary radius" type="submit">
+							class="btn btn-primary radius" type="button">
 							<i class="Hui-iconfont">&#xe632;</i> 修改房型信息
 						</button> 
 					</c:otherwise> 
@@ -441,40 +449,14 @@
 			$("#filePicker").click(function() {
 				document.getElementById("btn_file").click();
 			});
-			/* $("#btn_file")
-					.change(
-							function() {
-								var input = document.getElementById("btn_file");
-								var file = input.files[0];
-								if (!/image\/\w+/.test(file.type)) {
-									layer.msg("文件必须为图片！");
-									return false;
-								}
-								var reader = new FileReader();
-								reader.readAsDataURL(file);
-								reader.onload = function() {
-									document.getElementById("fileList").innerHTML = '<img src="'+this.result+'" style="width:300px;height:300px;"/>'
-								}
-							}); */
-			/* 	$("#roomPoto").click(function() {
-					document.getElementById("roomFile").click();
-				});
-				$("#roomFile")
-						.change(
-								function() {
-									var input = document.getElementById("roomFile");
-									var file = input.files[0];
-									if (!/image\/\w+/.test(file.type)) {
-										layer.msg("文件必须为图片！");
-										return false;
-									}
-									var reader = new FileReader();
-									reader.readAsDataURL(file);
-									reader.onload = function() {
-										document.getElementById("roomPotoList").innerHTML = '<img src="'+this.result+'" style="width:300px;height:300px;"/>'
-									}
-								}); */
 		});
+		function article_save_submit() {
+			$("#form-article-add").submit();
+			setTimeout(function () {
+				parent.location.reload()
+				layer_close();
+		    },800);
+		}
 	</script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 ﻿<%@ page language="java" import="java.util.*"
 	contentType="text/html;charset=UTF-8"%>
+	<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <html>
 <head>
 <meta charset="utf-8">
@@ -92,12 +93,12 @@
 				</dt>
 				<dd>
 					<ul>
-						<li><a data-href="getBackendPicture_list" data-title="资讯管理"
+						<li><a data-href="getBackendPicture_list" data-title="订单管理"
 							href="javascript:void(0)">订单管理</a></li>
 					</ul>
 				</dd>
 			</dl>
-			<dl id="menu-picture">
+			<!-- <dl id="menu-picture">
 				<dt>
 					<i class="Hui-iconfont">&#xe613;</i> 图片管理<i
 						class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i>
@@ -108,7 +109,7 @@
 							href="javascript:void(0)">图片管理</a></li>
 					</ul>
 				</dd>
-			</dl>
+			</dl> -->
 			<dl id="menu-product">
 				<dt>
 					<i class="Hui-iconfont">&#xe620;</i> 产品管理<i
@@ -118,14 +119,14 @@
 					<ul>
 						<li><a data-href="backendProductBrand" data-title="房型管理"
 							href="javascript:void(0)">房型管理</a></li>
-						<li><a data-href="product-category.jsp" data-title="分类管理"
-							href="javascript:void(0)">分类管理</a></li>
+						<!-- <li><a data-href="productPrice" data-title="分类管理"
+							href="javascript:void(0)">房型价格管理</a></li> -->
 						<li><a data-href="backendProductList" data-title="酒店管理"
 							href="javascript:void(0)">酒店管理</a></li>
 					</ul>
 				</dd>
 			</dl>
-			<dl id="menu-comments">
+			<!-- <dl id="menu-comments">
 				<dt>
 					<i class="Hui-iconfont">&#xe622;</i> 评论管理<i
 						class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i>
@@ -138,7 +139,7 @@
 							href="javascript:void(0)">意见反馈</a></li>
 					</ul>
 				</dd>
-			</dl>
+			</dl> -->
 			<dl id="menu-member">
 				<dt>
 					<i class="Hui-iconfont">&#xe60d;</i> 会员管理<i
@@ -146,12 +147,12 @@
 				</dt>
 				<dd>
 					<ul>
-						<li><a data-href="memberList" data-title="会员列表"
+						<li><a data-href="backendMemberList" data-title="会员列表"
 							href="javascript:;">会员列表</a></li>
-						<li><a data-href="member-del.jsp" data-title="删除的会员"
+						<!-- <li><a data-href="#" data-title="删除的会员"
 							href="javascript:;">删除的会员</a></li>
-						<li><a data-href="member-level.jsp" data-title="等级管理"
-							href="javascript:;">等级管理</a></li>
+						<li><a data-href="#" data-title="等级管理"
+							href="javascript:;">等级管理</a></li> -->
 					</ul>
 				</dd>
 			</dl>
@@ -164,10 +165,10 @@
 					<ul>
 						<li><a data-href="adminRole" data-title="角色管理"
 							href="javascript:void(0)">角色管理</a></li>
-						<li><a data-href="admin-permission.jsp" data-title="权限管理"
+						<!-- <li><a data-href="admin-permission.jsp" data-title="权限管理"
 							href="javascript:void(0)">权限管理</a></li>
 						<li><a data-href="admin-list.jsp" data-title="管理员列表"
-							href="javascript:void(0)">管理员列表</a></li>
+							href="javascript:void(0)">管理员列表</a></li> -->
 					</ul>
 				</dd>
 			</dl>
@@ -179,11 +180,11 @@
 				<dd>
 					<ul>
 						<li><a data-href="getCharts_1" data-title="折线图"
-							href="javascript:void(0)">折线图</a></li>
-						<li><a data-href="getCharts_4" data-title="柱状图"
+							href="javascript:void(0)">图形显示</a></li>
+						<!-- <li><a data-href="getCharts_4" data-title="柱状图"
 							href="javascript:void(0)">柱状图</a></li>
 						<li><a data-href="getCharts_5" data-title="饼状图"
-							href="javascript:void(0)">饼状图</a></li>
+							href="javascript:void(0)">饼状图</a></li> -->
 					</ul>
 				</dd>
 			</dl>
@@ -194,12 +195,12 @@
 				</dt>
 				<dd>
 					<ul>
-						<li><a data-href="system-category.jsp" data-title="栏目管理"
-							href="javascript:void(0)">栏目管理</a></li>
+						<!-- <li><a data-href="#" data-title="栏目管理"
+							href="javascript:void(0)">栏目管理</a></li> -->
 						<li><a data-href="dictionaries" data-title="数据字典"
 							href="javascript:void(0)">数据字典</a></li>
-						<li><a data-href="system-shielding.jsp" data-title="屏蔽词"
-							href="javascript:void(0)">屏蔽词</a></li>
+						<!-- <li><a data-href="#" data-title="屏蔽词"
+							href="javascript:void(0)">屏蔽词</a></li> -->
 					</ul>
 				</dd>
 			</dl>
@@ -213,9 +214,15 @@
 		<div id="Hui-tabNav" class="Hui-tabNav hidden-xs">
 			<div class="Hui-tabNav-wp">
 				<ul id="min_title_list" class="acrossTab cl">
-					<li class="active"><span title="我的桌面" data-href="welcome.jsp">我的桌面</span>
+					<li class="active"><span title="我的桌面" data-href="backendIndex">我的桌面</span>
 						<em></em></li>
 				</ul>
+				<input type="hidden" id="userName" value="${backUserSession.userName}">
+				<input type="hidden" id="sex" value="${backUserSession.sex}">
+				<input type="hidden" id="email" value="${backUserSession.email}">
+				<input type="hidden" id="address" value="${backUserSession.address}">
+				<input type="hidden" id="birthday" value="<fmt:formatDate value="${backUserSession.birthday}" pattern="MM月dd日"/>">
+				
 			</div>
 			<div class="Hui-tabNav-more btn-group">
 				<a id="js-tabNav-prev" class="btn radius btn-default size-S"
@@ -227,7 +234,7 @@
 		<div id="iframe_box" class="Hui-article">
 			<div class="show_iframe">
 				<div style="display: none" class="loading"></div>
-				<iframe scrolling="yes" frameborder="0" src="welcome"></iframe>
+				<iframe scrolling="yes" frameborder="0" src="backendwelcome"></iframe>
 			</div>
 		</div>
 	</section>
@@ -266,6 +273,12 @@
 		});
 		/*个人信息*/
 		function myselfinfo(name) {
+			var sex ="";
+			if($("#sex").val()==1){
+				sex="女";
+			}else{
+				sex="男";
+			}
 			layer.open({
 				type : 1,
 				area : [ '300px', '200px' ],
@@ -273,7 +286,7 @@
 				maxmin : true,
 				shade : 0.4,
 				title : '查看信息',
-				content : '<div>管理员信息<p>姓名:'+name+'</p><p>性别:'+1+'</p><p>生日:'+1+'</p><p>邮箱:'+1+'</p><p>地址:'+1+'</p></div>'
+				content : '<div>管理员信息<p>姓名:'+$("#userName").val()+'</p><p>性别:'+sex+'</p><p>生日:'+$("#birthday").val()+'</p><p>邮箱:'+$("#email").val()+'</p><p>地址:'+$("#address").val()+'</p></div>'
 			});
 		}
 
